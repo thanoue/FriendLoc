@@ -7,11 +7,23 @@
 
 	<Button
 		android:id="@+id/startBtn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+		android:layout_width="match_parent"
+		android:layout_height="50dp"
 		android:text="start"/>
+
+	<Button
+		android:id="@+id/loginBtn"
+		android:layout_width="match_parent"
+		android:layout_height="50dp"
+		android:text="LOGin to firebase"/>
+
+	<Button
+		android:id="@+id/getRecordsBtn"
+		android:layout_width="match_parent"
+		android:layout_height="50dp"
+		android:text="Get records"/>
 	<TextView
 		android:id="@+id/locationTv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"/>
 </LinearLayout>

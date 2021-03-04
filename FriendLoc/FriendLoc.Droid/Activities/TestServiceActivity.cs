@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Android;
 using Android.App;
 using Android.Content;
@@ -10,51 +13,23 @@ using Android.Runtime;
 using Android.Support.V4.App;
 using Android.Util;
 using Android.Widget;
+using Firebase.Auth;
+using Firebase.Database;
 using FriendLoc.Common;
+using FriendLoc.Common.Models;
 using FriendLoc.Droid.Services;
 
 namespace FriendLoc.Droid.Activities
 {
-    [BroadcastReceiver(Exported = true, Enabled = true)]    
-    [IntentFilter(new string[] { "RESTART" })]
-    public class RestartBroadcast : BroadcastReceiver
-    {
-        Activity _activity;
-
-        public RestartBroadcast()
-        {
-
-        }
-
-        public RestartBroadcast(Activity activity)
-        {
-            _activity = activity;
-        }
-
-        public override void OnReceive(Context context, Intent intent)
-        {
-            Log.Debug("RestartBroadcast","-------------------------------");
-            var serviceIntent = new Intent(context, typeof(MyLocationService));
-
-            //context.StopService(serviceIntent);
-
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
-            {
-                context.StartForegroundService(serviceIntent);
-            }
-            else
-            {
-                context.StartService(serviceIntent);
-            }
-        }
-    }
-
     [Activity(MainLauncher = true)]
     public class TestServiceActivity : Activity
     {
-        Button _startBtn;
-        TextView _locationTv;
         const int REQUEST_PERMISSIONS = 1;
+
+        Button _startBtn, _loginBtn, _getRecordsBtn;
+        TextView _locationTv;
+        string _userId, _tripId = "";
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -63,8 +38,11 @@ namespace FriendLoc.Droid.Activities
 
             _startBtn = FindViewById<Button>(Resource.Id.startBtn);
             _locationTv = FindViewById<TextView>(Resource.Id.locationTv);
+            _loginBtn = FindViewById<Button>(Resource.Id.loginBtn);
+            _getRecordsBtn = FindViewById<Button>(Resource.Id.getRecordsBtn);
 
             _startBtn.Enabled = false;
+            _loginBtn.Enabled = false;
 
             if (Build.VERSION.SdkInt >= BuildVersionCodes.Q)
             {
@@ -98,9 +76,23 @@ namespace FriendLoc.Droid.Activities
 
                 SettingsClient client = LocationServices.GetSettingsClient(this);
                 var task = client.CheckLocationSettings(builder.Build())
-                    .AddOnSuccessListener(new SuccessLisenter((obj) =>
+                    .AddOnSuccessListener(new SuccessLisenter(async (obj) =>
                     {
-                        StartService();
+                        var userIds = new Dictionary<string, string>();
+
+                        userIds.Add(_userId, _userId);
+
+                        var adding = await ServiceInstances.TripRepository.InsertAsync(new Common.Models.Trip()
+                        {
+                            Description = "Test trips",
+                            UserIds = userIds
+                        });
+
+                        if (adding != null)
+                        {
+                            _tripId = adding.Id;
+                            StartService(_tripId, _userId);
+                        }
 
                     })).AddOnFailureListener(new FailureLisenter((ex) =>
                     {
@@ -112,7 +104,7 @@ namespace FriendLoc.Droid.Activities
                                 resolvable.StartResolutionForResult(this,
                                         100);
                             }
-                            catch (IntentSender.SendIntentException sendEx)
+                            catch (IntentSender.SendIntentException e2x)
                             {
                                 // Ignore the error.
                             }
@@ -121,11 +113,45 @@ namespace FriendLoc.Droid.Activities
                     }));
 
             };
+
+            _loginBtn.Click += async delegate
+            {
+                var authProvider = new FirebaseAuthProvider(new FirebaseConfig("AIzaSyCxjza0PW9fg6y4tPlljkP-iBSwOC0XY6g"));
+
+                var login = await authProvider.SignInWithEmailAndPasswordAsync("kha@gmail.com", "Hello_2020");
+
+                if (login != null)
+                {
+                    _userId = login.User.LocalId;
+
+                    var firebase = new FirebaseClient(
+                    "https://friendloc-98ed3-default-rtdb.firebaseio.com/",
+                    new FirebaseOptions
+                    {
+                        AuthTokenAsyncFactory = () => Task.FromResult(login.FirebaseToken)
+                    });
+
+                    ServiceInstances.TripRepository.Init(firebase);
+                    ServiceInstances.UserRepository.Init(firebase);
+
+                    _startBtn.Enabled = true;
+                }
+
+            };
+
+            _getRecordsBtn.Click += async delegate
+            {
+                var res = await ServiceInstances.TripRepository.GetById(_tripId);
+
+                Console.WriteLine(res.Locations.Values.ToList()[0].CreatedTime);
+            };
         }
 
-        void StartService()
+        void StartService(string tripId, string userId)
         {
             var serviceIntent = new Intent(this, typeof(MyLocationService));
+            serviceIntent.PutExtra(Constants.TripId, tripId);
+            serviceIntent.PutExtra(Constants.UserId, userId);
 
             StopService(serviceIntent);
 
@@ -169,7 +195,7 @@ namespace FriendLoc.Droid.Activities
             }
             else
             {
-                _startBtn.Enabled = true;
+                _loginBtn.Enabled = true;
                 ServiceInstances.FileService.SetRootFolderPath(ServiceInstances.FileService.GetSdCardFolder());
             }
         }
@@ -187,7 +213,7 @@ namespace FriendLoc.Droid.Activities
             }
             else
             {
-                _startBtn.Enabled = true;
+                _loginBtn.Enabled = true;
                 ServiceInstances.FileService.SetRootFolderPath(ServiceInstances.FileService.GetSdCardFolder());
             }
         }

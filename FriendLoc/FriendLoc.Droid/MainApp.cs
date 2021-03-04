@@ -2,8 +2,10 @@
 using Android.App;
 using Android.Runtime;
 using FriendLoc.Common;
+using FriendLoc.Common.Repositories;
 using FriendLoc.Common.Services;
 using FriendLoc.Droid.Services;
+using Plugin.CurrentActivity;
 
 namespace FriendLoc.Droid
 {
@@ -18,11 +20,13 @@ namespace FriendLoc.Droid
         {
             base.OnCreate();
 
+            CrossCurrentActivity.Current.Init(this);
             Xamarin.Essentials.Platform.Init(this);
 
             ServiceLocator.Instance.Register<IFileService, DroidFileService>();
-
             ServiceLocator.Instance.Register<ILoggerService, LoggerService>();
+            ServiceLocator.Instance.Register<ITripRepository, TripRepository>();
+            ServiceLocator.Instance.Register<IUserRepository, UserRepository>();
         }
     }
 }

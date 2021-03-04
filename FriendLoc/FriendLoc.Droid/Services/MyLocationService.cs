@@ -14,7 +14,6 @@ using Android.Util;
 using FriendLoc.Common;
 namespace FriendLoc.Droid.Services
 {
-
     [BroadcastReceiver(Exported = true, Enabled = true)]
     [IntentFilter(new string[] { "RESTART" })]
     public class RestartBroadcast : BroadcastReceiver
@@ -57,7 +56,9 @@ namespace FriendLoc.Droid.Services
 
         private FusedLocationProviderClient _fusedLocationClient;
         private CusLocationCallback _callback;
-      
+        string _tripid;
+        string _userId;
+
         public override IBinder OnBind(Intent intent)
         {
             return null;
@@ -67,6 +68,10 @@ namespace FriendLoc.Droid.Services
         public override StartCommandResult OnStartCommand(Intent intent, [GeneratedEnum] StartCommandFlags flags, int startId)
         {
             base.OnStartCommand(intent, flags, startId);
+
+            _tripid = intent.GetStringExtra(Constants.TripId);
+            _userId = intent.GetStringExtra(Constants.UserId);
+
             return StartCommandResult.NotSticky;
         }
 
@@ -113,7 +118,17 @@ namespace FriendLoc.Droid.Services
 
             _fusedLocationClient = LocationServices.GetFusedLocationProviderClient(this);
 
-            _callback = new CusLocationCallback();
+            _callback = new CusLocationCallback((location)=> {
+
+                ServiceInstances.TripRepository.AddLocation(_tripid, new Common.Models.TripLocation()
+                {
+                    Latitude = location.Latitude,
+                    Longitude = location.Longitude,
+                     TripId = _tripid,
+                      UserId = _userId
+                });
+
+            });
 
             _fusedLocationClient.RequestLocationUpdates(locationRequest, _callback, Looper.MainLooper);
         }
@@ -125,6 +140,56 @@ namespace FriendLoc.Droid.Services
             _fusedLocationClient.RemoveLocationUpdates(_callback);
         }
     }
+
+    public class CusLocationCallback : LocationCallbackBase
+    {
+        Action<Location> _onLocationChanged;
+        public CusLocationCallback(Action<Location> onLocationChanged)
+        {
+            _onLocationChanged = onLocationChanged;
+        }
+
+        Location _lastestLocation;
+        public override void OnLocationResult(LocationResult locationResult)
+        {
+            if (locationResult == null)
+            {
+                return;
+            }
+
+            foreach (Location location in locationResult.Locations)
+            {
+                if (_lastestLocation == null)
+                    _lastestLocation = location;
+
+                var distance = _lastestLocation.DistanceTo(location);
+
+                if (distance <= 20)
+                {
+                    continue;
+                }
+
+                _lastestLocation.Set(location);
+
+                _onLocationChanged?.Invoke(location);
+
+                //Console.WriteLine(location.ToString());
+
+                //var logger = ServiceInstances.LoggerService;
+
+                //if (logger == null)
+                //{
+                //    var fileService = new DroidFileService(Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, Constants.APP_NAME));
+
+                //    logger = new LoggerService(fileService);
+                //}
+
+                //logger.Info(string.Format("Latitude : {0}, \n Longitude: {1}, \n Altitude: {2}", location.Latitude.ToString(), location.Longitude.ToString(), location.Altitude));
+
+            }
+        }
+    }
+
 
     public class SuccessLisenter : Java.Lang.Object, IOnSuccessListener
     {
@@ -154,45 +219,5 @@ namespace FriendLoc.Droid.Services
         }
     }   
 
-    public class CusLocationCallback : LocationCallbackBase
-    {
-        Location _lastestLocation;
-        public override void OnLocationResult(LocationResult locationResult)
-        {
-            if (locationResult == null)
-            {
-                return;
-            }
-
-            foreach (Location location in  locationResult.Locations)
-            {
-                if (_lastestLocation == null)
-                    _lastestLocation = location;
-
-                var distance = _lastestLocation.DistanceTo(location);
-
-                if(distance <= 20)
-                {
-                    continue;
-                }
-
-                _lastestLocation.Set(location);
-
-                Console.WriteLine(location.ToString());
-
-                var logger = ServiceInstances.LoggerService;
-
-                if (logger == null)
-                {
-                    var fileService = new DroidFileService(Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, Constants.APP_NAME));
-
-                    logger = new LoggerService(fileService);
-                }
-
-                logger.Info(string.Format("Latitude : {0}, \n Longitude: {1}, \n Altitude: {2}", location.Latitude.ToString(), location.Longitude.ToString(), location.Altitude));
-
-            }
-        }
-    }
 
 }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
+using Android.OS;
 using FriendLoc.Common;
 using FriendLoc.Common.Services.Impl;
+using Plugin.CurrentActivity;
 
 namespace FriendLoc.Droid.Services
 {
@@ -19,7 +21,18 @@ namespace FriendLoc.Droid.Services
 
         public override string GetSdCardFolder()
         {
-            var path = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, Constants.APP_NAME);
+            var path = "";
+
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.Q)
+            {
+                var activity = CrossCurrentActivity.Current.Activity;
+
+                path = Path.Combine(activity.GetExternalFilesDir(Android.OS.Environment.DirectoryDocuments).AbsolutePath, Constants.APP_NAME);
+            }
+            else
+            {
+                path = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, Constants.APP_NAME);
+            }
 
             if (!FolderExists(path))
             {
