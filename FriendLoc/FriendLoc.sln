@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.808.9
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FriendLoc.Droid", "FriendLoc.Droid\FriendLoc.Droid.csproj", "{39DD8554-C86D-4045-935F-90285480AE45}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commonn", "Commonn", "{2886511F-D98F-4B3C-B9B8-E1BE96410516}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FriendLoc.Common", "FriendLoc.Common\FriendLoc.Common.csproj", "{ACB85298-E9B5-4664-8BB9-F6FCE55BEC32}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{39DD8554-C86D-4045-935F-90285480AE45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39DD8554-C86D-4045-935F-90285480AE45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39DD8554-C86D-4045-935F-90285480AE45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39DD8554-C86D-4045-935F-90285480AE45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACB85298-E9B5-4664-8BB9-F6FCE55BEC32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACB85298-E9B5-4664-8BB9-F6FCE55BEC32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACB85298-E9B5-4664-8BB9-F6FCE55BEC32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACB85298-E9B5-4664-8BB9-F6FCE55BEC32}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C1C071EC-BCD8-4A0C-8A36-DBE4D0AF35BC}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{ACB85298-E9B5-4664-8BB9-F6FCE55BEC32} = {2886511F-D98F-4B3C-B9B8-E1BE96410516}
+	EndGlobalSection
+EndGlobal
