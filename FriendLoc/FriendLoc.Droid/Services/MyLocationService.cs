@@ -12,10 +12,6 @@ using Android.Runtime;
 using Android.Support.V4.App;
 using Android.Util;
 using FriendLoc.Common;
-using FriendLoc.Droid.Activities;
-using Java.Lang;
-using ILocationListener = Android.Locations.ILocationListener;
-
 namespace FriendLoc.Droid.Services
 {
 
@@ -53,21 +49,15 @@ namespace FriendLoc.Droid.Services
         }
     }
 
-    [Service(Name = "FriendLoc.Droid.Services.MyLocationService")]
+    [Service(ForegroundServiceType = ForegroundService.TypeLocation | ForegroundService.TypeDataSync,Name = "FriendLoc.Droid.Services.MyLocationService")]
     public class MyLocationService : Service
     {
         const string NOTIFY_CHANEL_ID = "FriendLoc";
         const string TAG = "MyLocationService";
-        private LocationManager mLocationManager = null;
 
         private FusedLocationProviderClient _fusedLocationClient;
         private CusLocationCallback _callback;
-
-        LocationListener[] mLocationListeners = new LocationListener[]{
-            new LocationListener(LocationManager.GpsProvider),
-            new LocationListener(LocationManager.NetworkProvider)
-        };
-
+      
         public override IBinder OnBind(Intent intent)
         {
             return null;
@@ -133,14 +123,6 @@ namespace FriendLoc.Droid.Services
             base.OnDestroy();
 
             _fusedLocationClient.RemoveLocationUpdates(_callback);
-        }
-
-        private void initializeLocationManager()
-        {
-            if (mLocationManager == null)
-            {
-                mLocationManager = ApplicationContext.GetSystemService(Context.LocationService).JavaCast<LocationManager>();
-            }
         }
     }
 
@@ -213,49 +195,4 @@ namespace FriendLoc.Droid.Services
         }
     }
 
-    public class LocationListener : Java.Lang.Object, ILocationListener
-    {
-        Location mLastLocation;
-
-        public LocationListener(string provider)
-        {
-            mLastLocation = new Location(provider);
-        }
-
-        public void OnLocationChanged(Location location)
-        {
-            var distance = mLastLocation.DistanceTo(location);  
-
-            if(distance >= 20)
-            {
-                mLastLocation.Set(location);
-
-                var logger = ServiceInstances.LoggerService;
-
-                if (logger == null)
-                {
-                    var fileService = new DroidFileService(Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, Constants.APP_NAME));
-
-                    logger = new LoggerService(fileService);
-                }
-
-                logger.Info(string.Format("Latitude : {0}, \n Longitude: {1}, \n Altitude: {2}", location.Latitude.ToString(), location.Longitude.ToString(), location.Altitude));
-            }
-        }
-
-        public void OnProviderDisabled(string provider)
-        {
-
-        }
-
-        public void OnProviderEnabled(string provider)
-        {
-
-        }
-
-        public void OnStatusChanged(string provider, [GeneratedEnum] Availability status, Bundle extras)
-        {
-
-        }
-    }
 }
