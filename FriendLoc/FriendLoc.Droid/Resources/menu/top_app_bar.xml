@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/favorite"
+        android:icon="@drawable/ic_favorite_24dp"
+        android:title="Favorite"
+        android:contentDescription="your favorite"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/ic_search_24dp"
+        android:title="Search"
+        android:contentDescription="search result"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/more"
+        android:title="Mores"
+        android:contentDescription="some more information"
+        app:showAsAction="never" />
+</menu>

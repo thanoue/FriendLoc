@@ -14,7 +14,7 @@ using static Asksira.WebViewSuiteLib.WebViewSuite;
 
 namespace FriendLoc.Droid.Activities
 {
-    [Activity(MainLauncher = true)]
+    [Activity(MainLauncher = false)]
     public class TripMapActivity : AppCompatActivity, IWebViewSetupInterference, IWebTrigger
     {
         WebViewSuite _webView; JavascriptClient _javascriptClient;

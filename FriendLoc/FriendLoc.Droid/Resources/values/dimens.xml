@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="screen_padding">@dimen/_10_5sdp</dimen>
+    <dimen name="fields_margin">@dimen/_5_5sdp</dimen>
+    <dimen name="btn_height">@dimen/_40_5sdp</dimen>
+    <dimen name="text_btn_height">@dimen/_30_5sdp</dimen>
 </resources>
