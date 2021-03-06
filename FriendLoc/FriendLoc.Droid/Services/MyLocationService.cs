@@ -73,7 +73,7 @@ namespace FriendLoc.Droid.Services
             _userId = intent.GetStringExtra(Constants.UserId);
 
             return StartCommandResult.NotSticky;
-        }
+        }   
 
         public override void OnTaskRemoved(Intent rootIntent)
         {
@@ -100,7 +100,7 @@ namespace FriendLoc.Droid.Services
                 var notifyChannel = new NotificationChannel(
                                                        NOTIFY_CHANEL_ID,
                                                        "FriendLoc",
-                                                       Android.App.NotificationImportance.Low);
+                                                       Android.App.NotificationImportance.Max);
                 notificationManager.CreateNotificationChannel(notifyChannel);
 
                 Notification notification = new NotificationCompat.Builder(this, NOTIFY_CHANEL_ID)

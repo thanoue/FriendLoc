@@ -4,12 +4,13 @@ using Android.Runtime;
 using FriendLoc.Common;
 using FriendLoc.Common.Repositories;
 using FriendLoc.Common.Services;
+using FriendLoc.Common.Services.Impl;
 using FriendLoc.Droid.Services;
 using Plugin.CurrentActivity;
 
 namespace FriendLoc.Droid
 {
-    [Application]
+    [Application(UsesCleartextTraffic = true)]
     public class MainApp : Application
     {
         protected MainApp(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
@@ -27,6 +28,7 @@ namespace FriendLoc.Droid
             ServiceLocator.Instance.Register<ILoggerService, LoggerService>();
             ServiceLocator.Instance.Register<ITripRepository, TripRepository>();
             ServiceLocator.Instance.Register<IUserRepository, UserRepository>();
+            ServiceLocator.Instance.Register<INativeTrigger, DroidNativeTrigger>();
         }
     }
 }

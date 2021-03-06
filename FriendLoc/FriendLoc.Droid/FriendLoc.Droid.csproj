@@ -66,6 +66,7 @@
     <Reference Include="Mono.Android" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors" />
+    <Reference Include="Mono.Android.Export" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Resources\Resource.designer.cs" />
@@ -74,6 +75,9 @@
     <Compile Include="Services\MyLocationService.cs" />
     <Compile Include="Activities\TestServiceActivity.cs" />
     <Compile Include="Services\DroidFileService.cs" />
+    <Compile Include="Activities\TripMapActivity.cs" />
+    <Compile Include="DroidUtils.cs" />
+    <Compile Include="Services\DroidNativeTrigger.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -105,6 +109,10 @@
     <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_foreground.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_round.png" />
     <AndroidResource Include="Resources\layout\activity_test.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\activity_trip_map.xml">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
@@ -147,6 +155,9 @@
     </PackageReference>
     <PackageReference Include="Plugin.CurrentActivity">
       <Version>2.1.0.4</Version>
+    </PackageReference>
+    <PackageReference Include="Karamunting.Android.SiraLam.WebViewSuite">
+      <Version>1.0.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

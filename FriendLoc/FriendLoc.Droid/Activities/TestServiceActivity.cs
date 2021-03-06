@@ -13,6 +13,7 @@ using Android.Runtime;
 using Android.Support.V4.App;
 using Android.Util;
 using Android.Widget;
+using AndroidX.AppCompat.App;
 using Firebase.Auth;
 using Firebase.Database;
 using FriendLoc.Common;
@@ -21,8 +22,8 @@ using FriendLoc.Droid.Services;
 
 namespace FriendLoc.Droid.Activities
 {
-    [Activity(MainLauncher = true)]
-    public class TestServiceActivity : Activity
+    [Activity(MainLauncher = false)]
+    public class TestServiceActivity : AppCompatActivity
     {
         const int REQUEST_PERMISSIONS = 1;
 

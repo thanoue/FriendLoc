@@ -8,7 +8,7 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 
-namespace FriendLoc.Droid.Services
+namespace FriendLoc.Common.Services.Impl
 {
     public enum LogTypes
     {
