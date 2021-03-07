@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <dimen name="screen_padding">@dimen/_10_5sdp</dimen>
-    <dimen name="fields_margin">@dimen/_5_5sdp</dimen>
+    <dimen name="fields_margin">@dimen/_4_5sdp</dimen>
     <dimen name="btn_height">@dimen/_40_5sdp</dimen>
     <dimen name="text_btn_height">@dimen/_30_5sdp</dimen>
+    <dimen name="big_stroke_size">@dimen/_1sdp</dimen>
+    <dimen name="avtt_img_size">@dimen/_95sdp</dimen>
+    <dimen name="avt_top_margin">@dimen/_19sdp</dimen>
+    <dimen name="avt_place_holder_size">@dimen/_30sdp</dimen>
+    <dimen name="avt_close_size">@dimen/_25sdp</dimen>
+    <dimen name="avt_add_top_margin">@dimen/_109sdp</dimen>
 </resources>

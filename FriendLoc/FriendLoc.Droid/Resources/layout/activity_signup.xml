@@ -1,0 +1,203 @@
+﻿<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	<RelativeLayout
+		android:id="@+id/avtArea"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@color/colorPrimaryDark"
+		android:paddingTop="@dimen/avt_top_margin"
+		android:paddingBottom="@dimen/avt_top_margin">
+		<RelativeLayout
+			android:layout_width="@dimen/avtt_img_size"
+			android:layout_centerHorizontal="true"
+			android:layout_height="@dimen/avtt_img_size">
+			<com.google.android.material.imageview.ShapeableImageView
+				android:id="@+id/avtImg"
+				android:layout_width="@dimen/avtt_img_size"
+				android:layout_height="@dimen/avtt_img_size"
+				app:strokeColor="@android:color/darker_gray"
+				android:padding="@dimen/big_stroke_size"
+				app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlayStyle"
+				app:strokeWidth="0dp"/>
+		</RelativeLayout>
+	</RelativeLayout>
+
+	<com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+		android:id="@+id/updatImgBtn"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:iconTint="@color/colorScreenBackground"
+		app:backgroundTint="@color/colorPrimary"
+		android:layout_alignParentRight="true"
+		android:layout_marginTop="@dimen/avt_add_top_margin"
+		android:layout_marginRight="@dimen/screen_padding"
+		app:icon="@drawable/ic_plus_24p"/>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:paddingLeft="@dimen/screen_padding"
+		android:paddingRight="@dimen/screen_padding"
+		android:layout_marginTop="@dimen/avt_top_margin"
+		android:layout_below="@+id/updatImgBtn"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<com.google.android.material.textfield.TextInputLayout
+			android:id="@+id/userNameTxt"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:hint="Login Name"
+			app:counterEnabled="true"
+			app:counterMaxLength="20"
+			app:endIconMode="clear_text"
+			app:startIconDrawable="@drawable/ic_face_24"
+			app:startIconContentDescription="The login name"
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+			<com.google.android.material.textfield.TextInputEditText
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content" />
+
+		</com.google.android.material.textfield.TextInputLayout>
+
+		<com.google.android.material.textfield.TextInputLayout
+			android:layout_marginTop="@dimen/fields_margin"
+			android:id="@+id/passwordTxt"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:hint="Password"
+			app:endIconMode="password_toggle"
+			app:errorEnabled="true"
+			app:counterEnabled="true"
+			app:counterMaxLength="15"
+			app:startIconDrawable="@android:drawable/ic_secure"
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+			<com.google.android.material.textfield.TextInputEditText
+				android:layout_width="match_parent"
+				android:inputType="textPassword"
+				android:layout_height="wrap_content" />
+
+		</com.google.android.material.textfield.TextInputLayout>
+
+		<com.google.android.material.textfield.TextInputLayout
+			android:layout_marginTop="@dimen/fields_margin"
+			android:id="@+id/retypePasswordTxt"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:hint="Retype Password"
+			app:endIconMode="password_toggle"
+			app:errorEnabled="true"
+			app:counterEnabled="true"
+			app:counterMaxLength="15"
+			app:startIconDrawable="@android:drawable/ic_secure"
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+			<com.google.android.material.textfield.TextInputEditText
+				android:layout_width="match_parent"
+				android:inputType="textPassword"
+				android:layout_height="wrap_content" />
+
+		</com.google.android.material.textfield.TextInputLayout>
+
+		<com.google.android.material.textfield.TextInputLayout
+			android:layout_marginTop="@dimen/fields_margin"
+			android:id="@+id/userFullNameTxt"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:hint="Full Name"
+			app:counterEnabled="true"
+			app:counterMaxLength="20"
+			app:endIconMode="clear_text"
+			app:startIconDrawable="@drawable/ic_account_24"
+			app:startIconContentDescription="Full Name"
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+			<com.google.android.material.textfield.TextInputEditText
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content" />
+
+		</com.google.android.material.textfield.TextInputLayout>
+
+		<LinearLayout
+			android:layout_marginTop="@dimen/fields_margin"
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:weightSum="3">
+
+			<com.google.android.material.textfield.TextInputLayout
+				android:id="@+id/countryCodeDropDown"
+				style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:hint="Country code">
+
+				<AutoCompleteTextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:inputType="none" />
+
+			</com.google.android.material.textfield.TextInputLayout>
+
+			<com.google.android.material.textfield.TextInputLayout
+				android:id="@+id/phoneNumberTxt"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:hint="Phone number"
+				android:layout_weight="2"
+				android:layout_marginLeft="@dimen/fields_margin"
+				app:endIconMode="clear_text"
+				app:prefixText="0"
+				app:prefixTextColor="#000"
+				app:startIconDrawable="@drawable/ic_mobile_phone_24p"
+				style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+				<com.google.android.material.textfield.TextInputEditText
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:inputType="number"/>
+
+			</com.google.android.material.textfield.TextInputLayout>
+
+		</LinearLayout>
+
+		<RadioGroup
+			android:id="@+id/genderGroup"
+			android:layout_marginTop="@dimen/fields_margin"
+			android:orientation="horizontal"
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:gravity="center">
+			<RadioButton
+				android:id="@+id/maleRadio"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Male"/>
+			<RadioButton
+				android:id="@+id/feMaleRadio"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="@dimen/fields_margin"
+				android:text="Female"/>
+			<RadioButton
+				android:id="@+id/othersRadio"
+				android:layout_width="wrap_content"
+				android:layout_marginLeft="@dimen/fields_margin"
+				android:layout_height="wrap_content"
+				android:text="Others"/>
+		</RadioGroup>
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/submitBtn"
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/btn_height"
+			android:text="Login"
+			style="@style/Widget.MaterialComponents.Button.Icon"/>
+	</LinearLayout>
+
+</RelativeLayout>

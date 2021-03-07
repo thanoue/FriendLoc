@@ -34,12 +34,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidLinkMode>None</AndroidLinkMode>
-<AndroidSupportedAbis>arm64-v8a;armeabi-v7a;x86;x86_64</AndroidSupportedAbis>
 <AndroidKeyStore>True</AndroidKeyStore>
 <AndroidSigningKeyStore>/Users/sin/Code/FriendLoc/Keys/friendloc_khoideptrai.keystore</AndroidSigningKeyStore>
 <AndroidSigningStorePass>Hello_2020</AndroidSigningStorePass>
 <AndroidSigningKeyAlias>friendloc_khoideptrai</AndroidSigningKeyAlias>
 <AndroidSigningKeyPass>Hello_2020</AndroidSigningKeyPass>
+<EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+<AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+<JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
+<AndroidSupportedAbis>armeabi-v7a;x86</AndroidSupportedAbis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -70,6 +73,9 @@
     <Reference Include="Dp.Lib">
       <HintPath>..\Libs\Dp.Lib.dll</HintPath>
     </Reference>
+    <Reference Include="ImagePicker.Lib">
+      <HintPath>..\Libs\ImagePicker.Lib.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Resources\Resource.designer.cs" />
@@ -81,8 +87,10 @@
     <Compile Include="Activities\TripMapActivity.cs" />
     <Compile Include="DroidUtils.cs" />
     <Compile Include="Services\DroidNativeTrigger.cs" />
-    <Compile Include="Activities\HomeActivity.cs" />
+    <Compile Include="Activities\SignUpActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
+    <Compile Include="Activities\BaseActivity.cs" />
+    <Compile Include="Activities\HomeActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -121,10 +129,6 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\activity_home.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
     <AndroidResource Include="Resources\menu\top_app_bar.xml">
       <SubType></SubType>
       <Generator></Generator>
@@ -158,6 +162,54 @@
       <Generator></Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\ic_plus_24p.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\activity_base.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_back_24.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\activity_root.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\activity_signup.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\activity_home.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\header_navigation_drawer.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_camera.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_account_24.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_minus_24.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_close_24.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_mobile_phone_24p.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\list_item.xml">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
@@ -203,6 +255,9 @@
     </PackageReference>
     <PackageReference Include="Karamunting.Android.SiraLam.WebViewSuite">
       <Version>1.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="Karamunting.Android.BumpTech.Glide">
+      <Version>4.9.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

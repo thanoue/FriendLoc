@@ -23,19 +23,19 @@ using FriendLoc.Droid.Services;
 namespace FriendLoc.Droid.Activities
 {
     [Activity(MainLauncher = false)]
-    public class TestServiceActivity : AppCompatActivity
+    public class TestServiceActivity : BaseActivity
     {
-        const int REQUEST_PERMISSIONS = 1;
 
         Button _startBtn, _loginBtn, _getRecordsBtn;
         TextView _locationTv;
         string _userId, _tripId = "";
 
+        protected override int LayoutResId => Resource.Layout.activity_test;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
-            SetContentView(Resource.Layout.activity_test);
 
             _startBtn = FindViewById<Button>(Resource.Id.startBtn);
             _locationTv = FindViewById<TextView>(Resource.Id.locationTv);
@@ -45,25 +45,25 @@ namespace FriendLoc.Droid.Activities
             _startBtn.Enabled = false;
             _loginBtn.Enabled = false;
 
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.Q)
-            {
-                CheckPermission(Android.Manifest.Permission.AccessBackgroundLocation,
-                                 Android.Manifest.Permission.AccessFineLocation,
-                                 Android.Manifest.Permission.AccessCoarseLocation,
-                                 Android.Manifest.Permission.ControlLocationUpdates,
-                                 Android.Manifest.Permission.Camera,
-                                 Android.Manifest.Permission.ReadExternalStorage,
-                                 Android.Manifest.Permission.WriteExternalStorage);
-            }
-            else
-            {
-                CheckPermission(Android.Manifest.Permission.AccessFineLocation,
-                        Android.Manifest.Permission.AccessCoarseLocation,
-                        Android.Manifest.Permission.ControlLocationUpdates,
-                        Android.Manifest.Permission.Camera,
-                        Android.Manifest.Permission.ReadExternalStorage,
-                        Android.Manifest.Permission.WriteExternalStorage);
-            }
+            //if (Build.VERSION.SdkInt >= BuildVersionCodes.Q)
+            //{
+            //    CheckPermission(()=> {
+
+            //    },Android.Manifest.Permission.AccessBackgroundLocation,
+            //                     Android.Manifest.Permission.AccessFineLocation,
+            //                     Android.Manifest.Permission.AccessCoarseLocation,
+            //                     Android.Manifest.Permission.ControlLocationUpdates,
+            //                    );
+            //}
+            //else
+            //{
+            //    CheckPermission(Android.Manifest.Permission.AccessFineLocation,
+            //            Android.Manifest.Permission.AccessCoarseLocation,
+            //            Android.Manifest.Permission.ControlLocationUpdates,
+            //            Android.Manifest.Permission.Camera,
+            //            Android.Manifest.Permission.ReadExternalStorage,
+            //            Android.Manifest.Permission.WriteExternalStorage);
+            //}
 
             _startBtn.Click += delegate
             {
@@ -166,57 +166,5 @@ namespace FriendLoc.Droid.Activities
             }
         }
 
-        bool IsGranted(params string[] pers)
-        {
-            foreach (var per in pers)
-            {
-                if (ActivityCompat.CheckSelfPermission(this, per) != Permission.Granted)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        void CheckPermission(params string[] pers)
-        {
-            if (!IsGranted(pers))
-            {
-                if (ActivityCompat.ShouldShowRequestPermissionRationale(this, pers[0]))
-                {
-                    ActivityCompat.RequestPermissions(this, pers,
-                      REQUEST_PERMISSIONS);
-                }
-                else
-                {
-                    ActivityCompat.RequestPermissions(this, pers,
-                      REQUEST_PERMISSIONS);
-                }
-            }
-            else
-            {
-                _loginBtn.Enabled = true;
-                ServiceInstances.FileService.SetRootFolderPath(ServiceInstances.FileService.GetSdCardFolder());
-            }
-        }
-
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
-        {
-            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-
-            if (requestCode != REQUEST_PERMISSIONS)
-                return;
-
-            if (grantResults.Length > 0 && grantResults[0] == Permission.Denied)
-            {
-                Toast.MakeText(ApplicationContext, "Please allow the permission", ToastLength.Long).Show();
-            }
-            else
-            {
-                _loginBtn.Enabled = true;
-                ServiceInstances.FileService.SetRootFolderPath(ServiceInstances.FileService.GetSdCardFolder());
-            }
-        }
     }
 }
