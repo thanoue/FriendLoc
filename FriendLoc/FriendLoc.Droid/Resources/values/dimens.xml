@@ -10,4 +10,12 @@
     <dimen name="avt_place_holder_size">@dimen/_30sdp</dimen>
     <dimen name="avt_close_size">@dimen/_25sdp</dimen>
     <dimen name="avt_add_top_margin">@dimen/_109sdp</dimen>
+    <dimen name="loading_size">@dimen/_105sdp</dimen>
+    <dimen name="base_text_size">@dimen/_14sdp</dimen>
+    <dimen name="left_menu_margin">@dimen/_17sdp</dimen>
+
+    <integer name="login_name_max_length">25</integer>
+    <integer name="login_name_min_length">5</integer>
+    <integer name="password_min_length">6</integer>
+    <integer name="password_max_length">16</integer>
 </resources>

@@ -5,3 +5,5 @@ FriendLoc/FriendLoc.Droid/bin/
 FriendLoc/.vs/
 *.DS_Store
 FriendLoc/FriendLog.IOS/obj/
+FriendLoc/FriendLog.IOS/bin/
+FriendLoc/.idea/

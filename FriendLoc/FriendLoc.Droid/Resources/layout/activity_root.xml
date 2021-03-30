@@ -1,11 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 	<RelativeLayout
 		android:id="@+id/baseContentView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"/>
+	<RelativeLayout
+		android:id="@+id/loadingArea"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="#80000000"
+		android:visibility="gone">
+		<com.airbnb.lottie.LottieAnimationView
+			android:id="@+id/animation_view"
+			android:layout_width="@dimen/loading_size"
+			android:layout_height="@dimen/loading_size"
+			app:lottie_fileName="loading_bigger.json"
+			app:lottie_loop="true"
+			android:layout_centerInParent="true"
+			app:lottie_autoPlay="false" />
+		<!--<com.google.android.material.textview.MaterialTextView
+			android:id="@+id/loadingTv"
+			android:layout_below="@+id/animation_view"
+			android:gravity="center_horizontal"
+			android:layout_marginBottom="@dimen/fields_margin"
+			android:textSize="@dimen/base_text_size"
+			android:textColor="@color/colorScreenBackground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+			android:text="Loading..."/>-->
+	</RelativeLayout>
 </RelativeLayout>

@@ -1,5 +1,5 @@
 ﻿using System;
-using FriendLoc.Common.Models;
+using FriendLoc.Entity;
 
 namespace FriendLoc.Common.Repositories
 {

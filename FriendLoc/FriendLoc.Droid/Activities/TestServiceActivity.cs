@@ -17,8 +17,8 @@ using AndroidX.AppCompat.App;
 using Firebase.Auth;
 using Firebase.Database;
 using FriendLoc.Common;
-using FriendLoc.Common.Models;
 using FriendLoc.Droid.Services;
+using FriendLoc.Entity;
 
 namespace FriendLoc.Droid.Activities
 {
@@ -45,26 +45,6 @@ namespace FriendLoc.Droid.Activities
             _startBtn.Enabled = false;
             _loginBtn.Enabled = false;
 
-            //if (Build.VERSION.SdkInt >= BuildVersionCodes.Q)
-            //{
-            //    CheckPermission(()=> {
-
-            //    },Android.Manifest.Permission.AccessBackgroundLocation,
-            //                     Android.Manifest.Permission.AccessFineLocation,
-            //                     Android.Manifest.Permission.AccessCoarseLocation,
-            //                     Android.Manifest.Permission.ControlLocationUpdates,
-            //                    );
-            //}
-            //else
-            //{
-            //    CheckPermission(Android.Manifest.Permission.AccessFineLocation,
-            //            Android.Manifest.Permission.AccessCoarseLocation,
-            //            Android.Manifest.Permission.ControlLocationUpdates,
-            //            Android.Manifest.Permission.Camera,
-            //            Android.Manifest.Permission.ReadExternalStorage,
-            //            Android.Manifest.Permission.WriteExternalStorage);
-            //}
-
             _startBtn.Click += delegate
             {
                 LocationRequest locationRequest = LocationRequest.Create();
@@ -83,7 +63,7 @@ namespace FriendLoc.Droid.Activities
 
                         userIds.Add(_userId, _userId);
 
-                        var adding = await ServiceInstances.TripRepository.InsertAsync(new Common.Models.Trip()
+                        var adding = await ServiceInstances.TripRepository.InsertAsync(new Trip()
                         {
                             Description = "Test trips",
                             UserIds = userIds
@@ -117,7 +97,7 @@ namespace FriendLoc.Droid.Activities
 
             _loginBtn.Click += async delegate
             {
-                var authProvider = new FirebaseAuthProvider(new FirebaseConfig("AIzaSyCxjza0PW9fg6y4tPlljkP-iBSwOC0XY6g"));
+                var authProvider = new FirebaseAuthProvider(new FirebaseConfig(Constants.FirebaseApiKey));
 
                 var login = await authProvider.SignInWithEmailAndPasswordAsync("kha@gmail.com", "Hello_2020");
 
@@ -126,14 +106,12 @@ namespace FriendLoc.Droid.Activities
                     _userId = login.User.LocalId;
 
                     var firebase = new FirebaseClient(
-                    "https://friendloc-98ed3-default-rtdb.firebaseio.com/",
+                    Constants.FirebaseDbPath,
                     new FirebaseOptions
                     {
                         AuthTokenAsyncFactory = () => Task.FromResult(login.FirebaseToken)
                     });
 
-                    ServiceInstances.TripRepository.Init(firebase);
-                    ServiceInstances.UserRepository.Init(firebase);
 
                     _startBtn.Enabled = true;
                 }

@@ -1,7 +1,8 @@
 ﻿using System;
 using Newtonsoft.Json;
+using FriendLoc.Common;
 
-namespace FriendLoc.Common.Models
+namespace FriendLoc.Entity
 {
     public abstract class BaseEntity
     {

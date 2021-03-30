@@ -7,8 +7,8 @@ using Android.Webkit;
 using AndroidX.AppCompat.App;
 using Asksira.WebViewSuiteLib;
 using FriendLoc.Common;
-using FriendLoc.Common.Models;
 using FriendLoc.Common.Services;
+using FriendLoc.Model;
 using Java.Interop;
 using static Asksira.WebViewSuiteLib.WebViewSuite;
 

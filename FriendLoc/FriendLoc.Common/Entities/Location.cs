@@ -1,8 +1,9 @@
 ﻿using System;
+using FriendLoc.Common;
 using LiteDB;
 using Newtonsoft.Json;
 
-namespace FriendLoc.Common.Models
+namespace FriendLoc.Entity
 {
     public class TripLocation
     {

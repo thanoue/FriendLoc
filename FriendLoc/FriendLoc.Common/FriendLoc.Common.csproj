@@ -12,9 +12,14 @@
     <Folder Include="Repositories\Base\" />
     <Folder Include="Repositories\UserRepo\" />
     <Folder Include="Repositories\TripRepo\" />
+    <Folder Include="Statistics\" />
+    <Folder Include="Entities\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NLog" Version="4.7.8" />
     <PackageReference Include="FirebaseDatabase.net" Version="4.0.6" />
+    <PackageReference Include="FirebaseStorage.net" Version="1.0.3" />
+    <PackageReference Include="FirebaseAuthentication.net" Version="3.6.0" />
+    <PackageReference Include="PCLCrypto" Version="2.0.147" />
   </ItemGroup>
 </Project>

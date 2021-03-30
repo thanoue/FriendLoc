@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
+  <group
+        android:id="@+id/group1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/tripItem"
+            android:icon="@drawable/ic_favorite_24dp"
+            android:title="Trips" />
+        <item
+            android:id="@+id/milestoneItem"
+            android:icon="@drawable/ic_favorite_24dp"
+            android:title="Milestones" />
+        <item
+            android:id="@+id/logoutItem"
+            android:icon="@drawable/ic_favorite_24dp"
+            android:title="Logout" />
+    </group>
+
+</menu>

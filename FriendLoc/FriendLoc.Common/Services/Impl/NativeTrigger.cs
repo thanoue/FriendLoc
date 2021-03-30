@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using FriendLoc.Common.Models;
 using FriendLoc.Common.Services;
+using FriendLoc.Model;
 using Newtonsoft.Json;
 
 namespace FriendLoc.Common.Services.Impl

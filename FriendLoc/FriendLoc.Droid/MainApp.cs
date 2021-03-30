@@ -29,6 +29,10 @@ namespace FriendLoc.Droid
             ServiceLocator.Instance.Register<ITripRepository, TripRepository>();
             ServiceLocator.Instance.Register<IUserRepository, UserRepository>();
             ServiceLocator.Instance.Register<INativeTrigger, DroidNativeTrigger>();
+            ServiceLocator.Instance.Register<IResourceService, DroidResourceService>(this.ApplicationContext);
+            ServiceLocator.Instance.Register<IAuthService, FirebaseAuthService>();
+            ServiceLocator.Instance.Register<ISecureStorageService, DroidSecureStorageService>(this);
+
         }
     }
 }

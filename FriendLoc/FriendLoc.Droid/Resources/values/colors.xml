@@ -5,4 +5,8 @@
     <color name="colorAccent">#2c3e50</color>
     <color name="colorScreenBackground">#fff</color>
     <color name="colorText">#000</color>
+    <color name="colorError">#FF0000</color>
+    <color name="colorInfo">#4682B4</color>
+    <color name="colorWarning">#FFFF00</color>
+    <color name="colorSuccess">#32CD32</color>
 </resources>

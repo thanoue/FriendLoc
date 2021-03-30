@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using FriendLoc.Common.Models;
+using FriendLoc.Model;
 
 namespace FriendLoc.Common.Services
 {

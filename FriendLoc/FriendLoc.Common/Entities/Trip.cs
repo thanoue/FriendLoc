@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FriendLoc.Common.Models
+namespace FriendLoc.Entity
 {
     public class Trip : BaseEntity
     {

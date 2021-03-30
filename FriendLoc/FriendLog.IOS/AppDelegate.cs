@@ -1,4 +1,5 @@
-﻿using Foundation;
+﻿using System;
+using Foundation;
 using UIKit;
 
 namespace FriendLog.IOS
@@ -15,6 +16,8 @@ namespace FriendLog.IOS
         [Export("application:didFinishLaunchingWithOptions:")]
         public bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
         {
+         
+
             // Override point for customization after application launch.
             // If not required for your application you can safely delete this method
             return true;
@@ -37,6 +40,7 @@ namespace FriendLog.IOS
             // If any sessions were discarded while the application was not running, this will be called shortly after `FinishedLaunching`.
             // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
         }
+
     }
 }
 

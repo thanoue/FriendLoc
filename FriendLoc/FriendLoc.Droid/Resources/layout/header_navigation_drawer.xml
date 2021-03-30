@@ -7,9 +7,10 @@
 	 android:fitsSystemWindows="true"
 	android:layout_height="wrap_content">
 	<com.google.android.material.imageview.ShapeableImageView
+		android:id="@+id/avtImg"
 		android:layout_width="@dimen/avtt_img_size"
 		android:layout_height="@dimen/avtt_img_size"
-		android:layout_marginStart="24dp"
+		android:layout_marginStart="@dimen/left_menu_margin"
 		android:layout_centerHorizontal="true"
 		app:strokeColor="@android:color/darker_gray"
 		android:padding="@dimen/big_stroke_size"
@@ -20,20 +21,22 @@
         />
 
 	<TextView
+		android:id="@+id/nameTv"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="24dp"
-		android:layout_marginStart="24dp"
-		android:layout_marginEnd="24dp"
+		android:layout_marginTop="@dimen/left_menu_margin"
+		android:layout_marginStart="@dimen/left_menu_margin"
+		android:layout_marginEnd="@dimen/left_menu_margin"
 		android:textAppearance="?attr/textAppearanceHeadline6"
 		android:text="Big title" />
 
 	<TextView
+		android:id="@+id/phoneNumberTv"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginBottom="24dp"
-		android:layout_marginStart="24dp"
-		android:layout_marginEnd="24dp"
+		android:layout_marginBottom="@dimen/left_menu_margin"
+		android:layout_marginStart="@dimen/left_menu_margin"
+		android:layout_marginEnd="@dimen/left_menu_margin"
 		android:textAppearance="?attr/textAppearanceBody2"
 		android:textColor="@color/material_on_surface_emphasis_medium"
 		android:text="Small title" />

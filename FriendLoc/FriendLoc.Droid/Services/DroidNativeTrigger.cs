@@ -1,7 +1,6 @@
 ﻿using System;
 using Android.OS;
 using Android.Webkit;
-using FriendLoc.Common.Models;
 using FriendLoc.Common.Services;
 using FriendLoc.Common.Services.Impl;
 using Newtonsoft.Json;

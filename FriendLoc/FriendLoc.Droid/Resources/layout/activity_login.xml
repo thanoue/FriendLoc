@@ -11,13 +11,13 @@
 		android:padding="@dimen/screen_padding"
 		android:gravity="center">
 
-		<com.google.android.material.textfield.TextInputLayout
+		<FriendLoc.Controls.CustomEditText
 			android:id="@+id/userNameTxt"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:hint="Login Name"
 			app:counterEnabled="true"
-			app:counterMaxLength="20"
+			app:counterMaxLength="@integer/login_name_max_length"
 			app:endIconMode="clear_text"
 			app:startIconDrawable="@drawable/ic_face_24"
 			app:startIconContentDescription="The login name"
@@ -27,9 +27,9 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content" />
 
-		</com.google.android.material.textfield.TextInputLayout>
+		</FriendLoc.Controls.CustomEditText>
 
-		<com.google.android.material.textfield.TextInputLayout
+		<FriendLoc.Controls.CustomEditText
 			android:layout_marginTop="@dimen/fields_margin"
 			android:id="@+id/passwordTxt"
 			android:layout_width="match_parent"
@@ -38,7 +38,7 @@
 			app:endIconMode="password_toggle"
 			app:errorEnabled="true"
 			app:counterEnabled="true"
-			app:counterMaxLength="15"
+			app:counterMaxLength="@integer/password_max_length"
 			app:startIconDrawable="@android:drawable/ic_secure"
 			app:startIconContentDescription="The login name"
 			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -48,12 +48,13 @@
 				android:inputType="textPassword"
 				android:layout_height="wrap_content" />
 
-		</com.google.android.material.textfield.TextInputLayout>
+		</FriendLoc.Controls.CustomEditText>
 
 		<CheckBox
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:checked="false"
+			android:id="@+id/keepLoggedinCheckBox"
 			app:useMaterialThemeColors="true"
 			android:text="Keep me logged in"/>
 		<Button

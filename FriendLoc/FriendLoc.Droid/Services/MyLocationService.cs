@@ -12,6 +12,8 @@ using Android.Runtime;
 using Android.Support.V4.App;
 using Android.Util;
 using FriendLoc.Common;
+using FriendLoc.Entity;
+
 namespace FriendLoc.Droid.Services
 {
     [BroadcastReceiver(Exported = true, Enabled = true)]
@@ -120,7 +122,7 @@ namespace FriendLoc.Droid.Services
 
             _callback = new CusLocationCallback((location)=> {
 
-                ServiceInstances.TripRepository.AddLocation(_tripid, new Common.Models.TripLocation()
+                ServiceInstances.TripRepository.AddLocation(_tripid, new TripLocation()
                 {
                     Latitude = location.Latitude,
                     Longitude = location.Longitude,

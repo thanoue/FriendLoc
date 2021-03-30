@@ -2,7 +2,7 @@
 using Newtonsoft;
 using Newtonsoft.Json;
 
-namespace FriendLoc.Common.Models
+namespace FriendLoc.Model
 {
     public class InitMapModel
     {

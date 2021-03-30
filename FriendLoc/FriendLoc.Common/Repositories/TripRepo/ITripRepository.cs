@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using FriendLoc.Common.Models;
+using FriendLoc.Entity;
 
 namespace FriendLoc.Common.Repositories
 {

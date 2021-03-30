@@ -1,6 +1,8 @@
 ﻿using System;
 using Android.OS;
 using Android.Webkit;
+using Firebase.Auth;
+using Newtonsoft.Json;
 
 namespace FriendLoc.Droid
 {
@@ -10,5 +12,7 @@ namespace FriendLoc.Droid
         {
            
         }
+
+        
     }
 }
