@@ -3,6 +3,7 @@ using Firebase.Database;
 using Newtonsoft.Json;
 using FriendLoc.Entity;
 using FriendLoc.Model;
+using Firebase.Auth;
 
 namespace FriendLoc.Common
 {
@@ -23,34 +24,34 @@ namespace FriendLoc.Common
             return dtfommls.ToLocalTime();
         }
 
-        public static string FirebaseAuthExceptionHandler(string exc)
+        public static string FirebaseAuthExceptionHandler(FirebaseAuthException firebaseExcep)
         {
-            var model = JsonConvert.DeserializeObject<FirebaseClientException>(exc);
-
-            switch (model.Error.Message)
+            switch (firebaseExcep.Reason)
             {
-                case "EMAIL_EXISTS":
-
+                case AuthErrorReason.EmailExists:
                     return "The email address is already in use by another account!";
-                case "OPERATION_NOT_ALLOWED":
 
-                    return "Password sign-in is disabled for this project!";
-
-                case "TOO_MANY_ATTEMPTS_TRY_LATER":
+                case AuthErrorReason.TooManyAttemptsTryLater:
 
                     return "We have blocked all requests from this device due to unusual activity. Try again later!";
 
-                case "INVALID_PASSWORD":
-
-                    return "Invalid Password!";
-                    
-                case "EMAIL_NOT_FOUND":
+                case AuthErrorReason.InvalidEmailAddress:
+                case AuthErrorReason.UnknownEmailAddress:
 
                     return "Email is not found!";
+
+                case AuthErrorReason.OperationNotAllowed:
+
+                   return  "Password sign-in is disabled for this project!";
+
+                case AuthErrorReason.WrongPassword:
+
+                    return "Invalid Password!";
 
                 default:
 
                     return "Has some errors with Firebase Authentication";
+
             }
         }
     }

@@ -20,7 +20,9 @@ namespace FriendLoc.Common
 
         public const string LoginName = "LoginName";
         public const string Password = "Password";
-
+        public const string UserToken = "UserToken";
+        public const string LoggedinUser = "LoggedinUser";
+        public const string LastestLoggedIn = "LastestLoggedIn";
         public const int LoginNameMaxLength = 15;
     }
 

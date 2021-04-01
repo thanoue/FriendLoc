@@ -6,6 +6,8 @@ using FriendLoc.Common;
 using System.IO;
 using Firebase.Storage;
 using FriendLoc.Entity;
+using Firebase.Auth;
+using System.Threading;
 
 namespace FriendLoc.Common.Repositories
 {
@@ -40,36 +42,117 @@ namespace FriendLoc.Common.Repositories
 
         public async Task<T> InsertAsync(T entity)
         {
-            entity.Created = DateTime.Now.GetLocalTimeTotalSeconds();
-            entity.Updated = DateTime.Now.GetLocalTimeTotalSeconds();
-            entity.Id = string.IsNullOrEmpty(entity.Id) ? Guid.NewGuid().ToString() : entity.Id;
-
-            var res = await Client.Child(Path).Child(entity.Id).PutAsync<T>(entity).ContinueWith((task) =>
+            try
             {
-                return entity;
-            });
+                entity.Created = DateTime.Now.GetLocalTimeTotalSeconds();
+                entity.Updated = DateTime.Now.GetLocalTimeTotalSeconds();
+                entity.Id = string.IsNullOrEmpty(entity.Id) ? Guid.NewGuid().ToString() : entity.Id;
 
-            return res;
+                var res = await Client.Child(Path).Child(entity.Id).PutAsync<T>(entity).ContinueWith((task) =>
+                {
+                    return entity;
+                });
+
+                return res;
+            }
+            catch(FirebaseAuthException firebaseExcep)
+            {
+                if (firebaseExcep.Reason != AuthErrorReason.InvalidAccessToken)
+                    return null;
+
+                var refreshToken = await ServiceInstances.AuthService.Login(UserSession.Instance.LoggedinUser.LoginName, UserSession.Instance.LoggedinUser.Password, (err) =>
+                {
+
+                });
+
+                if (!string.IsNullOrEmpty(refreshToken))
+                {
+                    return await InsertAsync(entity);
+                }
+                else
+                    return null;
+            }
         }
 
         public async Task<T> GetById(string id)
         {
-            return await Client.Child(Path).Child(id).OnceSingleAsync<T>();
+            try
+            {
+                return await Client.Child(Path).Child(id).OnceSingleAsync<T>();
+            }
+            catch(FirebaseAuthException firebaseExcep)
+            {
+                if (firebaseExcep.Reason != AuthErrorReason.InvalidAccessToken)
+                    return null;
+
+                var refreshToken = await ServiceInstances.AuthService.Login(UserSession.Instance.LoggedinUser.LoginName, UserSession.Instance.LoggedinUser.Password, (err) =>
+                {
+
+                });
+
+                if (!string.IsNullOrEmpty(refreshToken))
+                {
+                    return await GetById(id);
+                }
+                else
+                    return null;
+            }
         }
 
         public async Task<T> UpdateById(T entity)
         {
-            entity.Updated = DateTime.Now.GetLocalTimeTotalSeconds();
-
-            return await Client.Child(Path).Child(entity.Id).PutAsync<T>(entity).ContinueWith((task) =>
+            try
             {
-                return entity;
-            });
+                entity.Updated = DateTime.Now.GetLocalTimeTotalSeconds();
+
+                return await Client.Child(Path).Child(entity.Id).PutAsync<T>(entity).ContinueWith((task) =>
+                {
+                    return entity;
+                });
+            }
+            catch (FirebaseAuthException firebaseExcep)
+            {
+                if (firebaseExcep.Reason != AuthErrorReason.InvalidAccessToken)
+                    return null;
+
+                var refreshToken = await ServiceInstances.AuthService.Login(UserSession.Instance.LoggedinUser.LoginName, UserSession.Instance.LoggedinUser.Password, (err) =>
+                {
+
+                });
+
+                if (!string.IsNullOrEmpty(refreshToken))
+                {
+                    return await UpdateById(entity);
+                }
+                else
+                    return null;
+            }
+          
         }
 
         public async Task DeleteById(string id)
         {
-            await Client.Child(Path).Child(id).DeleteAsync(new TimeSpan(0, 0, 10));
+            try
+            {
+                await Client.Child(Path).Child(id).DeleteAsync(new TimeSpan(0, 0, 10));
+            }
+            catch (FirebaseAuthException firebaseExcep)
+            {
+                if (firebaseExcep.Reason != AuthErrorReason.InvalidAccessToken)
+                    return ;
+
+                var refreshToken = await ServiceInstances.AuthService.Login(UserSession.Instance.LoggedinUser.LoginName, UserSession.Instance.LoggedinUser.Password, (err) =>
+                {
+
+                });
+
+                if (!string.IsNullOrEmpty(refreshToken))
+                {
+                    await DeleteById(id);
+                }
+                else
+                    return;
+            }
         }
 
         public void NewRecordListening(Action<T> action)

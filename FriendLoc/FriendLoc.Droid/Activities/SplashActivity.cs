@@ -11,6 +11,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using FriendLoc.Common;
+using FriendLoc.Entity;
 
 namespace FriendLoc.Droid.Activities
 {
@@ -19,6 +20,7 @@ namespace FriendLoc.Droid.Activities
     {
         protected override int LayoutResId => Resource.Layout.activity_splash;
         protected override bool IsFullScreen => true;
+        protected override int ThemeResId => Resource.Style.AppTheme;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -37,7 +39,7 @@ namespace FriendLoc.Droid.Activities
             }
             else
             {
-                CheckPermission(PermissionCallback,Android.Manifest.Permission.AccessFineLocation,
+                CheckPermission(PermissionCallback, Android.Manifest.Permission.AccessFineLocation,
                         Android.Manifest.Permission.AccessCoarseLocation,
                         Android.Manifest.Permission.ControlLocationUpdates,
                         Android.Manifest.Permission.Camera,
@@ -48,27 +50,33 @@ namespace FriendLoc.Droid.Activities
 
         void PermissionCallback()
         {
-            var loginName = ServiceInstances.SecureStorage.Fetch(Constants.LoginName);
-            var password = ServiceInstances.SecureStorage.Fetch(Constants.Password);
+            var loggedInUser = ServiceInstances.SecureStorage.GetObject<User>(Constants.LoggedinUser);
+            var userToken = ServiceInstances.SecureStorage.Fetch(Constants.UserToken);
 
-            if (!string.IsNullOrEmpty(loginName))
+            if (!string.IsNullOrEmpty(userToken))
             {
-                StartLoading();
+                DateTime lastestLoggedIn;
 
-                ServiceInstances.AuthService.Login(loginName, password, (err) => {
+                if (DateTime.TryParse(ServiceInstances.SecureStorage.Fetch(Constants.LastestLoggedIn), out lastestLoggedIn))
+                {
+                    var period = DateTime.Now - lastestLoggedIn;
 
-                    StopLoading();
-                    ErrorToast(err);
+                    if (period.TotalMinutes > 50)
+                    {
+                        ServiceInstances.SecureStorage.DeleteObject(Constants.LoggedinUser);
+                        ServiceInstances.SecureStorage.DeleteObject(Constants.UserToken);
 
-                    StartNewActivity(typeof(LoginActivity));
+                        StartNewActivity(typeof(LoginActivity));
+                        return;
+                    }
 
-                }, () => {
-
-                    StopLoading();
+                    ServiceInstances.ResourceService.UserToken = userToken;
+                    UserSession.Instance.LoggedinUser = loggedInUser;
 
                     StartNewActivity(typeof(HomeActivity));
-
-                });
+                }
+                else
+                    StartNewActivity(typeof(LoginActivity));
             }
             else
             {

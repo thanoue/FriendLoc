@@ -14,13 +14,15 @@ using AndroidX.AppCompat.App;
 using AndroidX.DrawerLayout.Widget;
 using BumpTech.GlideLib;
 using FriendLoc.Common;
+using FriendLoc.Droid.Fragments;
 using Google.Android.Material.AppBar;
+using Google.Android.Material.FloatingActionButton;
 using Google.Android.Material.ImageView;
 using Google.Android.Material.Navigation;
 
 namespace FriendLoc.Droid.Activities
 {
-    [Activity(Theme = "@style/AppThemeTranslucent")]
+    [Activity]
     public class HomeActivity : BaseActivity, NavigationView.IOnNavigationItemSelectedListener
     {
         MaterialToolbar _toolBar;
@@ -28,21 +30,22 @@ namespace FriendLoc.Droid.Activities
         NavigationView _navigationView;
         ShapeableImageView _avtImmg;
         TextView _fullNameTv, _phoneNumberTv;
+        ExtendedFloatingActionButton _addTripBtn;
 
         protected override int LayoutResId => Resource.Layout.activity_home;
         protected override bool IsFullScreen => true;
-
         public bool OnNavigationItemSelected(IMenuItem menuItem)
         {
             menuItem.SetChecked(true);
+
             _drawerLayout.Close();
+
             switch (menuItem.ItemId)
             {
                 case Resource.Id.logoutItem:
 
-                    ServiceInstances.SecureStorage.DeleteObject(Constants.LoginName);
-                    ServiceInstances.SecureStorage.DeleteObject(Constants.Password);
-
+                    ServiceInstances.SecureStorage.DeleteObject(Constants.LoggedinUser);
+                    ServiceInstances.SecureStorage.DeleteObject(Constants.UserToken);
 
                     var intent = new Intent(this, typeof(LoginActivity));
 
@@ -63,11 +66,16 @@ namespace FriendLoc.Droid.Activities
             _toolBar = FindViewById<MaterialToolbar>(Resource.Id.topAppBar);
             _drawerLayout = FindViewById<DrawerLayout>(Resource.Id.container);
             _navigationView = FindViewById<NavigationView>(Resource.Id.navigationView);
-          
+            _addTripBtn = FindViewById<ExtendedFloatingActionButton>(Resource.Id.addTripBtn);
 
             _toolBar.Click += delegate
             {
                 _drawerLayout.Open();
+            };
+
+            _addTripBtn.Click += delegate
+            {
+                this.LoadFragment(new AddTripFragment());
             };
 
             _navigationView.SetNavigationItemSelectedListener(this);

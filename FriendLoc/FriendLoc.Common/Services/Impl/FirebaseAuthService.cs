@@ -14,9 +14,28 @@ namespace FriendLoc.Common.Services.Impl
         {
         }
 
-        public async Task Login(string loginName, string password, Action<string> errorCallback, Action successCallback)
+        FirebaseAuthProvider GetProvider()
         {
-            var authProvider = new FirebaseAuthProvider(new FirebaseConfig(Constants.FirebaseApiKey));
+            return new FirebaseAuthProvider(new FirebaseConfig(Constants.FirebaseApiKey));
+        }
+
+        public async Task<string> RefreshTokenAsync()
+        {
+            var login = await Login(UserSession.Instance.LoggedinUser.LoginName, UserSession.Instance.LoggedinUser.Password,(err)=> {
+
+            });
+
+            if (!string.IsNullOrEmpty(login))
+            {
+                return login;
+            }
+            else
+                return "";
+        }
+
+        public async Task<string> Login(string loginName, string password, Action<string> errorCallback)
+        {
+            var authProvider = GetProvider();
 
             try
             {
@@ -24,23 +43,30 @@ namespace FriendLoc.Common.Services.Impl
 
                 ServiceInstances.ResourceService.UserToken = login.FirebaseToken;
 
+                login.FirebaseAuthRefreshed += LoginFirebaseAuthRefreshed;
+
                 var user = await ServiceInstances.UserRepository.GetById(login.User.LocalId);
                 UserSession.Instance.LoggedinUser = user;
+                ServiceInstances.SecureStorage.Store(Constants.LastestLoggedIn, DateTime.Now.ToString());
 
-
-                successCallback();
-                return ;
+                return ServiceInstances.ResourceService.UserToken;
             }
             catch(FirebaseAuthException firebaseExcep)
             {
-                errorCallback(UtilCommon.FirebaseAuthExceptionHandler(firebaseExcep.ResponseData));
-                return;
+                errorCallback(UtilCommon.FirebaseAuthExceptionHandler(firebaseExcep));
+                return "";
             }
             catch(Exception ex)
             {
                 errorCallback(ex.Message);
-                return;
+                return "";
             }
+        }
+
+        private void LoginFirebaseAuthRefreshed(object sender, FirebaseAuthEventArgs e)
+        {
+            ServiceInstances.ResourceService.UserToken = e.FirebaseAuth.RefreshToken;
+            ServiceInstances.SecureStorage.Store(Constants.LastestLoggedIn,DateTime.Now.ToString());
         }
 
         public async void  SignUp(SignUpModel model, Action<string> errorCallback, Action successCallback)
@@ -60,7 +86,7 @@ namespace FriendLoc.Common.Services.Impl
                 Gender = model.Gender
             };
 
-            var authProvider = new FirebaseAuthProvider(new FirebaseConfig(Constants.FirebaseApiKey));
+            var authProvider = GetProvider();
 
             try
             {
@@ -95,7 +121,7 @@ namespace FriendLoc.Common.Services.Impl
             }
             catch (Firebase.Auth.FirebaseAuthException firebaseExcep)
             {
-                errorCallback(UtilCommon.FirebaseAuthExceptionHandler(firebaseExcep.ResponseData));
+                errorCallback(UtilCommon.FirebaseAuthExceptionHandler(firebaseExcep));
                 return;
             }
             catch (Exception ex)

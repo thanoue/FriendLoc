@@ -30,13 +30,14 @@ using FriendLoc.Controls;
 using User = FriendLoc.Entity.User;
 using FriendLoc.Entity;
 using FriendLoc.Model;
+using FriendLoc.Droid.Fragments;
 
 namespace FriendLoc.Droid.Activities
 {
     [Activity]
     public class SignUpActivity : BaseActivity
     {
-        protected override bool IsConfirmBeforeBack => true;
+        protected override bool IsAskBeforeDismiss => true;
         protected override int LayoutResId => Resource.Layout.activity_signup;
         protected override string HeaderTitle => "Sign up";
 
@@ -73,6 +74,7 @@ namespace FriendLoc.Droid.Activities
 
             _avtImg.Click += delegate
             {
+                //this.LoadFragment(new AddTripFragment());
                 SelectAvt();
             };
 

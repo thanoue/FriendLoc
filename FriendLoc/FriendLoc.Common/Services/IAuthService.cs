@@ -8,7 +8,8 @@ namespace FriendLoc.Common.Services
     public interface IAuthService
     {
         void SignUp(SignUpModel model, Action<string> errorCallback, Action successCallback);
-        Task Login(string loginName, string password,Action<string> errorCallback, Action successCallback);
+        Task<string> Login(string loginName, string password, Action<string> errorCallback);
         Task<string> PushUserAvatar(string path, Action<int> progressAction);
+        Task<string> RefreshTokenAsync();
     }
 }

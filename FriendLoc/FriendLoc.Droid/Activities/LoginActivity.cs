@@ -13,6 +13,7 @@ using Android.Widget;
 using AndroidX.AppCompat.App;
 using FriendLoc.Common;
 using FriendLoc.Controls;
+using FriendLoc.Droid.Fragments;
 using Google.Android.Material.Button;
 
 namespace FriendLoc.Droid.Activities
@@ -30,12 +31,7 @@ namespace FriendLoc.Droid.Activities
         {
             base.OnCreate(savedInstanceState);
 
-            Window.ClearFlags(Android.Views.WindowManagerFlags.TranslucentNavigation);
-            Window.ClearFlags(Android.Views.WindowManagerFlags.TranslucentStatus);
-            Window.AddFlags(Android.Views.WindowManagerFlags.DrawsSystemBarBackgrounds);
-
             Window.SetStatusBarColor(this.Resources.GetColor(Resource.Color.colorScreenBackground));
-            Window.SetNavigationBarColor(this.Resources.GetColor(Resource.Color.colorScreenBackground));
 
             _loginNameTxt = FindViewById<CustomEditText>(Resource.Id.userNameTxt);
             _passwordTxt = FindViewById<CustomEditText>(Resource.Id.passwordTxt);
@@ -51,8 +47,12 @@ namespace FriendLoc.Droid.Activities
 
             FindViewById<MaterialButton>(Resource.Id.loginBtn).Click += delegate
             {
-                Login();
+                //this.LoadFragment(new AddTripFragment());
+                LoginAsync();
             };
+
+            _loginNameTxt.Text = "testuser";
+            _passwordTxt.Text = "123456789";
             // Create your application here
         }
 
@@ -87,34 +87,40 @@ namespace FriendLoc.Droid.Activities
             return res;
         }
 
-        void Login()
+        async System.Threading.Tasks.Task LoginAsync()
         {
             if (!ValidateFields())
                 return;
 
             StartLoading();
 
-            ServiceInstances.AuthService.Login(_loginNameTxt.Text, _passwordTxt.Text,(err)=> {
+            var token = await ServiceInstances.AuthService.Login(_loginNameTxt.Text, _passwordTxt.Text,(err)=> {
 
                 StopLoading();
                 ErrorToast(err);
 
-            },()=> {
+            });
 
+            if (!string.IsNullOrEmpty(token))
+            {
                 StopLoading();
-                StartActivity(typeof(HomeActivity));
+
+                var intent = new Intent(this, typeof(HomeActivity));
+                intent.AddFlags(ActivityFlags.ClearTask | ActivityFlags.ClearTop | ActivityFlags.NewTask);
+
+                StartActivity(intent);
 
                 if (_keepLoggedinCheckBox.Checked)
                 {
-                    ServiceInstances.SecureStorage.Store(Constants.LoginName,_loginNameTxt.Text);
-                    ServiceInstances.SecureStorage.Store(Constants.Password, _passwordTxt.Text);
+                    ServiceInstances.SecureStorage.StoreObject(Constants.LoggedinUser, UserSession.Instance.LoggedinUser);
+                    ServiceInstances.SecureStorage.Store(Constants.UserToken, ServiceInstances.ResourceService.UserToken);
                 }
                 else
                 {
-                    ServiceInstances.SecureStorage.DeleteObject(Constants.LoginName);
-                    ServiceInstances.SecureStorage.DeleteObject(Constants.Password);
+                    ServiceInstances.SecureStorage.DeleteObject(Constants.LoggedinUser);
+                    ServiceInstances.SecureStorage.DeleteObject(Constants.UserToken);
                 }
-            });
+            }
         }
     }
 }

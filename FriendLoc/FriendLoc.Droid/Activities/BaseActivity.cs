@@ -16,11 +16,12 @@ using AndroidX.AppCompat.App;
 using AndroidX.Core.App;
 using Com.Airbnb.Lottie;
 using FriendLoc.Common;
+using FriendLoc.Droid.Fragments;
 using Google.Android.Material.AppBar;
 using Google.Android.Material.Dialog;
 using Google.Android.Material.Snackbar;
 using Google.Android.Material.TextView;
-
+using Fragment = AndroidX.Fragment.App.Fragment;
 namespace FriendLoc.Droid.Activities
 {
     public abstract class BaseActivity : AppCompatActivity, View.IOnClickListener
@@ -31,22 +32,27 @@ namespace FriendLoc.Droid.Activities
         protected virtual bool IsFullScreen => false;
         protected virtual string HeaderTitle => "";
         protected virtual int NavigationIconResId => Resource.Drawable.ic_back_24;
-        protected virtual bool IsConfirmBeforeBack => false;
+        protected virtual bool IsAskBeforeDismiss => false;
+        protected virtual int ThemeResId => Resource.Style.WhiteNavigtionBaseTheme;
 
         RelativeLayout _loadingView;
         LottieAnimationView _animView;
         Action _permissionCallback;
         MaterialToolbar _toolBar;
         RelativeLayout _rootView;
+        FrameLayout _fragmentContainer;
+        BaseFragment _currentFragment;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            SetTheme(ThemeResId);
+
             base.OnCreate(savedInstanceState);
 
             SetContentView(Resource.Layout.activity_root);
 
             _rootView = FindViewById<RelativeLayout>(Resource.Id.baseContentView);
-
+            _fragmentContainer = FindViewById<FrameLayout>(Resource.Id.fragmentContainer);
             _loadingView = FindViewById<RelativeLayout>(Resource.Id.loadingArea);
             _animView = FindViewById<LottieAnimationView>(Resource.Id.animation_view);
             _animView.SetScaleType(ImageView.ScaleType.FitXy);
@@ -73,7 +79,7 @@ namespace FriendLoc.Droid.Activities
 
         protected void ErrorToast(string content, Action onClick = null)
         {
-            ToastMessage(content, Resource.Color.colorError,5000, onClick);
+            ToastMessage(content, Resource.Color.colorError, 5000, onClick);
         }
 
         protected void WarningToast(string content, Action onClick = null)
@@ -137,33 +143,51 @@ namespace FriendLoc.Droid.Activities
 
         protected virtual void OnCancel()
         {
-            this.Finish();
-        }
-
-        void OnBackClick()
-        {
-            if (!IsConfirmBeforeBack)
+            if (_currentFragment != null)
             {
-                Finish();
+                RemoveFragment(_currentFragment);
                 return;
             }
 
+            this.Finish();
+        }
+
+        public void OnBackClick()
+        {
             var builder = new MaterialAlertDialogBuilder(this)
                                 .SetTitle("Alert")
-                                .SetMessage("Do you want to save it first?")
+                                .SetMessage("Do you really want to discard all your changes?")
                                 .SetNeutralButton("Cancel", (sender, e) =>
                                 {
 
                                 })
                                 .SetNegativeButton("No", (sender, e) =>
                                 {
-                                    OnCancel();
                                 })
                                 .SetPositiveButton("Yes", (sender, e) =>
                                 {
-                                    OnSaveRequest();
+                                    OnCancel();
                                 });
 
+            if (_currentFragment != null)
+            {
+                if (_currentFragment.IsAskBeforeDismiss)
+                {
+                    builder.Show();
+                    return;
+                }
+                else
+                {
+                    OnCancel();
+                    return;
+                }
+            }
+
+            if (!IsAskBeforeDismiss)
+            {
+                OnCancel();
+                return;
+            }
 
             builder.Show();
         }
@@ -194,6 +218,30 @@ namespace FriendLoc.Droid.Activities
             }
 
             return true;
+        }
+
+        public void LoadFragment(BaseFragment fragment, bool isWithAnim = true)
+        {
+            var ft = SupportFragmentManager.BeginTransaction();
+
+            if (isWithAnim)
+                ft.SetCustomAnimations(Resource.Animation.design_bottom_sheet_slide_in, Resource.Animation.design_bottom_sheet_slide_out);
+
+            ft.Replace(_fragmentContainer.Id, fragment).Commit();
+
+            _currentFragment = fragment;
+        }
+
+        public void RemoveFragment(BaseFragment fragment, bool isWithAnim = true)
+        {
+            var ft = SupportFragmentManager.BeginTransaction();
+
+            if (isWithAnim)
+                ft.SetCustomAnimations(Resource.Animation.design_bottom_sheet_slide_in, Resource.Animation.design_bottom_sheet_slide_out);
+
+            ft.Remove(fragment).Commit();
+
+            _currentFragment = null;
         }
 
         protected void CheckPermission(Action successCallback, params string[] pers)
