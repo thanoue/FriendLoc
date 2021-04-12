@@ -7,9 +7,11 @@ using Android.Webkit;
 using AndroidX.AppCompat.App;
 using Asksira.WebViewSuiteLib;
 using FriendLoc.Common;
+using FriendLoc.Common.Models;
 using FriendLoc.Common.Services;
 using FriendLoc.Model;
 using Java.Interop;
+using Newtonsoft.Json;
 using static Asksira.WebViewSuiteLib.WebViewSuite;
 
 namespace FriendLoc.Droid.Activities
@@ -63,7 +65,7 @@ namespace FriendLoc.Droid.Activities
 
         public void OnReady()
         {
-            ServiceInstances.NativeTrigger.InitMap("FJqTTDyUrZA2WiGRgXWfkWEfdK98VSCgHpGpn1bkvMM", 10.877500, 106.722928);
+            ServiceInstances.NativeTrigger.InitMap(Constants.HereMapApiKey, 10.877500, 106.722928);
 
             (new Handler()).PostDelayed(() =>
             {
@@ -124,48 +126,11 @@ namespace FriendLoc.Droid.Activities
 
         }
 
+        public void LocationUpdated(Coordinate coordinate)
+        {
+
+        }
+
         #endregion trigger
     }
-
-    public class JavascriptClient : Java.Lang.Object
-    {
-        IWebTrigger _trigger;
-
-        public JavascriptClient(IWebTrigger trigger)
-        {
-            _trigger = trigger;
-        }
-
-        [Android.Webkit.JavascriptInterface]
-        [Export("nativeInvoke")]
-        public void NativeInvoke(string command, string data)
-        {
-            switch (command)
-            {
-                case Command.documentIsReady:
-
-                    _trigger?.OnReady();
-
-                    break;
-            }
-        }
-
-    }
-
-    public class MyWebChromeClient : WebChromeClient
-    {
-        public MyWebChromeClient()
-        {
-        }
-
-        [Obsolete]
-        public override void OnConsoleMessage(string message, int lineNumber, string sourceID)
-        {
-            base.OnConsoleMessage(message, lineNumber, sourceID);
-
-            Console.WriteLine(string.Format("LOG: {0}, lineNumber: {1}, file: {2}", message, lineNumber, sourceID));
-        }
-    }
-
-
 }

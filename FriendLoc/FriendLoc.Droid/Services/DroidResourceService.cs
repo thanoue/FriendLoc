@@ -27,5 +27,9 @@ namespace FriendLoc.Droid.Services
         public override int PasswordMinLength => _context.Resources.GetInteger(Resource.Integer.password_min_length);
 
         public override int PasswordMaxLength => _context.Resources.GetInteger(Resource.Integer.password_max_length);
+
+        public override int TripNameMinLength => _context.Resources.GetInteger(Resource.Integer.trip_name_min_lenth);
+
+        public override int TripNameMaxLength => _context.Resources.GetInteger(Resource.Integer.trip_name_max_lenth);
     }
 }

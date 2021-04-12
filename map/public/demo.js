@@ -1,5 +1,6 @@
 var userLocaitons = {};
 var map;
+var currentMarker;
 
 function addUserToMap(user) {
 
@@ -8,7 +9,7 @@ function addUserToMap(user) {
   let marker = icon != undefined ? new H.map.Marker({ lat: user.lat, lng: user.lng },
     { icon: icon }) : new H.map.Marker({ lat: user.lat, lng: user.lng });
 
-  marker.draggable = true;
+  marker.draggable = false;
 
   let userObj = {
     marker: marker,
@@ -32,18 +33,25 @@ function updateUserLocation(userId, lat, lng) {
 
 }
 
-/**
- * Adds markers to the map highlighting the locations of the captials of
- * France, Italy, Germany, Spain and the United Kingdom.
- *
- * @param  {H.Map} map      A HERE Map instance within the application
- */
-function addMarkersToMap(map) {
-  var parisMarker = new H.map.Marker({ lat: 10.827200, lng: 106.722928 });
-  map.addObject(parisMarker);
+function addCoordinate(coordinate) {
+
+  currentMarker = new H.map.Marker({ lat: coordinate.latitude, lng: coordinate.longitude });
+  currentMarker.draggable = true;
+
+  map.addObject(currentMarker);
 
 }
 
+function updateNewCoordinate(coordinate) {
+
+  if (currentMarker == undefined)
+    return;
+
+  currentMarker.setGeometry({ lat: coordinate.latitude, lng: coordinate.longitude });
+  map.setCenter({ lat: coordinate.latitude, lng: coordinate.longitude });
+  map.setZoom(14);
+
+}
 
 function initMap(data) {
   /**
@@ -96,10 +104,16 @@ function initMap(data) {
   // when dragging has completed
   map.addEventListener('dragend', function (ev) {
     var target = ev.target;
+
     if (target instanceof H.map.Marker) {
+
       behavior.enable();
-      console.log(ev.target.b);
+
+      locactionChanged(target.b.lat, target.b.lng);
+      console.log(JSON.stringify(target.b));
+
     }
+
   }, false);
 
   // Listen to the drag event and move the position of the marker
@@ -111,5 +125,13 @@ function initMap(data) {
       target.setGeometry(map.screenToGeo(pointer.viewportX - target['offset'].x, pointer.viewportY - target['offset'].y));
     }
   }, false);
+
+
+  if (data.isAddMarker) {
+    addCoordinate({
+      latitude: data.lat,
+      longitude: data.lng
+    });
+  }
 
 }

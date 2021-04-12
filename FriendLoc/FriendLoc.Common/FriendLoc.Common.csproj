@@ -14,6 +14,7 @@
     <Folder Include="Repositories\TripRepo\" />
     <Folder Include="Statistics\" />
     <Folder Include="Entities\" />
+    <Folder Include="Repositories\UserMileStoneRepo\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NLog" Version="4.7.8" />

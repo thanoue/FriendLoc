@@ -13,6 +13,7 @@ using AndroidX.Fragment.App;
 using Android.Widget;
 using Google.Android.Material.AppBar;
 using FriendLoc.Droid.Activities;
+using Plugin.CurrentActivity;
 
 namespace FriendLoc.Droid.Fragments
 {
@@ -24,6 +25,8 @@ namespace FriendLoc.Droid.Fragments
 
         MaterialToolbar _appBar;
 
+        public BaseActivity CurrentActivity => (BaseActivity)CrossCurrentActivity.Current.Activity;
+
         public override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -31,10 +34,6 @@ namespace FriendLoc.Droid.Fragments
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            //var contextThemeWrapper = new ContextThemeWrapper(Activity, Resource.Style.AppTheme);
-
-            //LayoutInflater localInflater = inflater.CloneInContext(contextThemeWrapper);
-
             var baseView = inflater.Inflate(Resource.Layout.fragment_base, container,false);
 
             inflater.Inflate(ResId, baseView.FindViewById<RelativeLayout>(Resource.Id.contentView),true);
@@ -54,7 +53,7 @@ namespace FriendLoc.Droid.Fragments
             {
                 case Resource.Id.closeIcon:
 
-                    ((BaseActivity)Plugin.CurrentActivity.CrossCurrentActivity.Current.Activity).OnBackClick();
+                    CurrentActivity.OnBackClick();
 
                     break;
             }

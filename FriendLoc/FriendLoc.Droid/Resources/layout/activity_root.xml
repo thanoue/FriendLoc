@@ -27,15 +27,5 @@
 			app:lottie_loop="true"
 			android:layout_centerInParent="true"
 			app:lottie_autoPlay="false" />
-		<!--<com.google.android.material.textview.MaterialTextView
-			android:id="@+id/loadingTv"
-			android:layout_below="@+id/animation_view"
-			android:gravity="center_horizontal"
-			android:layout_marginBottom="@dimen/fields_margin"
-			android:textSize="@dimen/base_text_size"
-			android:textColor="@color/colorScreenBackground"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-			android:text="Loading..."/>-->
 	</RelativeLayout>
 </RelativeLayout>

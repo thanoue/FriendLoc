@@ -162,7 +162,10 @@ namespace FriendLoc.Droid.Services
             foreach (Location location in locationResult.Locations)
             {
                 if (_lastestLocation == null)
+                {
+                    _onLocationChanged?.Invoke(location);
                     _lastestLocation = location;
+                }
 
                 var distance = _lastestLocation.DistanceTo(location);
 

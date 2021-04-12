@@ -9,7 +9,7 @@ namespace FriendLoc.Common.Services
     {
         void SignUp(SignUpModel model, Action<string> errorCallback, Action successCallback);
         Task<string> Login(string loginName, string password, Action<string> errorCallback);
-        Task<string> PushUserAvatar(string path, Action<int> progressAction);
+        Task<string> PushImageToServer(string path, Action<int> progressAction,string folderName);
         Task<string> RefreshTokenAsync();
     }
 }

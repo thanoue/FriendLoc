@@ -33,5 +33,9 @@ namespace FriendLoc.Common.Services.Impl
 
         public abstract int PasswordMaxLength { get; }
 
+        public abstract int TripNameMinLength { get; }
+
+        public abstract int TripNameMaxLength { get; }
+
     }
 }

@@ -9,4 +9,5 @@
     <color name="colorInfo">#4682B4</color>
     <color name="colorWarning">#FFFF00</color>
     <color name="colorSuccess">#32CD32</color>
+    <color name="colorSubTitleTextColor">#ABABAB</color>
 </resources>

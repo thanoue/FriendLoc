@@ -85,7 +85,6 @@
     <Compile Include="Activities\TestServiceActivity.cs" />
     <Compile Include="Services\DroidFileService.cs" />
     <Compile Include="Activities\TripMapActivity.cs" />
-    <Compile Include="DroidUtils.cs" />
     <Compile Include="Services\DroidNativeTrigger.cs" />
     <Compile Include="Activities\SignUpActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
@@ -97,6 +96,16 @@
     <Compile Include="Activities\SplashActivity.cs" />
     <Compile Include="Fragments\AddTripFragment.cs" />
     <Compile Include="Fragments\BaseFragment.cs" />
+    <Compile Include="Adapters\SpinnerAdapter.cs" />
+    <Compile Include="ViewModels\SpinnerItem.cs" />
+    <Compile Include="Dialogs\AddMilestoneDialog.cs" />
+    <Compile Include="Dialogs\BaseDialog.cs" />
+    <Compile Include="Dialogs\SelectionLocationDialog.cs" />
+    <Compile Include="Utlis\DroidUtils.cs" />
+    <Compile Include="Controls\CustomRelativeLayout.cs" />
+    <Compile Include="Dialogs\LoadingDialog.cs" />
+    <Compile Include="Dialogs\ViewQRCodeDialog.cs" />
+    <Compile Include="Services\QRCodeService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -262,6 +271,66 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_travel_explore_24.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_description_24.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_date_range_24.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\adapter_full_info_spinner.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_add_circle_24.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\color\mtrl_list_item_tint.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_landscape_24.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\dialog_base.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\dialog_addmilestone.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_place_24.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\dialog_selection_location.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_search_24.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_check_24.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\dialog_loadin.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\dialog_view_qr_code.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
@@ -271,6 +340,11 @@
     <Folder Include="Controls\" />
     <Folder Include="Fragments\" />
     <Folder Include="Resources\anim\" />
+    <Folder Include="Adapters\" />
+    <Folder Include="ViewModels\" />
+    <Folder Include="Resources\color\" />
+    <Folder Include="Dialogs\" />
+    <Folder Include="Utlis\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Android.Support.Design" Version="28.0.0.3" />
@@ -316,6 +390,9 @@
     </PackageReference>
     <PackageReference Include="PCLCrypto">
       <Version>2.0.147</Version>
+    </PackageReference>
+    <PackageReference Include="ZXing.Net.Mobile">
+      <Version>2.4.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

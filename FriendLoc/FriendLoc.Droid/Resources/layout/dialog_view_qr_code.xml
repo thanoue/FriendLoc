@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:padding="@dimen/screen_padding">
+
+	<ImageView
+		android:scaleType="fitCenter"
+		android:id="@+id/qrImg"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/qr_code_height"/>
+
+	<LinearLayout
+		android:layout_marginTop="@dimen/fields_margin"
+		android:weightSum="2"
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/saveBtn"
+			android:layout_width="0dp"
+			android:layout_marginRight="@dimen/fields_margin"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:text="Share"
+			style="@style/Widget.MaterialComponents.Button.TextButton"/>
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/startBtn"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="@dimen/fields_margin"
+			android:layout_weight="1"
+			android:text="Done"
+			style="@style/Widget.MaterialComponents.Button.Icon"/>
+	</LinearLayout>
+
+</LinearLayout>

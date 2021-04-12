@@ -35,7 +35,7 @@ using FriendLoc.Droid.Fragments;
 namespace FriendLoc.Droid.Activities
 {
     [Activity]
-    public class SignUpActivity : BaseActivity
+    public class SignUpActivity : BaseActivity, IImgSelectionObj
     {
         protected override bool IsAskBeforeDismiss => true;
         protected override int LayoutResId => Resource.Layout.activity_signup;
@@ -74,7 +74,6 @@ namespace FriendLoc.Droid.Activities
 
             _avtImg.Click += delegate
             {
-                //this.LoadFragment(new AddTripFragment());
                 SelectAvt();
             };
 
@@ -95,26 +94,9 @@ namespace FriendLoc.Droid.Activities
 
         void SelectAvt()
         {
-            CheckPermission(() =>
-            {
-                ServiceInstances.FileService.SetRootFolderPath(ServiceInstances.FileService.GetSdCardFolder());
-
-                ImagePicker.With(this)
-                   .SetFolderMode(true)
-                   .SetCameraOnly(false)
-                   .SetFolderTitle("Album")
-                   .SetMultipleMode(false)
-                   .SetMaxSize(1)
-                   .SetBackgroundColor("#ffffff")
-                   .SetAlwaysShowDoneButton(false)
-                   .SetKeepScreenOn(true)
-                   .SetToolbarColorResId(Resource.Color.colorPrimary)
-                   .SetStatusBarColor("#431DCC")
-                   .Start();
-
-            }, Manifest.Permission.Camera, Manifest.Permission.ReadExternalStorage, Manifest.Permission.WriteExternalStorage);
+            SetImgSelectionListner(this);
+            SelectImageFromGallery();
         }
-
 
         bool ValidateFields()
         {
@@ -191,26 +173,13 @@ namespace FriendLoc.Droid.Activities
             });
         }
 
-        protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
+        public void OnImgSelected(string path, Activity activity)
         {
-            base.OnActivityResult(requestCode, resultCode, data);
-
-            if (resultCode != Result.Ok)
-                return;
-
-            if (Config.RcPickImages == requestCode)
+            _avtPath = path;
+            using (var bitmap = BitmapFactory.DecodeFile(_avtPath))
             {
-                var urls = data.GetParcelableArrayListExtra(Config.ExtraImages).Cast<Image>().ToList();
-
-                if (urls != null && urls.Count > 0)
-                {
-                    _avtPath = urls[0].Path;
-                    using (var bitmap = BitmapFactory.DecodeFile(_avtPath))
-                    {
-                        _avtImg.SetScaleType(ImageView.ScaleType.CenterCrop);
-                        Glide.With(this).Load(bitmap).Into(_avtImg);
-                    }
-                }
+                _avtImg.SetScaleType(ImageView.ScaleType.CenterCrop);
+                Glide.With(this).Load(bitmap).Into(_avtImg);
             }
         }
     }

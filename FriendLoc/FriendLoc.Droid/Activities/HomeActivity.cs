@@ -80,15 +80,15 @@ namespace FriendLoc.Droid.Activities
 
             _navigationView.SetNavigationItemSelectedListener(this);
 
-             var header  = _navigationView.GetHeaderView(0);
+            var header = _navigationView.GetHeaderView(0);
 
             _avtImmg = header.FindViewById<ShapeableImageView>(Resource.Id.avtImg);
             _fullNameTv = header.FindViewById<TextView>(Resource.Id.nameTv);
             _phoneNumberTv = header.FindViewById<TextView>(Resource.Id.phoneNumberTv);
 
-            Glide.With(this).Load(UserSession.Instance.LoggedinUser.AvtUrl).Into(_avtImmg);
-            _fullNameTv.Text = UserSession.Instance.LoggedinUser.FullName;
-            _phoneNumberTv.Text = UserSession.Instance.LoggedinUser.PhoneNumber;
+            //Glide.With(this).Load(UserSession.Instance.LoggedinUser.AvtUrl).Into(_avtImmg);
+            //_fullNameTv.Text = UserSession.Instance.LoggedinUser.FullName;
+            //_phoneNumberTv.Text = UserSession.Instance.LoggedinUser.PhoneNumber;
         }
     }
 }

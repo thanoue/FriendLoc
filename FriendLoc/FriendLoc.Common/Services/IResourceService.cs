@@ -7,6 +7,8 @@ namespace FriendLoc.Common.Services
         int LoginNameMaxLength { get; }
         int PasswordMinLength { get; }
         int PasswordMaxLength { get; }
+        int TripNameMaxLength { get; }
+        int TripNameMinLength { get; }
         string UserToken { get; set; }
     }
 }

@@ -15,6 +15,9 @@ namespace FriendLoc.Model
         [JsonProperty("apiKey")]
         public string ApiKey { get; set; }
 
+        [JsonProperty("isAddMarker")]
+        public bool IsAddMarker { get; set; }
+
         public InitMapModel()
         {
         }

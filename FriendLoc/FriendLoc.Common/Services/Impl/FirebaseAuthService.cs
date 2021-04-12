@@ -46,8 +46,11 @@ namespace FriendLoc.Common.Services.Impl
                 login.FirebaseAuthRefreshed += LoginFirebaseAuthRefreshed;
 
                 var user = await ServiceInstances.UserRepository.GetById(login.User.LocalId);
+
                 UserSession.Instance.LoggedinUser = user;
+
                 ServiceInstances.SecureStorage.Store(Constants.LastestLoggedIn, DateTime.Now.ToString());
+                ServiceInstances.SecureStorage.StoreObject(Constants.LoggedinUser, user);
 
                 return ServiceInstances.ResourceService.UserToken;
             }
@@ -71,9 +74,9 @@ namespace FriendLoc.Common.Services.Impl
 
         public async void  SignUp(SignUpModel model, Action<string> errorCallback, Action successCallback)
         {
-            var avtUrl = await PushUserAvatar(model.AvtImgPath,(progress)=> {
+            var avtUrl = await PushImageToServer(model.AvtImgPath,(progress)=> {
 
-            }); 
+            },Constants.UserAvtStorageFolderName); 
 
             var user = new User()
             {
@@ -130,13 +133,13 @@ namespace FriendLoc.Common.Services.Impl
             }
         }
 
-        public async Task<string> PushUserAvatar(string path,Action<int> progressAction)
+        public async Task<string> PushImageToServer(string path,Action<int> progressAction,string folderName)
         {
             if (!string.IsNullOrEmpty(path))
             {
                 using (var stream = File.OpenRead(path))
                 {
-                    var imgUrl = await ServiceInstances.UserRepository.UploadFile(stream, Constants.UserAvtStorageFolderName, progressAction);
+                    var imgUrl = await ServiceInstances.UserRepository.UploadFile(stream, folderName, progressAction);
 
                     return imgUrl;
                 }

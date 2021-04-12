@@ -1,29 +1,173 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+﻿<ScrollView
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:orientation="vertical"
 	android:layout_width="match_parent"
-	android:paddingLeft="@dimen/screen_padding"
-	android:paddingTop="@dimen/screen_padding"
-	android:paddingRight="@dimen/screen_padding"
-	android:layout_height="match_parent">
-	<FriendLoc.Controls.CustomEditText
-		android:id="@+id/userNameTxt"
+	android:layout_height="match_parent"
+	android:scrollbars="none">
+	<RelativeLayout
+		android:isScrollContainer="true"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:hint="Name"
-		app:counterEnabled="true"
-		app:counterMaxLength="@integer/login_name_max_length"
-		app:endIconMode="clear_text"
-		app:startIconDrawable="@drawable/ic_pencil_24"
-		app:startIconContentDescription="The Name of Trip"
-		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-		<com.google.android.material.textfield.TextInputEditText
+		android:layout_height="match_parent">
+		<RelativeLayout
+			android:id="@+id/avtArea"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:singleLine="true" />
+			android:background="@color/colorPrimaryDark"
+			android:paddingTop="@dimen/avt_top_margin"
+			android:paddingBottom="@dimen/avt_top_margin">
+			<RelativeLayout
+				android:layout_width="@dimen/avtt_img_size"
+				android:layout_centerHorizontal="true"
+				android:layout_height="@dimen/avtt_img_size">
+				<com.google.android.material.imageview.ShapeableImageView
+					android:id="@+id/avtImg"
+					android:layout_width="@dimen/avtt_img_size"
+					android:layout_height="@dimen/avtt_img_size"
+					app:strokeColor="@android:color/darker_gray"
+					android:padding="@dimen/big_stroke_size"
+					app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlayStyle"
+					app:strokeWidth="0dp"/>
+			</RelativeLayout>
+		</RelativeLayout>
 
-	</FriendLoc.Controls.CustomEditText>
-</LinearLayout>
+		<com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+			android:id="@+id/updatImgBtn"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			app:iconTint="@color/colorScreenBackground"
+			app:backgroundTint="@color/colorPrimary"
+			android:layout_alignParentRight="true"
+			android:layout_marginTop="@dimen/avt_add_top_margin"
+			android:layout_marginRight="@dimen/screen_padding"
+			app:icon="@drawable/ic_plus_24p"/>
+
+		<LinearLayout
+			android:orientation="vertical"
+			android:paddingLeft="@dimen/screen_padding"
+			android:paddingRight="@dimen/screen_padding"
+			android:layout_marginTop="@dimen/avt_top_margin"
+			android:layout_below="@+id/updatImgBtn"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+
+			<FriendLoc.Controls.CustomEditText
+				android:id="@+id/nameTxt"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:hint="Name of Trip"
+				app:counterEnabled="true"
+				app:counterMaxLength="@integer/trip_name_max_lenth"
+				app:endIconMode="clear_text"
+				app:startIconDrawable="@drawable/ic_pencil_24"
+				app:startIconContentDescription="The trip name"
+				style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+				<com.google.android.material.textfield.TextInputEditText
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:singleLine="true"		 />
+
+			</FriendLoc.Controls.CustomEditText>
+
+			<FriendLoc.Controls.CustomEditText
+				android:layout_marginTop="@dimen/fields_margin"
+				android:id="@+id/descriptionTxt"
+				android:layout_width="match_parent"
+				android:layout_height="@dimen/_100_5sdp"
+				android:hint="Description"
+				android:layout_gravity="top"
+				app:endIconMode="clear_text"
+				style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+				<com.google.android.material.textfield.TextInputEditText
+					android:layout_width="match_parent"
+					android:singleLine="false"
+					android:gravity="top"
+					android:maxLines="10"
+					android:inputType="textMultiLine"
+					android:layout_height="match_parent" />
+
+			</FriendLoc.Controls.CustomEditText>
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:weightSum="2"
+				android:layout_marginTop="@dimen/_10_5sdp"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<com.google.android.material.chip.Chip
+					android:id="@+id/startPointChip"
+					android:layout_weight="1"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:paddingVertical="@dimen/_10_5sdp"
+					android:layout_marginRight="@dimen/fields_margin"
+					android:text="Start Point"/>
+
+				<com.google.android.material.chip.Chip
+					android:id="@+id/endPointChip"
+					android:layout_weight="1"
+					android:layout_marginLeft="@dimen/fields_margin"
+					android:paddingVertical="@dimen/_10_5sdp"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:text="End Point"/>
+
+			</LinearLayout>
+
+			<FriendLoc.Controls.CustomEditText
+				android:layout_marginTop="@dimen/fields_margin"
+				android:id="@+id/timeRangeTxt"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:clickable="true"
+				android:hint="Period"
+				app:endIconMode="clear_text"
+				app:startIconDrawable="@drawable/ic_date_range_24"
+				app:startIconContentDescription="The trip name"
+				style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+				<com.google.android.material.textfield.TextInputEditText
+					android:id="@+id/periodBtn"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:singleLine="true"
+					android:clickable="true"
+					android:focusable="false"
+					android:focusableInTouchMode="false"
+					android:inputType="none"/>
+
+			</FriendLoc.Controls.CustomEditText>
+
+			<LinearLayout
+				android:layout_marginTop="@dimen/fields_margin"
+				android:weightSum="2"
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+				<com.google.android.material.button.MaterialButton
+					android:id="@+id/saveBtn"
+					android:layout_width="0dp"
+					android:layout_marginRight="@dimen/fields_margin"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="Save"
+					style="@style/Widget.MaterialComponents.Button.TextButton"/>
+				<com.google.android.material.button.MaterialButton
+					android:id="@+id/startBtn"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginLeft="@dimen/fields_margin"
+					android:layout_weight="1"
+					android:text="Start"
+					style="@style/Widget.MaterialComponents.Button.Icon"/>
+			</LinearLayout>
+
+
+
+		</LinearLayout>
+
+	</RelativeLayout>
+</ScrollView>
+

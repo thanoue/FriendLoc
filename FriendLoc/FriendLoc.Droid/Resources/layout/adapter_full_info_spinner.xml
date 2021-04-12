@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:paddingTop="@dimen/fields_margin"
+	android:background="?attr/selectableItemBackground"
+	android:paddingBottom="@dimen/fields_margin"
+	android:layout_height="wrap_content">
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/spinner_item_height">
+		<com.google.android.material.imageview.ShapeableImageView
+			android:id="@+id/leftImg"
+			android:layout_width="@dimen/spinner_item_height"
+			android:layout_height="match_parent"
+			app:strokeColor="@android:color/darker_gray"
+			android:src="@drawable/ic_account_24"
+			android:scaleType="fitXY"
+			android:layout_marginLeft="@dimen/fields_margin_double"
+			app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlayStyle"
+			app:strokeWidth="0dp"/>
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_toRightOf="@id/leftImg"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:gravity="left|center"
+			android:layout_marginLeft="@dimen/fields_margin_double">
+			<com.google.android.material.textview.MaterialTextView
+				android:id="@+id/mainTitleTv"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="left|center"
+				android:textAppearance="?attr/textAppearanceSubtitle1"
+				android:textSize="@dimen/main_title_text_size"
+				android:textColor="@color/colorText"/>
+			<com.google.android.material.textview.MaterialTextView
+				android:gravity="left|center"
+				android:id="@+id/subTitleTv"
+				android:layout_width="match_parent"
+				android:textAppearance="?attr/textAppearanceSubtitle1"
+				android:layout_height="wrap_content"
+				android:textSize="@dimen/sub_title_text_size"
+				android:textColor="@color/mtrl_list_item_tint"/>
+		</LinearLayout>
+	</RelativeLayout>
+
+</RelativeLayout>
