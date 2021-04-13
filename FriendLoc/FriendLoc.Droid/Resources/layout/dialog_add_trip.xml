@@ -25,6 +25,8 @@
 					android:layout_height="@dimen/avtt_img_size"
 					app:strokeColor="@android:color/darker_gray"
 					android:padding="@dimen/big_stroke_size"
+					android:scaleType="fitXY"
+					android:src="@drawable/ic_add_location_24"
 					app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlayStyle"
 					app:strokeWidth="0dp"/>
 			</RelativeLayout>
@@ -151,16 +153,8 @@
 					android:layout_width="0dp"
 					android:layout_marginRight="@dimen/fields_margin"
 					android:layout_height="wrap_content"
-					android:layout_weight="1"
+					android:layout_weight="2"
 					android:text="Save"
-					style="@style/Widget.MaterialComponents.Button.TextButton"/>
-				<com.google.android.material.button.MaterialButton
-					android:id="@+id/startBtn"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_marginLeft="@dimen/fields_margin"
-					android:layout_weight="1"
-					android:text="Start"
 					style="@style/Widget.MaterialComponents.Button.Icon"/>
 			</LinearLayout>
 

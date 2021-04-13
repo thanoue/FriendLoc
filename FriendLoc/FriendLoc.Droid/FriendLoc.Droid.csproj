@@ -78,6 +78,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dialogs\ScanQRCodeDialog.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MainApp.cs" />
@@ -94,7 +95,6 @@
     <Compile Include="Controls\CustomEditText.cs" />
     <Compile Include="Services\DroidSecureStorageService.cs" />
     <Compile Include="Activities\SplashActivity.cs" />
-    <Compile Include="Fragments\AddTripFragment.cs" />
     <Compile Include="Fragments\BaseFragment.cs" />
     <Compile Include="Adapters\SpinnerAdapter.cs" />
     <Compile Include="ViewModels\SpinnerItem.cs" />
@@ -109,6 +109,7 @@
     <Compile Include="Fragments\TripsFragment.cs" />
     <Compile Include="Adapters\TripAdapter.cs" />
     <Compile Include="ViewModels\TripViewModel.cs" />
+    <Compile Include="Dialogs\AddTripDialog.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -116,6 +117,9 @@
     <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\drawable\ic_attach_file_24.xml" />
+    <AndroidResource Include="Resources\drawable\ic_qr_code_scanner_24.xml" />
+    <AndroidResource Include="Resources\layout\dialog_scan_qr_code.xml" />
     <AndroidResource Include="Resources\values\colors.xml" />
     <AndroidResource Include="Resources\values\strings.xml" />
     <AndroidResource Include="Resources\values\styles.xml" />
@@ -220,7 +224,7 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\fragment_add_trip.xml">
+    <AndroidResource Include="Resources\layout\dialog_add_trip.xml">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>

@@ -7,9 +7,8 @@
 	android:layout_height="wrap_content"
 	android:padding="@dimen/screen_padding">
 
-	<ImageView
-		android:scaleType="fitCenter"
-		android:id="@+id/qrImg"
+	<RelativeLayout
+		android:id="@+id/scanViewBg"
 		android:layout_width="match_parent"
 		android:layout_height="@dimen/qr_code_height"/>
 
@@ -20,12 +19,12 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
 		<com.google.android.material.button.MaterialButton
-			android:id="@+id/shareBtn"
+			android:id="@+id/getFromFile"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="2"
-			android:text="Share"
-			app:icon="@drawable/ic_share_24"
+			android:text="Select Image"
+			app:icon="@drawable/ic_attach_file_24"
 			style="@style/Widget.MaterialComponents.Button.Icon"/>
 	</LinearLayout>
 

@@ -41,7 +41,7 @@ namespace FriendLoc.Common.Repositories
             return await task;
         }
 
-        public async Task<T> InsertAsync(T entity)
+        public virtual async Task<T> InsertAsync(T entity)
         {
             try
             {

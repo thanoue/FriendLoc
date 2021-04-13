@@ -14,7 +14,6 @@ namespace FriendLoc.Entity
         public double StartPointLatitude { get; set; }
         public double StartPointLongitute { get; set; }
         public string StartPointName { get; set; }
-
         public double EndPointLatitude { get; set; }
         public double EndPointLongitute { get; set; }
         public string EndPointName { get; set; }
@@ -53,13 +52,10 @@ namespace FriendLoc.Entity
             set { ExecuteTimeValue = value.GetLocalTimeTotalSeconds(); }
         }
         public IDictionary<string, string> UserIds { get; set; }
-        public IDictionary<string, TripLocation> Locations { get; set; }
-
 
         public Trip()
         {
             UserIds = new Dictionary<string, string>();
-            Locations = new Dictionary<string, TripLocation>();
         }
     }
 

@@ -8,6 +8,7 @@ using Android.Widget;
 using AndroidX.AppCompat.View.Menu;
 using AndroidX.AppCompat.Widget;
 using BumpTech.GlideLib;
+using FriendLoc.Common;
 using FriendLoc.Droid.ViewModels;
 using Google.Android.Material.ImageView;
 using Google.Android.Material.TextView;
@@ -19,9 +20,10 @@ namespace FriendLoc.Droid.Adapters
     {
         IList<TripViewModel> _items;
         Context _context;
-
-        public TripAdapter(Context context, IList<TripViewModel> items)
+        private Action<TripActions, string> _onAction;
+        public TripAdapter(Context context,Action<TripActions, string> onAction, IList<TripViewModel> items)
         {
+            _onAction = onAction;
             _context = context;
             _items = items;
         }
@@ -62,7 +64,33 @@ namespace FriendLoc.Droid.Adapters
                     var item = _items[viewHolder.Position];
                     int popupResId = 0;
 
-                    if(item.Status == Entity.TripStatuses.Runnning)
+                    popup.SetOnMenuItemClickListener(new OnMenuItemClickListener((menuItem) =>
+                    {
+                        switch (menuItem.ItemId)
+                        {
+                            case Resource.Id.shareItem:
+                                _onAction?.Invoke(TripActions.Share,item.Id);
+                                break;  
+                            case Resource.Id.startItem:
+                                _onAction?.Invoke(TripActions.Start,item.Id);
+                                break;
+                            case Resource.Id.stopItem:
+                                _onAction?.Invoke(TripActions.Stop,item.Id);
+                                break; 
+                            case Resource.Id.removeItem:
+                                _onAction?.Invoke(TripActions.Remove,item.Id);
+                                break; 
+                            case Resource.Id.leaveItem:
+                                _onAction?.Invoke(TripActions.Leave,item.Id);
+                                break;    
+                            case Resource.Id.duplicateItem:
+                                _onAction?.Invoke(TripActions.Copy,item.Id);
+                                break;
+                        }
+                        
+                    }));
+
+                    if (item.Status == Entity.TripStatuses.Runnning)
                     {
                         popupResId = Resource.Menu.trip_popup_menu_playing;
                     }
@@ -80,7 +108,8 @@ namespace FriendLoc.Droid.Adapters
 
                         foreach (var menu in menuBuilder.VisibleItems)
                         {
-                            var iconMarginPx =(int)TypedValue.ApplyDimension(ComplexUnitType.Dip, 10f, _context.Resources.DisplayMetrics);
+                            var iconMarginPx = (int) TypedValue.ApplyDimension(ComplexUnitType.Dip, 10f,
+                                _context.Resources.DisplayMetrics);
 
                             menu.SetIcon(new InsetDrawable(menu.Icon, iconMarginPx, 0, iconMarginPx, 0));
                         }
@@ -93,7 +122,7 @@ namespace FriendLoc.Droid.Adapters
             }
             else
             {
-                viewHolder = (ViewHolder)view.Tag;
+                viewHolder = (ViewHolder) view.Tag;
             }
 
             viewHolder.Position = position;

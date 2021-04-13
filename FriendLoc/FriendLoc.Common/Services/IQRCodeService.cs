@@ -6,6 +6,8 @@ namespace FriendLoc.Common.Services
     {
         object GenerateQRCode(QRCodeData qRCodeData);
         void InitScanView(object surfaceView);
-        void StartLoading(Action<string> onScanned);
+        void StartScanning(Action<string> onScanned);
+        void StopScanning();
+        string ScanFromImage(string path);
     }
 }

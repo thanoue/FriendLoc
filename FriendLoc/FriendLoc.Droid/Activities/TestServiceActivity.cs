@@ -121,8 +121,6 @@ namespace FriendLoc.Droid.Activities
             _getRecordsBtn.Click += async delegate
             {
                 var res = await ServiceInstances.TripRepository.GetById(_tripId);
-
-                Console.WriteLine(res.Locations.Values.ToList()[0].CreatedTime);
             };
         }
 

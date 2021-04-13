@@ -38,13 +38,13 @@ namespace FriendLog.IOS
         {
             CLLocation location = e.Location;
 
-            ServiceInstances.TripRepository.AddLocation(_tripId, new TripLocation()
-            {
-                Latitude = location.Coordinate.Latitude,
-                Longitude = location.Coordinate.Longitude,
-                TripId = _tripId,
-                UserId = _userId
-            });
+            // ServiceInstances.TripRepository.AddLocation(_tripId, new TripLocation()
+            // {
+            //     Latitude = location.Coordinate.Latitude,
+            //     Longitude = location.Coordinate.Longitude,
+            //     TripId = _tripId,
+            //     UserId = _userId
+            // });
 
             // Handle foreground updates
             //

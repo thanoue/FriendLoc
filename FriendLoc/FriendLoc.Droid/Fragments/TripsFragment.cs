@@ -11,9 +11,13 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using AndroidX.Fragment.App;
+using FriendLoc.Common;
 using FriendLoc.Droid.Adapters;
+using FriendLoc.Droid.Dialogs;
 using FriendLoc.Droid.ViewModels;
 using FriendLoc.Entity;
+using Google.Android.Material.Button;
+using Plugin.CurrentActivity;
 
 namespace FriendLoc.Droid.Fragments
 {
@@ -23,12 +27,13 @@ namespace FriendLoc.Droid.Fragments
         IList<Trip> _trips;
         IList<TripViewModel> _items;
         TripAdapter _tripAdapter;
-
+        MaterialButton _addTripBtn,_scanQrCodeBtn;
+        
         public TripsFragment(IList<Trip> trips)
         {
             _trips = trips;
         }
-
+        
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             // Use this to return your custom view for this Fragment
@@ -40,58 +45,83 @@ namespace FriendLoc.Droid.Fragments
             base.OnViewCreated(view, savedInstanceState);
 
             _tripListView = view.FindViewById<ListView>(Resource.Id.tripListview);
-
+            _addTripBtn = view.FindViewById<MaterialButton>(Resource.Id.addTripBtn);
+            _scanQrCodeBtn = view.FindViewById<MaterialButton>(Resource.Id.scanQRBtn);
+            
             if (_trips == null && _trips.Count <= 0)
             {
                 return;
             }
 
+            _scanQrCodeBtn.Click += delegate
+            {
+                var scanQr = new ScanQRCodeDialog(Context, (id) =>
+                {
+
+                });
+                scanQr.ShowDialog();
+            };
+
+            _addTripBtn.Click += delegate
+            {
+                var addTripDialog = new AddTripDialog(Context, () =>
+                {
+                    ServiceInstances.TripRepository.GetByJoinedUser(UserSession.Instance.LoggedinUser.Id).ContinueWith((res) =>
+                    {
+                        CrossCurrentActivity.Current.Activity.RunOnUiThread(() =>
+                        {
+                            _trips.Clear();
+
+                            ((List<Trip>)_trips).AddRange(res.Result);
+                            DataBinding();
+                            _tripAdapter.NotifyDataSetChanged();
+
+                        });
+                        
+                    });
+                });
+
+                addTripDialog.ShowDialog();
+            };
+           
             _items = new List<TripViewModel>();
 
-            foreach (var trip in _trips)
-            {
-                _items.Add(new TripViewModel()
-                {
-                    AvtUrl = trip.ImageUrl,
-                    DateRange = trip.StartTime.ToShortDateString() + " - " + trip.EndTime.ToShortDateString(),
-                    Id = trip.Id,
-                    OwnerId = trip.OwnerId,
-                    Milestones = trip.StartPointName + " - " + trip.EndPointName,
-                    Name = trip.Name,
-                    Status = (Entity.TripStatuses)(new Random().Next(0, 2))
-                }) ;
-            }
+            DataBinding();
 
-            foreach (var trip in _trips)
-            {
-                _items.Add(new TripViewModel()
-                {
-                    AvtUrl = trip.ImageUrl,
-                    DateRange = trip.StartTime.ToShortDateString() + " - " + trip.EndTime.ToShortDateString(),
-                    Id = trip.Id,
-                    OwnerId = trip.OwnerId,
-                    Milestones = trip.StartPointName + " - " + trip.EndPointName,
-                    Name = trip.Name,
-                    Status = (Entity.TripStatuses)(new Random().Next(0, 2))
-                }) ;
-            }
-
-            foreach (var trip in _trips)
-            {
-                _items.Add(new TripViewModel()
-                {
-                    AvtUrl = trip.ImageUrl,
-                    DateRange = trip.StartTime.ToShortDateString() + " - " + trip.EndTime.ToShortDateString(),
-                    Id = trip.Id,
-                    OwnerId = trip.OwnerId,
-                    Milestones = trip.StartPointName + " - " + trip.EndPointName,
-                    Name = trip.Name,
-                    Status = (Entity.TripStatuses)(new Random().Next(0, 2))
-                }) ;
-            }
-
-            _tripAdapter = new TripAdapter(Context, _items);
+            _tripAdapter = new TripAdapter(Context,OnTripAction, _items);
             _tripListView.Adapter = _tripAdapter;
+        }
+
+        void OnTripAction(TripActions action,string id)
+        {
+            switch (action)
+            {
+                case TripActions.Share:
+
+                    var dialog = new ViewQRCodeDialog(Context, id);
+                    dialog.ShowDialog();
+                    
+                    break;
+            }
+        }
+
+        void DataBinding()
+        {
+            _items.Clear();
+
+            foreach (var trip in _trips)
+            {
+                _items.Add(new TripViewModel()
+                {
+                    AvtUrl = trip.ImageUrl,
+                    DateRange = trip.StartTime.ToShortDateString() + " - " + trip.EndTime.ToShortDateString(),
+                    Id = trip.Id,
+                    OwnerId = trip.OwnerId,
+                    Milestones = trip.StartPointName + " - " + trip.EndPointName,
+                    Name = trip.Name,
+                    Status = (Entity.TripStatuses)(new Random().Next(0, 2))
+                });
+            }
         }
     }
 }

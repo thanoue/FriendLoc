@@ -36,13 +36,15 @@ using Newtonsoft.Json;
 using Pair = AndroidX.Core.Util.Pair;
 using TimeZone = Java.Util.TimeZone;
 
-namespace FriendLoc.Droid.Fragments
+namespace FriendLoc.Droid.Dialogs
 {
-    public class AddTripFragment : BaseFragment, IImgSelectionObj, IMaterialPickerOnPositiveButtonClickListener
+    public class AddTripDialog : BaseDialog, IImgSelectionObj, IMaterialPickerOnPositiveButtonClickListener
     {
-        public override int ResId => Resource.Layout.fragment_add_trip;
-        public override string HeaderTitle => "Add new Trip";
-        public override bool IsAskBeforeDismiss => true;
+        protected override int LayoutResId => Resource.Layout.dialog_add_trip;
+        protected override string Title => "Add new Trip";
+        protected override DialogTypes DialogTypes => DialogTypes.FullScreen;
+
+        protected override string TAG => nameof(AddTripDialog);
 
         private ShapeableImageView _avtImg;
         private CustomEditText _periodTxt, _nameTxt, _descriptionTxt;
@@ -54,6 +56,12 @@ namespace FriendLoc.Droid.Fragments
         private Trip _trip;
         private string _avtUrl;
         private bool _isStartingTrip;
+        private Action _onAdded;
+
+        public AddTripDialog(Context context, Action onAdded) : base(context)
+        {
+            _onAdded = onAdded;
+        }
 
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
@@ -67,9 +75,6 @@ namespace FriendLoc.Droid.Fragments
             _endPoint = view.FindViewById<Chip>(Resource.Id.endPointChip);
             _nameTxt = view.FindViewById<CustomEditText>(Resource.Id.nameTxt);
             _descriptionTxt = view.FindViewById<CustomEditText>(Resource.Id.descriptionTxt);
-
-            _avtImg.SetImageResource(Resource.Drawable.ic_account_24);
-            _avtImg.SetScaleType(ImageView.ScaleType.FitXy);
 
             view.FindViewById<ExtendedFloatingActionButton>(Resource.Id.updatImgBtn).Click += delegate
             {
@@ -112,7 +117,7 @@ namespace FriendLoc.Droid.Fragments
             _trip = new Trip();
         }
 
-        private async  void _saveBtn_Click(object sender, EventArgs e)
+        private async void _saveBtn_Click(object sender, EventArgs e)
         {
             if (!ValidateFields())
             {
@@ -120,7 +125,7 @@ namespace FriendLoc.Droid.Fragments
                 return;
             }
 
-            CurrentActivity.StartLoading();
+            StartLoading();
 
             if (!string.IsNullOrEmpty(_avtUrl))
             {
@@ -164,9 +169,12 @@ namespace FriendLoc.Droid.Fragments
 
             _trip = await ServiceInstances.TripRepository.InsertAsync(_trip);
 
-            CurrentActivity.StopLoading();
+            StopLoading();
 
-            CurrentActivity.OnCancel();
+            this.Dismiss();
+
+            _onAdded?.Invoke();
+
             var qrCodeDialog = new ViewQRCodeDialog(CurrentActivity, _trip.Id);
 
             qrCodeDialog.ShowDialog();
@@ -207,7 +215,7 @@ namespace FriendLoc.Droid.Fragments
         {
             if (_mileStones == null)
             {
-                CurrentActivity.StartLoading();
+                StartLoading();
 
                 _mileStones = new List<SpinnerItem>();
                 var milestones = (await ServiceInstances.UserMilestoneRepository.GetById(UserSession.Instance.LoggedinUser.Id)).Milestones;
@@ -234,7 +242,7 @@ namespace FriendLoc.Droid.Fragments
                     LeftImgResId = Resource.Drawable.ic_add_circle_24
                 });
 
-                CurrentActivity.StopLoading();
+                StopLoading();
 
                 SelectMilestone(chip);
             }

@@ -126,14 +126,14 @@ namespace FriendLog.IOS
 
                     var firebase = new FirebaseClient(
                       "https://friendloc-98ed3-default-rtdb.firebaseio.com/");
-
-                    await client.AddLocation("b4594b25-284e-4459-8560-0aa98aeb6135", new TripLocation()
-                    {
-                        Latitude = location.Coordinate.Latitude,
-                        Longitude = location.Coordinate.Longitude,
-                        TripId = "b4594b25-284e-4459-8560-0aa98aeb6135",
-                        UserId = "4hWvuBnYtSNp2Vb7UoSGZ8fDjJp2"
-                    });
+                    //
+                    // await client.AddLocation("b4594b25-284e-4459-8560-0aa98aeb6135", new TripLocation()
+                    // {
+                    //     Latitude = location.Coordinate.Latitude,
+                    //     Longitude = location.Coordinate.Longitude,
+                    //     TripId = "b4594b25-284e-4459-8560-0aa98aeb6135",
+                    //     UserId = "4hWvuBnYtSNp2Vb7UoSGZ8fDjJp2"
+                    // });
 
                     //LocationUpdated(this, new LocationUpdatedEventArgs(e.Locations[e.Locations.Length - 1]));
                 };

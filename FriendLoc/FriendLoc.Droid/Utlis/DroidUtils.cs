@@ -1,8 +1,13 @@
 ﻿using System;
+using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
+using Android.Util;
+using Android.Views;
 using Android.Webkit;
+using Android.Widget;
+using AndroidX.Core.Content;
 using Firebase.Auth;
 using FriendLoc.Common;
 using FriendLoc.Common.Models;
@@ -10,6 +15,7 @@ using FriendLoc.Common.Services;
 using FriendLoc.Model;
 using Java.Interop;
 using Newtonsoft.Json;
+using PopupMenu = AndroidX.AppCompat.Widget.PopupMenu;
 
 namespace FriendLoc.Droid
 {
@@ -18,6 +24,44 @@ namespace FriendLoc.Droid
         public static void ExecJavaScript(WebView webView, string jscode)
         {
            
+        }
+        
+        public  static Java.IO.File CreateNewFilePath(this Context context,string ext)
+        {
+            var imagePath = context.GetExternalFilesDir(Android.OS.Environment.DirectoryDcim);
+
+            Log.Debug("PATH", imagePath.AbsolutePath);
+
+            if (!imagePath.Exists() && !imagePath.Mkdirs())
+            {
+                Log.Debug("Florid", "failed to create directory");
+            }
+
+            string imageFileName = (System.DateTime.Now).ToString("yyyyMMdd_HHmmss") + ext;
+            var image = new Java.IO.File(imagePath, imageFileName);
+
+            return image;
+        }
+        
+        public static void ShareImgFile(this Activity context,int requestCode, string filePath)
+        {
+            Intent share = new Intent(Intent.ActionSend);
+            share.SetType(filePath.Contains(".png") ? "image/png" : "image/jpeg");
+
+            var photoFile = new Java.IO.File(filePath);
+
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.N)
+            {
+                Android.Net.Uri photoURI = FileProvider.GetUriForFile(context,
+                    "com.khoideptrai.friendloc.fileprovider",
+                    photoFile);
+
+                share.PutExtra(Intent.ExtraStream, photoURI);
+            }
+            else
+                share.PutExtra(Intent.ExtraStream, Android.Net.Uri.FromFile(photoFile));
+            
+            context.StartActivityForResult(Intent.CreateChooser(share, "Share Image"), requestCode);
         }
 
         public static Bitmap OverlayBitmapToCenter(Bitmap bitmap, Bitmap bitmapOverlay)
@@ -71,6 +115,21 @@ namespace FriendLoc.Droid
             return output;
         }
 
+    }
+
+    public class OnMenuItemClickListener : Java.Lang.Object, PopupMenu.IOnMenuItemClickListener
+    {
+        private Action<IMenuItem> _onItemCicked;
+        public OnMenuItemClickListener( Action<IMenuItem> onItemCicked)
+        {
+            _onItemCicked = onItemCicked;
+        }
+        public bool OnMenuItemClick(IMenuItem? item)
+        {
+            _onItemCicked?.Invoke(item);
+
+            return true;
+        }
     }
 
     public class DialogLisenter : Java.Lang.Object, IDialogInterfaceOnClickListener

@@ -20,8 +20,6 @@ namespace FriendLoc.Common
         public const string UserAvtStorageFolderName = "UserAvt";
         public const string MileStoneStorageFolderName = "MileStone";
 
-        public const string LoginName = "LoginName";
-        public const string Password = "Password";
         public const string UserToken = "UserToken";
         public const string LoggedinUser = "LoggedinUser";
         public const string LastestLoggedIn = "LastestLoggedIn";

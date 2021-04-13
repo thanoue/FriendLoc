@@ -18,6 +18,7 @@ using Com.Airbnb.Lottie;
 using Com.Nguyenhoanglam.Imagepicker.Model;
 using Com.Nguyenhoanglam.Imagepicker.UI.Imagepicker;
 using FriendLoc.Common;
+using FriendLoc.Droid.Dialogs;
 using FriendLoc.Droid.Fragments;
 using Google.Android.Material.AppBar;
 using Google.Android.Material.Dialog;
@@ -34,7 +35,8 @@ namespace FriendLoc.Droid.Activities
     public abstract class BaseActivity : AppCompatActivity, View.IOnClickListener
     {
         const int REQUEST_PERMISSIONS = 11;
-
+        public  const int REQUEST_SHARE_IMAGE = 99;
+        
         protected abstract int LayoutResId { get; }
         protected virtual bool IsFullScreen => false;
         protected virtual string HeaderTitle => "";

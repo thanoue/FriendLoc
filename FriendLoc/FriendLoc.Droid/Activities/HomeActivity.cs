@@ -30,7 +30,6 @@ namespace FriendLoc.Droid.Activities
         NavigationView _navigationView;
         ShapeableImageView _avtImmg;
         TextView _fullNameTv, _phoneNumberTv;
-        ExtendedFloatingActionButton _addTripBtn;
         FrameLayout _fragmentContainer;
 
         protected override int LayoutResId => Resource.Layout.activity_home;
@@ -43,7 +42,6 @@ namespace FriendLoc.Droid.Activities
             _toolBar = FindViewById<MaterialToolbar>(Resource.Id.topAppBar);
             _drawerLayout = FindViewById<DrawerLayout>(Resource.Id.container);
             _navigationView = FindViewById<NavigationView>(Resource.Id.navigationView);
-            _addTripBtn = FindViewById<ExtendedFloatingActionButton>(Resource.Id.addTripBtn);
             _fragmentContainer = FindViewById<FrameLayout>(Resource.Id.homeFragmentContainer);
 
             var header = _navigationView.GetHeaderView(0);
@@ -55,11 +53,6 @@ namespace FriendLoc.Droid.Activities
             _toolBar.Click += delegate
             {
                 _drawerLayout.Open();
-            };
-
-            _addTripBtn.Click += delegate
-            {
-                this.LoadFragment(new AddTripFragment());
             };
 
             _navigationView.SetNavigationItemSelectedListener(this);
@@ -82,7 +75,7 @@ namespace FriendLoc.Droid.Activities
 
                     ServiceInstances.SecureStorage.DeleteObject(Constants.LoggedinUser);
                     ServiceInstances.SecureStorage.DeleteObject(Constants.UserToken);
-                    
+
                     var intent = new Intent(this, typeof(LoginActivity));
 
                     intent.AddFlags(ActivityFlags.ClearTask | ActivityFlags.ClearTop | ActivityFlags.NewTask);
@@ -95,7 +88,7 @@ namespace FriendLoc.Droid.Activities
 
                     StartLoading();
 
-                    ServiceInstances.TripRepository.GetAll().ContinueWith((res) =>
+                    ServiceInstances.TripRepository.GetByJoinedUser(UserSession.Instance.LoggedinUser.Id).ContinueWith((res) =>
                     {
                         var trips = res.Result;
 

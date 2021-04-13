@@ -18,10 +18,11 @@
     <dimen name="main_title_text_size">@dimen/_15ssp</dimen>
     <dimen name="sub_title_text_size">@dimen/_10ssp</dimen>
     <dimen name="small_bnt_size">@dimen/_25_5sdp</dimen>
-    <dimen name="field_height">@dimen/_50sdp</dimen>
+    <dimen name="normal_bnt_size">@dimen/_35_5sdp</dimen>
+    <dimen name="field_height">@dimen/_40sdp</dimen>
     <dimen name="qr_code_height">@dimen/_250sdp</dimen>
     <dimen name="trip_item_height">@dimen/_70sdp</dimen>
-    <dimen name="menu_btn_size">@dimen/_35sdp</dimen>
+    <dimen name="menu_btn_size">@dimen/_20sdp</dimen>
     <dimen name="trup_item_left_img_size">@dimen/_60sdp</dimen>
     <dimen name="small_icon_size">@dimen/_14sdp</dimen>
 

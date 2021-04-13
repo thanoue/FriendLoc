@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Firebase.Auth;
@@ -14,31 +15,32 @@ namespace FriendLoc.Common.Repositories
         public TripRepository()
         {
         }
-
-        public async Task AddLocation(string tripId,TripLocation location)
+        
+        public async Task<IList<Trip>> GetByJoinedUser(string userId)
         {
-            try
+            var allTrips = await GetAll();
+            var trips = new List<Trip>();
+            
+            foreach (var trip in allTrips)
             {
-                location.Created = DateTime.Now.GetLocalTimeTotalSeconds();
-                await Client.Child(Path).Child(tripId).Child(nameof(Trip.Locations)).PostAsync(location);
+                if(trip.UserIds == null || trip.UserIds.Count <=0)
+                    continue;
+
+                if(trip.UserIds.ContainsKey(userId))
+                    trips.Add(trip);
             }
-            catch (FirebaseAuthException firebaseExcep)
-            {
-                if (firebaseExcep.Reason != AuthErrorReason.InvalidAccessToken)
-                    return;
 
-                var refreshToken = await ServiceInstances.AuthService.Login(UserSession.Instance.LoggedinUser.LoginName, UserSession.Instance.LoggedinUser.Password, (err) =>
-                {
-
-                });
-
-                if (!string.IsNullOrEmpty(refreshToken))
-                {
-                    await AddLocation(tripId, location);
-                }
-                else
-                    return;
-            }
+            return trips;
         }
+        public override async Task<Trip> InsertAsync(Trip entity)
+        {
+            entity.UserIds = new Dictionary<string, string>();
+            
+            entity.UserIds.Add(entity.OwnerId,entity.OwnerId);
+            
+            return await base.InsertAsync(entity);
+        }
+
+     
     }
 }

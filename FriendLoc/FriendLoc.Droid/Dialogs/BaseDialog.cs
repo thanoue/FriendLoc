@@ -18,7 +18,6 @@ namespace FriendLoc.Droid.Dialogs
         protected virtual DialogTypes DialogTypes => DialogTypes.Popup;
         public BaseActivity CurrentActivity => (BaseActivity)CrossCurrentActivity.Current.Activity;
 
-
         LoadingDialog _loadingDialog;
 
         Context _context;

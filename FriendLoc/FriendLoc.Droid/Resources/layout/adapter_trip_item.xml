@@ -9,6 +9,7 @@
 	android:clickable="true"
 	android:focusable="true">
 	<RelativeLayout
+		android:paddingHorizontal="@dimen/screen_padding"
 		android:layout_width="match_parent"
 		android:layout_height="@dimen/trip_item_height">
 
@@ -19,7 +20,6 @@
 			android:layout_height="@dimen/trup_item_left_img_size"
 			android:src="@drawable/ic_account_24"
 			android:scaleType="fitXY"
-			android:layout_marginLeft="@dimen/fields_margin_double"
 			app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlayStyle"
 			app:strokeWidth="0dp"/>
 		<LinearLayout
@@ -110,7 +110,8 @@
 			android:layout_alignParentEnd="true"
 			android:layout_width="@dimen/menu_btn_size"
 			android:layout_height="@dimen/menu_btn_size"
-			android:padding="@dimen/fields_margin"
+			android:padding="0dp"
+			android:foregroundGravity="right"
 			android:background="?selectableItemBackgroundBorderless"
 			android:src="@drawable/ic_dots_menu_24"/>
 	</RelativeLayout>
