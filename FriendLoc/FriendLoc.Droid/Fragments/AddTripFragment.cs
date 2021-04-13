@@ -46,7 +46,7 @@ namespace FriendLoc.Droid.Fragments
 
         private ShapeableImageView _avtImg;
         private CustomEditText _periodTxt, _nameTxt, _descriptionTxt;
-        private MaterialButton _saveBtn, _startBtn;
+        private MaterialButton _saveBtn;
         private TextInputEditText _periodBtn;
         private Chip _startPoint, _endPoint;
 
@@ -62,7 +62,6 @@ namespace FriendLoc.Droid.Fragments
             _avtImg = view.FindViewById<ShapeableImageView>(Resource.Id.avtImg);
             _periodTxt = view.FindViewById<CustomEditText>(Resource.Id.timeRangeTxt);
             _saveBtn = view.FindViewById<MaterialButton>(Resource.Id.saveBtn);
-            _startBtn = view.FindViewById<MaterialButton>(Resource.Id.startBtn);
             _periodBtn = view.FindViewById<TextInputEditText>(Resource.Id.periodBtn);
             _startPoint = view.FindViewById<Chip>(Resource.Id.startPointChip);
             _endPoint = view.FindViewById<Chip>(Resource.Id.endPointChip);
@@ -109,16 +108,8 @@ namespace FriendLoc.Droid.Fragments
             };
 
             _saveBtn.Click += _saveBtn_Click;
-            _startBtn.Click += _startBtn_Click;
 
             _trip = new Trip();
-        }
-
-        private void _startBtn_Click(object sender, EventArgs e)
-        {
-            _isStartingTrip = true;
-
-            _saveBtn.PerformClick();
         }
 
         private async  void _saveBtn_Click(object sender, EventArgs e)
@@ -168,19 +159,17 @@ namespace FriendLoc.Droid.Fragments
             _trip.EndPointLongitute = endPoint.Longitude;
             _trip.OwnerId = UserSession.Instance.LoggedinUser.Id;
             _trip.Status = TripStatuses.Created;
+            _trip.StartPointName = _startPoint.Text;
+            _trip.EndPointName = _endPoint.Text;
 
             _trip = await ServiceInstances.TripRepository.InsertAsync(_trip);
 
             CurrentActivity.StopLoading();
 
             CurrentActivity.OnCancel();
+            var qrCodeDialog = new ViewQRCodeDialog(CurrentActivity, _trip.Id);
 
-            if (_isStartingTrip)
-            {
-                var qrCodeDialog = new ViewQRCodeDialog(CurrentActivity, _trip.Id);
-
-                qrCodeDialog.ShowDialog();
-            }
+            qrCodeDialog.ShowDialog();
         }
 
         bool ValidateFields()

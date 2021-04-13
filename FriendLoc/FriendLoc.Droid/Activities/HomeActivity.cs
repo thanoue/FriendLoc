@@ -31,33 +31,10 @@ namespace FriendLoc.Droid.Activities
         ShapeableImageView _avtImmg;
         TextView _fullNameTv, _phoneNumberTv;
         ExtendedFloatingActionButton _addTripBtn;
+        FrameLayout _fragmentContainer;
 
         protected override int LayoutResId => Resource.Layout.activity_home;
         protected override bool IsFullScreen => true;
-        public bool OnNavigationItemSelected(IMenuItem menuItem)
-        {
-            menuItem.SetChecked(true);
-
-            _drawerLayout.Close();
-
-            switch (menuItem.ItemId)
-            {
-                case Resource.Id.logoutItem:
-
-                    ServiceInstances.SecureStorage.DeleteObject(Constants.LoggedinUser);
-                    ServiceInstances.SecureStorage.DeleteObject(Constants.UserToken);
-
-                    var intent = new Intent(this, typeof(LoginActivity));
-
-                    intent.AddFlags(ActivityFlags.ClearTask | ActivityFlags.ClearTop | ActivityFlags.NewTask);
-
-                    StartActivity(intent);
-
-                    break;
-            }
-
-            return true;
-        }
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -67,6 +44,13 @@ namespace FriendLoc.Droid.Activities
             _drawerLayout = FindViewById<DrawerLayout>(Resource.Id.container);
             _navigationView = FindViewById<NavigationView>(Resource.Id.navigationView);
             _addTripBtn = FindViewById<ExtendedFloatingActionButton>(Resource.Id.addTripBtn);
+            _fragmentContainer = FindViewById<FrameLayout>(Resource.Id.homeFragmentContainer);
+
+            var header = _navigationView.GetHeaderView(0);
+
+            _avtImmg = header.FindViewById<ShapeableImageView>(Resource.Id.avtImg);
+            _fullNameTv = header.FindViewById<TextView>(Resource.Id.nameTv);
+            _phoneNumberTv = header.FindViewById<TextView>(Resource.Id.phoneNumberTv);
 
             _toolBar.Click += delegate
             {
@@ -80,15 +64,56 @@ namespace FriendLoc.Droid.Activities
 
             _navigationView.SetNavigationItemSelectedListener(this);
 
-            var header = _navigationView.GetHeaderView(0);
 
-            _avtImmg = header.FindViewById<ShapeableImageView>(Resource.Id.avtImg);
-            _fullNameTv = header.FindViewById<TextView>(Resource.Id.nameTv);
-            _phoneNumberTv = header.FindViewById<TextView>(Resource.Id.phoneNumberTv);
+            Glide.With(this).Load(UserSession.Instance.LoggedinUser.AvtUrl).Into(_avtImmg);
+            _fullNameTv.Text = UserSession.Instance.LoggedinUser.FullName;
+            _phoneNumberTv.Text = UserSession.Instance.LoggedinUser.PhoneNumber;
+        }
 
-            //Glide.With(this).Load(UserSession.Instance.LoggedinUser.AvtUrl).Into(_avtImmg);
-            //_fullNameTv.Text = UserSession.Instance.LoggedinUser.FullName;
-            //_phoneNumberTv.Text = UserSession.Instance.LoggedinUser.PhoneNumber;
+        public bool OnNavigationItemSelected(IMenuItem menuItem)
+        {
+            menuItem.SetChecked(true);
+
+            _drawerLayout.Close();
+
+            switch (menuItem.ItemId)
+            {
+                case Resource.Id.logoutItem:
+
+                    ServiceInstances.SecureStorage.DeleteObject(Constants.LoggedinUser);
+                    ServiceInstances.SecureStorage.DeleteObject(Constants.UserToken);
+                    
+                    var intent = new Intent(this, typeof(LoginActivity));
+
+                    intent.AddFlags(ActivityFlags.ClearTask | ActivityFlags.ClearTop | ActivityFlags.NewTask);
+
+                    StartActivity(intent);
+
+                    break;
+
+                case Resource.Id.tripItem:
+
+                    StartLoading();
+
+                    ServiceInstances.TripRepository.GetAll().ContinueWith((res) =>
+                    {
+                        var trips = res.Result;
+
+                        StopLoading();
+
+                        var fragment = new TripsFragment(trips);
+
+                        var ft = SupportFragmentManager.BeginTransaction();
+
+                        ft.SetCustomAnimations(Resource.Animation.design_bottom_sheet_slide_in, Resource.Animation.design_bottom_sheet_slide_out);
+
+                        ft.Replace(_fragmentContainer.Id, fragment).Commit();
+                    });
+
+                    break;
+            }
+
+            return true;
         }
     }
 }

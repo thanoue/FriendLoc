@@ -20,21 +20,14 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
 		<com.google.android.material.button.MaterialButton
-			android:id="@+id/saveBtn"
+			android:id="@+id/shareBtn"
 			android:layout_width="0dp"
 			android:layout_marginRight="@dimen/fields_margin"
 			android:layout_height="wrap_content"
-			android:layout_weight="1"
+			android:layout_weight="2"
 			android:text="Share"
+			app:icon="@drawable/ic_share_24"
 			style="@style/Widget.MaterialComponents.Button.TextButton"/>
-		<com.google.android.material.button.MaterialButton
-			android:id="@+id/startBtn"
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_marginLeft="@dimen/fields_margin"
-			android:layout_weight="1"
-			android:text="Done"
-			style="@style/Widget.MaterialComponents.Button.Icon"/>
 	</LinearLayout>
 
 </LinearLayout>

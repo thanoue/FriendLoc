@@ -8,6 +8,7 @@ using Firebase.Storage;
 using FriendLoc.Entity;
 using Firebase.Auth;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace FriendLoc.Common.Repositories
 {
@@ -68,6 +69,40 @@ namespace FriendLoc.Common.Repositories
                 if (!string.IsNullOrEmpty(refreshToken))
                 {
                     return await InsertAsync(entity);
+                }
+                else
+                    return null;
+            }
+        }
+
+        public async Task<IList<T>> GetAll()
+        {
+            try
+            {
+                var items = new List<T>();
+
+                var collection =  await Client.Child(Path).OnceAsync<T>();
+
+                foreach(var item in collection)
+                {
+                    items.Add(item.Object);
+                }
+
+                return items;
+            }
+            catch (FirebaseAuthException firebaseExcep)
+            {
+                if (firebaseExcep.Reason != AuthErrorReason.InvalidAccessToken)
+                    return null;
+
+                var refreshToken = await ServiceInstances.AuthService.Login(UserSession.Instance.LoggedinUser.LoginName, UserSession.Instance.LoggedinUser.Password, (err) =>
+                {
+
+                });
+
+                if (!string.IsNullOrEmpty(refreshToken))
+                {
+                    return await GetAll();
                 }
                 else
                     return null;
@@ -159,5 +194,7 @@ namespace FriendLoc.Common.Repositories
         {
             Client.Child(Path).AsObservable<T>().Subscribe(d => action?.Invoke(d.Object));
         }
+
+     
     }
 }

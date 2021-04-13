@@ -13,9 +13,11 @@ namespace FriendLoc.Entity
 
         public double StartPointLatitude { get; set; }
         public double StartPointLongitute { get; set; }
+        public string StartPointName { get; set; }
 
         public double EndPointLatitude { get; set; }
         public double EndPointLongitute { get; set; }
+        public string EndPointName { get; set; }
 
         public string Description { get; set; }
         public string ImageUrl { get; set; }

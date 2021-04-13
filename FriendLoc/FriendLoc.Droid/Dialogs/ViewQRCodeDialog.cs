@@ -6,6 +6,7 @@ using Android.Views;
 using Android.Widget;
 using FriendLoc.Common;
 using FriendLoc.Common.Models;
+using Google.Android.Material.Button;
 
 namespace FriendLoc.Droid.Dialogs
 {
@@ -18,6 +19,7 @@ namespace FriendLoc.Droid.Dialogs
         string _qrContent = "";
 
         ImageView _qrImg;
+        MaterialButton _shareBtn;
 
         public ViewQRCodeDialog(Context context,string qrContent) : base(context)
         {
@@ -29,6 +31,7 @@ namespace FriendLoc.Droid.Dialogs
             base.OnViewCreated(view, savedInstanceState);
 
             _qrImg = view.FindViewById<ImageView>(Resource.Id.qrImg);
+            _shareBtn = view.FindViewById<MaterialButton>(Resource.Id.shareBtn);
 
             var qrData = new QRCodeData()
             {
@@ -39,6 +42,18 @@ namespace FriendLoc.Droid.Dialogs
             var qrCode = (Bitmap)ServiceInstances.QRCodeService.GenerateQRCode(qrData);
 
             _qrImg.SetImageBitmap(qrCode);
+
+
+            _shareBtn.Click += delegate
+            {
+                
+            };
+        }
+
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+            GC.Collect();
         }
     }
 }
