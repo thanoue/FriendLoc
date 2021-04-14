@@ -11,29 +11,13 @@ namespace FriendLoc.Common.Repositories
     {
         public override string Path => "TripLocations";
 
-        public async Task AddLocation(string tripId, Location location)
+        public async Task<bool> AddLocation(string tripId, Location location)
         {
-            try
+            return await Handle<bool>(async () =>
             {
-                await Client.Child(Path).Child(tripId).Child(nameof(TripLocation.Locations)).PostAsync(location);
-            }
-            catch (FirebaseAuthException firebaseExcep)
-            {
-                if (firebaseExcep.Reason != AuthErrorReason.InvalidAccessToken)
-                    return;
-
-                var refreshToken = await ServiceInstances.AuthService.Login(UserSession.Instance.LoggedinUser.LoginName, UserSession.Instance.LoggedinUser.Password, (err) =>
-                {
-
-                });
-
-                if (!string.IsNullOrEmpty(refreshToken))
-                {
-                    await AddLocation(tripId, location);
-                }
-                else
-                    return;
-            }
+                return await Client.Child(Path).Child(tripId).Child(nameof(TripLocation.Locations)).PostAsync(location).ContinueWith((res) => { return !res.IsFaulted; });
+            });
         }
+
     }
 }

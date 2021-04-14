@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Gms.Common.Apis;
+using Android.Gms.Extensions;
 using Android.Gms.Location;
 using Android.Graphics;
 using Android.OS;
@@ -41,11 +43,10 @@ namespace FriendLoc.Droid.Dialogs
         ExtendedFloatingActionButton _selectAvtBtn;
         MaterialButton _submitBtn;
         string _imgUrl;
-        public Action<Coordinate,string> OnSelected;
+        public Action<Coordinate, string> OnSelected;
 
         public AddMilestoneDialog(Context context) : base(context)
         {
-
         }
 
         public override void OnViewCreated(View view, Bundle savedInstanceState)
@@ -59,15 +60,9 @@ namespace FriendLoc.Droid.Dialogs
             _submitBtn = view.FindViewById<MaterialButton>(Resource.Id.submitBtn);
             _nameTxt = view.FindViewById<CustomEditText>(Resource.Id.nameTxt);
 
-            _avtImg.Click += delegate
-            {
-                SelectAvt();
-            };
+            _avtImg.Click += delegate { SelectAvt(); };
 
-            _selectAvtBtn.Click += delegate
-            {
-                SelectAvt();
-            };
+            _selectAvtBtn.Click += delegate { SelectAvt(); };
 
             _selectLocationBtn.Click += delegate
             {
@@ -81,41 +76,40 @@ namespace FriendLoc.Droid.Dialogs
                         Longitude = coor.Longitude,
                         Latitude = coor.Latitude
                     };
-
                 };
 
                 selectLoc.ShowDialog();
             };
 
-            _locationProviderClient = LocationServices.GetFusedLocationProviderClient(Context);
+            _submitBtn.Click += delegate { SubmitAsync(); };
+
+            GetCurrentLocation();
+        }
+
+        async void GetCurrentLocation()
+        {
+            _locationProviderClient = LocationServices.GetFusedLocationProviderClient(CurrentActivity);
 
             LocationRequest locationRequest = LocationRequest.Create();
-            locationRequest.SetInterval(10000);
+            locationRequest.SetInterval(5000);
             locationRequest.SetFastestInterval(5000);
             locationRequest.SetPriority(LocationRequest.PriorityHighAccuracy);
 
             LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
             builder.AddLocationRequest(locationRequest);
 
-            SettingsClient client = LocationServices.GetSettingsClient(Context);
-            var task = client.CheckLocationSettings(builder.Build())
-                .AddOnSuccessListener(new SuccessLisenter((obj) =>
-                {
-                    StartLoading();
+            SettingsClient client = LocationServices.GetSettingsClient(CurrentActivity);
 
-                    _callback = new CusLocationCallback(OnLocationGot);
-
-                    _locationProviderClient.RequestLocationUpdates(locationRequest, _callback, Looper.MainLooper);
-
-                })).AddOnFailureListener(new FailureLisenter((ex) =>
+            var task = await client.CheckLocationSettings(builder.Build())
+                .AddOnFailureListener(new FailureLisenter((ex) =>
                 {
                     if (ex is ResolvableApiException)
                     {
                         try
                         {
-                            ResolvableApiException resolvable = (ResolvableApiException)ex;
+                            ResolvableApiException resolvable = (ResolvableApiException) ex;
                             resolvable.StartResolutionForResult(CrossCurrentActivity.Current.Activity,
-                                    100);
+                                100);
 
                             Dismiss();
                         }
@@ -124,22 +118,40 @@ namespace FriendLoc.Droid.Dialogs
                             // Ignore the error.
                         }
                     }
-
                 }));
 
-            _submitBtn.Click += delegate { SubmitAsync(); };
+            UtilUI.StartLoading();
+
+            if (task != null)
+            {
+                Task.Run(() =>
+                {
+                    _callback = new CusLocationCallback(OnLocationGot);
+
+                    _locationProviderClient.RequestLocationUpdates(locationRequest, _callback, Looper.MainLooper);
+                });
+            }
+        }
+
+        void OnLocationGot(Android.Locations.Location location)
+        {
+            _locationProviderClient.RemoveLocationUpdates(_callback);
+
+            UtilUI.StopLoading();
+
+            _location = new Coordinate()
+            {
+                Longitude = location.Longitude,
+                Latitude = location.Latitude
+            };
         }
 
         private async void SubmitAsync()
         {
-            StartLoading();
-
             if (!string.IsNullOrEmpty(_imgUrl))
             {
-                var path = await ServiceInstances.AuthService.PushImageToServer(_imgUrl, (process) =>
-               {
-
-               }, Constants.MileStoneStorageFolderName);
+                var path = await ServiceInstances.AuthService.PushImageToServer(_imgUrl, (process) => { },
+                    Constants.MileStoneStorageFolderName);
 
                 if (!string.IsNullOrEmpty(path))
                 {
@@ -168,15 +180,14 @@ namespace FriendLoc.Droid.Dialogs
                 Longitude = _location.Longitude
             };
 
-            await ServiceInstances.UserMilestoneRepository.AddMileStone(UserSession.Instance.LoggedinUser.Id, milestone);
-
-            StopLoading();
+            await ServiceInstances.UserMilestoneRepository.AddMileStone(UserSession.Instance.LoggedinUser.Id,
+                milestone);
 
             OnSelected?.Invoke(new Coordinate()
             {
                 Latitude = _location.Latitude,
                 Longitude = _location.Longitude
-            },milestone.Name);
+            }, milestone.Name);
 
             this.Dismiss();
         }
@@ -185,19 +196,6 @@ namespace FriendLoc.Droid.Dialogs
         {
             CurrentActivity.SetImgSelectionListner(this);
             CurrentActivity.SelectImageFromGallery();
-        }
-
-        void OnLocationGot(Android.Locations.Location location)
-        {
-            StopLoading();
-
-            _location = new Coordinate()
-            {
-                Longitude = location.Longitude,
-                Latitude = location.Latitude
-            };
-
-            _locationProviderClient.RemoveLocationUpdates(_callback);
         }
 
         public void OnImgSelected(string path, Activity activity)

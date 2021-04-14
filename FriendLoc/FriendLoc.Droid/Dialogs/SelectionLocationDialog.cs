@@ -89,13 +89,13 @@ namespace FriendLoc.Droid.Dialogs
 
             _webView.WebView.AddJavascriptInterface(new JavascriptClient(this), "Android");
 
-            StartLoading();
+            UtilUI.StartLoading();
 
             if (!string.IsNullOrEmpty(_locationName))
             {
                 GeoDecoder(_locationName, (coor) =>
                 {
-                    StopLoading();
+                    UtilUI.StopLoading();
                     _location = coor;
                     _webView.StartLoading(Constants.MapUrl);
                 });
@@ -104,7 +104,7 @@ namespace FriendLoc.Droid.Dialogs
             {
                 GeoDecoder(_location.Latitude, _location.Longitude, (coor) =>
                 {
-                    StopLoading();
+                    UtilUI.StopLoading();
                     _location = coor;
                     _nameTxt.Text = _locationName;
                     _webView.StartLoading(Constants.MapUrl);

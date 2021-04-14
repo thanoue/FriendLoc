@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using FriendLoc.Common.Models;
 namespace FriendLoc.Common.Services
 {
@@ -8,6 +9,6 @@ namespace FriendLoc.Common.Services
         void InitScanView(object surfaceView);
         void StartScanning(Action<string> onScanned);
         void StopScanning();
-        string ScanFromImage(string path);
+        Task<string> ScanFromImage(string path);
     }
 }

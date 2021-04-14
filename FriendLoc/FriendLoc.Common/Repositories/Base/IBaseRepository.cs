@@ -14,7 +14,7 @@ namespace FriendLoc.Common.Repositories
         Task<T> GetById(string id);
         Task<IList<T>> GetAll();
         Task<T> UpdateById(T entity);
-        Task DeleteById(string id);
+        Task<bool> DeleteById(string id);
         void NewRecordListening(Action<T> action);
         Task<string> UploadFile(Stream imageData, string folderName, Action<int> progressCallback);
     }

@@ -10,6 +10,8 @@ namespace FriendLoc.Common.Services.Impl
 {
     public class FirebaseAuthService : IAuthService
     {
+        protected IGlobalUIService UtilUI => ServiceLocator.Instance.Get<IGlobalUIService>();
+
         public FirebaseAuthService()
         {
         }
@@ -19,27 +21,16 @@ namespace FriendLoc.Common.Services.Impl
             return new FirebaseAuthProvider(new FirebaseConfig(Constants.FirebaseApiKey));
         }
 
-        public async Task<string> RefreshTokenAsync()
-        {
-            var login = await Login(UserSession.Instance.LoggedinUser.LoginName, UserSession.Instance.LoggedinUser.Password,(err)=> {
-
-            });
-
-            if (!string.IsNullOrEmpty(login))
-            {
-                return login;
-            }
-            else
-                return "";
-        }
-
         public async Task<string> Login(string loginName, string password, Action<string> errorCallback)
         {
+            UtilUI.StartLoading();
+
             var authProvider = GetProvider();
 
             try
             {
-                var login = await authProvider.SignInWithEmailAndPasswordAsync(loginName + Constants.EmailSuffix, password);
+                var login = await authProvider.SignInWithEmailAndPasswordAsync(loginName + Constants.EmailSuffix,
+                    password);
 
                 ServiceInstances.ResourceService.UserToken = login.FirebaseToken;
 
@@ -52,15 +43,20 @@ namespace FriendLoc.Common.Services.Impl
                 ServiceInstances.SecureStorage.Store(Constants.LastestLoggedIn, DateTime.Now.ToString());
                 ServiceInstances.SecureStorage.StoreObject(Constants.LoggedinUser, user);
 
+                UtilUI.StopLoading();
+
                 return ServiceInstances.ResourceService.UserToken;
             }
-            catch(FirebaseAuthException firebaseExcep)
+            catch (FirebaseAuthException firebaseExcep)
             {
                 errorCallback(UtilCommon.FirebaseAuthExceptionHandler(firebaseExcep));
+                UtilUI.StopLoading();
+
                 return "";
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
+                UtilUI.StopLoading();
                 errorCallback(ex.Message);
                 return "";
             }
@@ -69,14 +65,15 @@ namespace FriendLoc.Common.Services.Impl
         private void LoginFirebaseAuthRefreshed(object sender, FirebaseAuthEventArgs e)
         {
             ServiceInstances.ResourceService.UserToken = e.FirebaseAuth.RefreshToken;
-            ServiceInstances.SecureStorage.Store(Constants.LastestLoggedIn,DateTime.Now.ToString());
+            ServiceInstances.SecureStorage.Store(Constants.LastestLoggedIn, DateTime.Now.ToString());
         }
 
-        public async void  SignUp(SignUpModel model, Action<string> errorCallback, Action successCallback)
+        public async void SignUp(SignUpModel model, Action<string> errorCallback, Action successCallback)
         {
-            var avtUrl = await PushImageToServer(model.AvtImgPath,(progress)=> {
-
-            },Constants.UserAvtStorageFolderName); 
+            UtilUI.StartLoading();
+            
+            var avtUrl =
+                await PushImageToServer(model.AvtImgPath, (progress) => { }, Constants.UserAvtStorageFolderName);
 
             var user = new User()
             {
@@ -93,7 +90,9 @@ namespace FriendLoc.Common.Services.Impl
 
             try
             {
-                var account = await authProvider.CreateUserWithEmailAndPasswordAsync(user.LoginName + Constants.EmailSuffix, user.Password, user.FullName);
+                var account =
+                    await authProvider.CreateUserWithEmailAndPasswordAsync(user.LoginName + Constants.EmailSuffix,
+                        user.Password, user.FullName);
 
                 if (account == null)
                 {
@@ -112,11 +111,15 @@ namespace FriendLoc.Common.Services.Impl
 
                     if (dbUser != null)
                     {
+                        ServiceInstances.ResourceService.UserToken = "";
+                        UtilUI.StopLoading();
                         successCallback();
                         return;
                     }
                     else
                     {
+                        UtilUI.StopLoading();
+                        ServiceInstances.ResourceService.UserToken = "";
                         errorCallback("Got some errors when creating new account! please try again.");
                         return;
                     }
@@ -124,29 +127,37 @@ namespace FriendLoc.Common.Services.Impl
             }
             catch (Firebase.Auth.FirebaseAuthException firebaseExcep)
             {
+                UtilUI.StopLoading();
                 errorCallback(UtilCommon.FirebaseAuthExceptionHandler(firebaseExcep));
                 return;
             }
             catch (Exception ex)
             {
+                UtilUI.StopLoading();
                 errorCallback(ex.Message);
+                return;
             }
         }
 
-        public async Task<string> PushImageToServer(string path,Action<int> progressAction,string folderName)
+        public async Task<string> PushImageToServer(string path, Action<int> progressAction, string folderName)
         {
             if (!string.IsNullOrEmpty(path))
             {
+                UtilUI.StartLoading();
                 using (var stream = File.OpenRead(path))
                 {
-                    var imgUrl = await ServiceInstances.UserRepository.UploadFile(stream, folderName, progressAction);
+                    var imgUrl = await ServiceInstances.UserRepository.UploadFile(stream, folderName, progressAction).ContinueWith(
+                        (res) =>
+                        {
+                            UtilUI.StopLoading();
+                            return res.Result;
+                        });
 
                     return imgUrl;
                 }
             }
 
             return "";
-
         }
     }
 }

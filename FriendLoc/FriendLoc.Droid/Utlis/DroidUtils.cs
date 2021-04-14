@@ -7,26 +7,32 @@ using Android.Util;
 using Android.Views;
 using Android.Webkit;
 using Android.Widget;
+using AndroidX.AppCompat.App;
 using AndroidX.Core.Content;
 using Firebase.Auth;
 using FriendLoc.Common;
 using FriendLoc.Common.Models;
 using FriendLoc.Common.Services;
+using FriendLoc.Droid.Activities;
+using FriendLoc.Droid.Dialogs;
 using FriendLoc.Model;
+using Google.Android.Material.Snackbar;
 using Java.Interop;
 using Newtonsoft.Json;
+using Plugin.CurrentActivity;
 using PopupMenu = AndroidX.AppCompat.Widget.PopupMenu;
 
 namespace FriendLoc.Droid
 {
+   
+
     public static class DroidUtils
     {
         public static void ExecJavaScript(WebView webView, string jscode)
         {
-           
         }
-        
-        public  static Java.IO.File CreateNewFilePath(this Context context,string ext)
+
+        public static Java.IO.File CreateNewFilePath(this Context context, string ext)
         {
             var imagePath = context.GetExternalFilesDir(Android.OS.Environment.DirectoryDcim);
 
@@ -42,8 +48,8 @@ namespace FriendLoc.Droid
 
             return image;
         }
-        
-        public static void ShareImgFile(this Activity context,int requestCode, string filePath)
+
+        public static void ShareImgFile(this Activity context, int requestCode, string filePath)
         {
             Intent share = new Intent(Intent.ActionSend);
             share.SetType(filePath.Contains(".png") ? "image/png" : "image/jpeg");
@@ -60,7 +66,7 @@ namespace FriendLoc.Droid
             }
             else
                 share.PutExtra(Intent.ExtraStream, Android.Net.Uri.FromFile(photoFile));
-            
+
             context.StartActivityForResult(Intent.CreateChooser(share, "Share Image"), requestCode);
         }
 
@@ -73,8 +79,8 @@ namespace FriendLoc.Droid
             int bitmapOverWidth = 120;
             int bitmapOverHeight = 120;
 
-            float marginLeft = (float)(bitmapWidth * 0.5 - bitmapOverWidth * 0.5);
-            float marginTop = (float)(bitmapHeight * 0.5 - bitmapOverHeight * 0.5);
+            float marginLeft = (float) (bitmapWidth * 0.5 - bitmapOverWidth * 0.5);
+            float marginTop = (float) (bitmapHeight * 0.5 - bitmapOverHeight * 0.5);
 
             Bitmap overlayBitmap = Bitmap.CreateBitmap(bitmapWidth, bitmapHeight, bitmap.GetConfig());
             Canvas canvas = new Canvas(overlayBitmap);
@@ -92,7 +98,7 @@ namespace FriendLoc.Droid
                 return null;
 
             var newWidth = size;
-            var newHeight = (int)(bitmap.Height * ((double)120 / (double)bitmap.Width));
+            var newHeight = (int) (bitmap.Height * ((double) 120 / (double) bitmap.Width));
 
             var bitmapScalled = Bitmap.CreateScaledBitmap(bitmap, newWidth, newHeight, true);
 
@@ -114,16 +120,17 @@ namespace FriendLoc.Droid
 
             return output;
         }
-
     }
 
     public class OnMenuItemClickListener : Java.Lang.Object, PopupMenu.IOnMenuItemClickListener
     {
         private Action<IMenuItem> _onItemCicked;
-        public OnMenuItemClickListener( Action<IMenuItem> onItemCicked)
+
+        public OnMenuItemClickListener(Action<IMenuItem> onItemCicked)
         {
             _onItemCicked = onItemCicked;
         }
+
         public bool OnMenuItemClick(IMenuItem? item)
         {
             _onItemCicked?.Invoke(item);
@@ -177,7 +184,7 @@ namespace FriendLoc.Droid
                     break;
             }
         }
-    }   
+    }
 
     public class MyWebChromeClient : WebChromeClient
     {

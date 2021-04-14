@@ -160,39 +160,39 @@ namespace FriendLoc.Droid.Services
                 return;
             }
 
-            // foreach (Location location in locationResult.Locations)
-            // {
-            //     if (_lastestLocation == null)
-            //     {
-            //         _onLocationChanged?.Invoke(location);
-            //         _lastestLocation = location;
-            //     }
-            //
-            //     var distance = _lastestLocation.DistanceTo(location);
-            //
-            //     if (distance <= 20)
-            //     {
-            //         continue;
-            //     }
-            //
-            //     _lastestLocation.Set(location);
-            //
-            //     _onLocationChanged?.Invoke(location);
-            //
-            //     //Console.WriteLine(location.ToString());
-            //
-            //     //var logger = ServiceInstances.LoggerService;
-            //
-            //     //if (logger == null)
-            //     //{
-            //     //    var fileService = new DroidFileService(Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, Constants.APP_NAME));
-            //
-            //     //    logger = new LoggerService(fileService);
-            //     //}
-            //
-            //     //logger.Info(string.Format("Latitude : {0}, \n Longitude: {1}, \n Altitude: {2}", location.Latitude.ToString(), location.Longitude.ToString(), location.Altitude));
-            //
-            // }
+            foreach (Location location in locationResult.Locations)
+            {
+                if (_lastestLocation == null)
+                {
+                    _onLocationChanged?.Invoke(location);
+                    _lastestLocation = location;
+                }
+            
+                var distance = _lastestLocation.DistanceTo(location);
+            
+                if (distance <= 20)
+                {
+                    continue;
+                }
+            
+                _lastestLocation.Set(location);
+            
+                _onLocationChanged?.Invoke(location);
+            
+                //Console.WriteLine(location.ToString());
+            
+                //var logger = ServiceInstances.LoggerService;
+            
+                //if (logger == null)
+                //{
+                //    var fileService = new DroidFileService(Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, Constants.APP_NAME));
+            
+                //    logger = new LoggerService(fileService);
+                //}
+            
+                //logger.Info(string.Format("Latitude : {0}, \n Longitude: {1}, \n Altitude: {2}", location.Latitude.ToString(), location.Longitude.ToString(), location.Altitude));
+            
+            }
         }
     }
 

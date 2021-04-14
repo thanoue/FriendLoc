@@ -9,6 +9,7 @@ namespace FriendLoc.Common.Repositories
     public interface ITripRepository : IBaseRepository<Trip>
     {
         Task<IList<Trip>> GetByJoinedUser(string userId);
+        Task<bool> AddMember(string tripId, string userId);
 
     }
 }

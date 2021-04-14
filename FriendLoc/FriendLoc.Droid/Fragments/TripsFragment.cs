@@ -1,9 +1,7 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
@@ -21,19 +19,19 @@ using Plugin.CurrentActivity;
 
 namespace FriendLoc.Droid.Fragments
 {
-    public class TripsFragment : Fragment
+    public class TripsFragment : BaseFragment
     {
         ListView _tripListView;
         IList<Trip> _trips;
         IList<TripViewModel> _items;
         TripAdapter _tripAdapter;
-        MaterialButton _addTripBtn,_scanQrCodeBtn;
-        
+        MaterialButton _addTripBtn, _scanQrCodeBtn;
+
         public TripsFragment(IList<Trip> trips)
         {
             _trips = trips;
         }
-        
+
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             // Use this to return your custom view for this Fragment
@@ -47,7 +45,7 @@ namespace FriendLoc.Droid.Fragments
             _tripListView = view.FindViewById<ListView>(Resource.Id.tripListview);
             _addTripBtn = view.FindViewById<MaterialButton>(Resource.Id.addTripBtn);
             _scanQrCodeBtn = view.FindViewById<MaterialButton>(Resource.Id.scanQRBtn);
-            
+
             if (_trips == null && _trips.Count <= 0)
             {
                 return;
@@ -55,44 +53,43 @@ namespace FriendLoc.Droid.Fragments
 
             _scanQrCodeBtn.Click += delegate
             {
-                var scanQr = new ScanQRCodeDialog(Context, (id) =>
+                var scanQr = new ScanQRCodeDialog(Context, async (id) =>
                 {
+                    var duplicate = _trips.FirstOrDefault(p => p.Id.Equals(id));
 
+                    if (duplicate != null)
+                    {
+                        UtilUI.ErrorToast("You've have already joined in this Trip!");
+                        return;
+                    }
+
+                   var join = await ServiceInstances.TripRepository.AddMember(id, UserSession.Instance.LoggedinUser.Id);
+
+                    if (join)
+                    {
+                        ReloadTrips();
+                    }
                 });
+
                 scanQr.ShowDialog();
             };
 
             _addTripBtn.Click += delegate
             {
-                var addTripDialog = new AddTripDialog(Context, () =>
-                {
-                    ServiceInstances.TripRepository.GetByJoinedUser(UserSession.Instance.LoggedinUser.Id).ContinueWith((res) =>
-                    {
-                        CrossCurrentActivity.Current.Activity.RunOnUiThread(() =>
-                        {
-                            _trips.Clear();
-
-                            ((List<Trip>)_trips).AddRange(res.Result);
-                            DataBinding();
-                            _tripAdapter.NotifyDataSetChanged();
-
-                        });
-                        
-                    });
-                });
+                var addTripDialog = new AddTripDialog(Context, () => { ReloadTrips(); });
 
                 addTripDialog.ShowDialog();
             };
-           
+
             _items = new List<TripViewModel>();
 
             DataBinding();
 
-            _tripAdapter = new TripAdapter(Context,OnTripAction, _items);
+            _tripAdapter = new TripAdapter(Context, OnTripAction, _items);
             _tripListView.Adapter = _tripAdapter;
         }
 
-        void OnTripAction(TripActions action,string id)
+        void OnTripAction(TripActions action, string id)
         {
             switch (action)
             {
@@ -100,9 +97,22 @@ namespace FriendLoc.Droid.Fragments
 
                     var dialog = new ViewQRCodeDialog(Context, id);
                     dialog.ShowDialog();
-                    
+
                     break;
             }
+        }
+
+        async void ReloadTrips()
+        {
+            var res  = await ServiceInstances.TripRepository.GetByJoinedUser(UserSession.Instance.LoggedinUser.Id);
+
+            _trips.Clear();
+
+            ((List<Trip>) _trips).AddRange(res);
+            
+            DataBinding();
+            
+            _tripAdapter.NotifyDataSetChanged();
         }
 
         void DataBinding()
@@ -119,7 +129,7 @@ namespace FriendLoc.Droid.Fragments
                     OwnerId = trip.OwnerId,
                     Milestones = trip.StartPointName + " - " + trip.EndPointName,
                     Name = trip.Name,
-                    Status = (Entity.TripStatuses)(new Random().Next(0, 2))
+                    Status = (Entity.TripStatuses) (new Random().Next(0, 2))
                 });
             }
         }

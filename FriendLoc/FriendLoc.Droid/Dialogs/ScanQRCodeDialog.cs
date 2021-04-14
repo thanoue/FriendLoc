@@ -56,13 +56,20 @@ namespace FriendLoc.Droid.Dialogs
             this.Dismiss();
         }
 
-        public void OnImgSelected(string path, Activity activity)
+        public async void OnImgSelected(string path, Activity activity)
         {
-            var res = ServiceInstances.QRCodeService.ScanFromImage(path);
+            UtilUI.StartLoading();
+
+            var res = await ServiceInstances.QRCodeService.ScanFromImage(path);
 
             if (!string.IsNullOrEmpty(res))
             {
                 ScanSucess(res);
+                UtilUI.StopLoading();
+            }
+            else
+            {
+                UtilUI.StopLoading();
             }
         }
     }

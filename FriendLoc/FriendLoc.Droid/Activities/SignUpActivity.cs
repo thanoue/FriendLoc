@@ -145,8 +145,6 @@ namespace FriendLoc.Droid.Activities
             if (!ValidateFields())
                 return;
 
-            StartLoading("Creating new Account...");
-
             var userModel = new SignUpModel()
             {
                 Gender = _maleGenderRadio.Checked ? Gender.Male : _feMaleGenderRadio.Checked ? Gender.Female : Gender.Others,
@@ -162,13 +160,11 @@ namespace FriendLoc.Droid.Activities
             {
                 RunOnUiThread(() =>
                 {
-                    ErrorToast(err);
-                    StopLoading();
+                    UtilUI.ErrorToast(err);
                 });
 
             }, () =>
             {
-                StopLoading();
                 Finish();
             });
         }

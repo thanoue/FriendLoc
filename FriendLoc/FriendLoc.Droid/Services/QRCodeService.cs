@@ -1,14 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using Android.Content;
+using Android.Gms.Extensions;
 using Android.Graphics;
 using Android.OS;
+using Android.Runtime;
 using Android.Views;
+using FriendLoc.Common;
 using FriendLoc.Common.Models;
 using FriendLoc.Common.Services;
 using Java.Util;
 using Newtonsoft.Json;
+using Xamarin.Google.MLKit.Vision.BarCode;
+using Xamarin.Google.MLKit.Vision.BarCode.Internal;
+using Xamarin.Google.MLKit.Vision.Common;
 using ZXing;
 using ZXing.Common;
 using ZXing.Mobile;
@@ -32,9 +40,9 @@ namespace FriendLoc.Droid.Services
         public object GenerateQRCode(QRCodeData data)
         {
             var qrCode =
-                GenerateQRCode(data.Data is string ? (string) data.Data : JsonConvert.SerializeObject(data.Data));
+                GenerateQRCode(data.Data is string ? (string)data.Data : JsonConvert.SerializeObject(data.Data));
 
-            Bitmap bitmap = data.Image == null ? null : (Bitmap) data.Image;
+            Bitmap bitmap = data.Image == null ? null : (Bitmap)data.Image;
 
             var logoInside = DroidUtils.CreateRoundedBitmap(bitmap, 120);
 
@@ -52,11 +60,11 @@ namespace FriendLoc.Droid.Services
 
             if (surfaceViewBackground is ViewGroup)
             {
-                ((ViewGroup) surfaceViewBackground).AddView(_scannerView, new ViewGroup.LayoutParams(-1, -1));
+                ((ViewGroup)surfaceViewBackground).AddView(_scannerView, new ViewGroup.LayoutParams(-1, -1));
             }
         }
 
-        public string ScanFromImage(string path)
+        public async Task<string> ScanFromImage(string path)
         {
             using (var stream = new FileStream(path, FileMode.Open))
             {
@@ -65,10 +73,45 @@ namespace FriendLoc.Droid.Services
                     stream.CopyTo(memory);
 
                     var bytes = memory.ToArray();
-                    
-                
+
+                    BarcodeScannerOptions options = new BarcodeScannerOptions.Builder()
+                    .SetBarcodeFormats(Barcode.FormatQrCode, Barcode.FormatDataMatrix).Build();
+
+                    InputImage image;
+                    try
+                    {
+                        image = InputImage.FromFilePath(_context,Android.Net.Uri.FromFile(new Java.IO.File(path)));
+                    }
+                    catch (IOException e)
+                    {
+                        ServiceInstances.LoggerService.Error(e.ToString());
+                        return "";
+                    }
+
+                    var scanner = BarcodeScanning.GetClient(options);
+
+                    var res = "";
+
+                   var codes = await scanner.Process(image)
+                        .AddOnFailureListener(new FailureLisenter((exp) =>
+                        {
+                            ServiceInstances.LoggerService.Error(exp.ToString());
+                            res = "";
+
+                        }));
+
+                    if(codes != null)
+                    {
+                        var results = codes.JavaCast<JavaList<Barcode>>();
+
+                        res = ((Barcode)results.Get(0)).DisplayValue;
+                    }
+
+                    return res;
                 }
             }
+
+
         }
         public void StartScanning(Action<string> onScanned)
         {
@@ -77,7 +120,7 @@ namespace FriendLoc.Droid.Services
                 if (string.IsNullOrEmpty(res.Text))
                     return;
 
-                onScanned?.Invoke( res.Text);
+                onScanned?.Invoke(res.Text);
 
                 Vibrator vib = (Vibrator)_context.GetSystemService(Context.VibratorService);
                 vib.Vibrate(1000);

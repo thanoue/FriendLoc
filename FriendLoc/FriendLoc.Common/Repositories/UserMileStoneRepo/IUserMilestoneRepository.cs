@@ -6,6 +6,6 @@ namespace FriendLoc.Common.Repositories
 {
     public interface IUserMilestoneRepository : IBaseRepository<UserMilestone> 
     {
-        Task AddMileStone(string userId, Milestone milestone);
+        Task<bool> AddMileStone(string userId, Milestone milestone);
     }
 }

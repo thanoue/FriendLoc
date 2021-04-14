@@ -18,6 +18,7 @@ using Com.Airbnb.Lottie;
 using Com.Nguyenhoanglam.Imagepicker.Model;
 using Com.Nguyenhoanglam.Imagepicker.UI.Imagepicker;
 using FriendLoc.Common;
+using FriendLoc.Common.Services;
 using FriendLoc.Droid.Dialogs;
 using FriendLoc.Droid.Fragments;
 using Google.Android.Material.AppBar;
@@ -36,7 +37,6 @@ namespace FriendLoc.Droid.Activities
     {
         const int REQUEST_PERMISSIONS = 11;
         public  const int REQUEST_SHARE_IMAGE = 99;
-        
         protected abstract int LayoutResId { get; }
         protected virtual bool IsFullScreen => false;
         protected virtual string HeaderTitle => "";
@@ -44,15 +44,15 @@ namespace FriendLoc.Droid.Activities
         protected virtual bool IsAskBeforeDismiss => false;
         protected virtual int ThemeResId => Resource.Style.WhiteNavigtionBaseTheme;
 
-        RelativeLayout _loadingView;
-        LottieAnimationView _animView;
+        public IGlobalUIService UtilUI => ServiceLocator.Instance.Get<IGlobalUIService>();
+
         Action _permissionCallback;
         MaterialToolbar _toolBar;
         RelativeLayout _rootView;
-        FrameLayout _fragmentContainer;
-        BaseFragment _currentFragment;
 
+        bool _isFirstResumed = false;
         IImgSelectionObj _imgSelectionObj;
+        string _selectGalleryImagePath = "";
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -63,12 +63,6 @@ namespace FriendLoc.Droid.Activities
             SetContentView(Resource.Layout.activity_root);
 
             _rootView = FindViewById<RelativeLayout>(Resource.Id.baseContentView);
-            _fragmentContainer = FindViewById<FrameLayout>(Resource.Id.fragmentContainer);
-            _loadingView = FindViewById<RelativeLayout>(Resource.Id.loadingArea);
-            _animView = FindViewById<LottieAnimationView>(Resource.Id.animation_view);
-            _animView.SetScaleType(ImageView.ScaleType.FitXy);
-            _animView.Scale = 10;
-            _animView.Speed = 2f;
 
             if (IsFullScreen)
             {
@@ -88,64 +82,26 @@ namespace FriendLoc.Droid.Activities
             };
         }
 
-        public void ErrorToast(string content, Action onClick = null)
+        protected override void OnResume()
         {
-            ToastMessage(content, Resource.Color.colorError, 5000, onClick);
-        }
+            base.OnResume();
 
-        public void WarningToast(string content, Action onClick = null)
-        {
-            ToastMessage(content, Resource.Color.colorWarning, Snackbar.LengthShort, onClick);
-        }
-
-        public void InfToast(string content, Action onClick = null)
-        {
-            ToastMessage(content, Resource.Color.colorInfo, Snackbar.LengthShort, onClick);
-        }
-
-        public void SuccessToast(string content, Action onClick = null)
-        {
-            ToastMessage(content, Resource.Color.colorSuccess, Snackbar.LengthShort, onClick);
-        }
-
-        private void ToastMessage(string content, int backgroundColorResId, int duration, Action onClick = null)
-        {
-            RunOnUiThread(() =>
+            if (_isFirstResumed)
             {
-                var bar = Snackbar.Make(_rootView, content, duration)
-                       .SetBackgroundTint(backgroundColorResId)
-                       .SetBackgroundTintMode(PorterDuff.Mode.Darken)
-                       .SetTextColor(Color.White)
-                       .SetAction("Dismiss", (view) =>
-                       {
-                           onClick?.Invoke();
-                       });
-
-                bar.SetAnimationMode(Snackbar.AnimationModeSlide);
-
-                bar.Show();
-            });
-        }
-
-        public void StartLoading(string loadingContent = "Loading...")
-        {
-            RunOnUiThread(() =>
+                if (!string.IsNullOrEmpty(_selectGalleryImagePath))
+                {
+                    _imgSelectionObj?.OnImgSelected(_selectGalleryImagePath, this);
+                    _selectGalleryImagePath = "";
+                }
+            }
+            else
             {
-                Window.SetFlags(WindowManagerFlags.NotTouchable, WindowManagerFlags.NotTouchable);
-                _loadingView.Visibility = ViewStates.Visible;
-                _animView.PlayAnimation();
-            });
+                _isFirstResumed = true;
+            }
         }
 
-        public void StopLoading()
-        {
-            RunOnUiThread(() =>
-            {
-                Window.ClearFlags(WindowManagerFlags.NotTouchable);
-                _loadingView.Visibility = ViewStates.Gone;
-                _animView.CancelAnimation();
-            });
-        }
+
+
 
         protected virtual void OnSaveRequest()
         {
@@ -154,12 +110,6 @@ namespace FriendLoc.Droid.Activities
 
         public virtual void OnCancel()
         {
-            if (_currentFragment != null)
-            {
-                RemoveFragment(_currentFragment);
-                return;
-            }
-
             this.Finish();
         }
 
@@ -203,7 +153,7 @@ namespace FriendLoc.Droid.Activities
 
                 if (urls != null && urls.Count > 0)
                 {
-                    _imgSelectionObj?.OnImgSelected(urls[0].Path,this);
+                    _selectGalleryImagePath = urls[0].Path;
                 }
             }
         }
@@ -225,20 +175,6 @@ namespace FriendLoc.Droid.Activities
                                     OnCancel();
                                 });
 
-            if (_currentFragment != null)
-            {
-                if (_currentFragment.IsAskBeforeDismiss)
-                {
-                    builder.Show();
-                    return;
-                }
-                else
-                {
-                    OnCancel();
-                    return;
-                }
-            }
-
             if (!IsAskBeforeDismiss)
             {
                 OnCancel();
@@ -250,11 +186,6 @@ namespace FriendLoc.Droid.Activities
 
         public override void OnBackPressed()
         {
-            if (_loadingView.Visibility == ViewStates.Visible)
-            {
-                return;
-            }
-
             OnBackClick();
         }
 
@@ -274,30 +205,6 @@ namespace FriendLoc.Droid.Activities
             }
 
             return true;
-        }
-
-        public void LoadFragment(BaseFragment fragment, bool isWithAnim = true)
-        {
-            var ft = SupportFragmentManager.BeginTransaction();
-
-            if (isWithAnim)
-                ft.SetCustomAnimations(Resource.Animation.design_bottom_sheet_slide_in, Resource.Animation.design_bottom_sheet_slide_out);
-
-            ft.Replace(_fragmentContainer.Id, fragment).Commit();
-
-            _currentFragment = fragment;
-        }
-
-        public void RemoveFragment(BaseFragment fragment, bool isWithAnim = true)
-        {
-            var ft = SupportFragmentManager.BeginTransaction();
-
-            if (isWithAnim)
-                ft.SetCustomAnimations(Resource.Animation.design_bottom_sheet_slide_in, Resource.Animation.design_bottom_sheet_slide_out);
-
-            ft.Remove(fragment).Commit();
-
-            _currentFragment = null;
         }
 
         public void CheckPermission(Action successCallback, params string[] pers)

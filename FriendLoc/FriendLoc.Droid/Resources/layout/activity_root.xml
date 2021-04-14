@@ -9,23 +9,4 @@
 		android:id="@+id/baseContentView"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"/>
-	<FrameLayout
-		android:id="@+id/fragmentContainer"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"/>
-	<RelativeLayout
-		android:id="@+id/loadingArea"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:background="#80000000"
-		android:visibility="gone">
-		<com.airbnb.lottie.LottieAnimationView
-			android:id="@+id/animation_view"
-			android:layout_width="@dimen/loading_size"
-			android:layout_height="@dimen/loading_size"
-			app:lottie_fileName="loading_bigger.json"
-			app:lottie_loop="true"
-			android:layout_centerInParent="true"
-			app:lottie_autoPlay="false" />
-	</RelativeLayout>
 </RelativeLayout>

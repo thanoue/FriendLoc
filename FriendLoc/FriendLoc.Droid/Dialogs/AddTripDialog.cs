@@ -43,7 +43,6 @@ namespace FriendLoc.Droid.Dialogs
         protected override int LayoutResId => Resource.Layout.dialog_add_trip;
         protected override string Title => "Add new Trip";
         protected override DialogTypes DialogTypes => DialogTypes.FullScreen;
-
         protected override string TAG => nameof(AddTripDialog);
 
         private ShapeableImageView _avtImg;
@@ -125,8 +124,6 @@ namespace FriendLoc.Droid.Dialogs
                 return;
             }
 
-            StartLoading();
-
             if (!string.IsNullOrEmpty(_avtUrl))
             {
                 var path = await ServiceInstances.AuthService.PushImageToServer(_avtUrl, (process) =>
@@ -168,8 +165,6 @@ namespace FriendLoc.Droid.Dialogs
             _trip.EndPointName = _endPoint.Text;
 
             _trip = await ServiceInstances.TripRepository.InsertAsync(_trip);
-
-            StopLoading();
 
             this.Dismiss();
 
@@ -215,8 +210,6 @@ namespace FriendLoc.Droid.Dialogs
         {
             if (_mileStones == null)
             {
-                StartLoading();
-
                 _mileStones = new List<SpinnerItem>();
                 var milestones = (await ServiceInstances.UserMilestoneRepository.GetById(UserSession.Instance.LoggedinUser.Id)).Milestones;
 
@@ -241,8 +234,6 @@ namespace FriendLoc.Droid.Dialogs
                     MainTitle = "Add new Milestone",
                     LeftImgResId = Resource.Drawable.ic_add_circle_24
                 });
-
-                StopLoading();
 
                 SelectMilestone(chip);
             }

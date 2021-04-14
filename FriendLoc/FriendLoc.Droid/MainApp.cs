@@ -38,6 +38,9 @@ namespace FriendLoc.Droid
             ServiceLocator.Instance.Register<IAuthService, FirebaseAuthService>();
             ServiceLocator.Instance.Register<ISecureStorageService, DroidSecureStorageService>(this);
             ServiceLocator.Instance.Register<IQRCodeService, QRCodeService>(this.ApplicationContext);
+            
+            ServiceLocator.Instance.Register<IGlobalUIService, DroidGlobalUIService>();
+            
 
         }
     }

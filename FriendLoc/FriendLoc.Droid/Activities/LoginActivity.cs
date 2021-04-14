@@ -1,9 +1,7 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -37,13 +35,10 @@ namespace FriendLoc.Droid.Activities
             _passwordTxt = FindViewById<CustomEditText>(Resource.Id.passwordTxt);
             _keepLoggedinCheckBox = FindViewById<CheckBox>(Resource.Id.keepLoggedinCheckBox);
 
-            var flag = (Android.Views.StatusBarVisibility)Android.Views.SystemUiFlags.LightStatusBar;
+            var flag = (Android.Views.StatusBarVisibility) Android.Views.SystemUiFlags.LightStatusBar;
             Window.DecorView.SystemUiVisibility = flag;
 
-            FindViewById<View>(Resource.Id.extended_fab).Click += delegate
-            {
-                StartActivity(typeof(SignUpActivity));
-            };
+            FindViewById<View>(Resource.Id.extended_fab).Click += delegate { StartActivity(typeof(SignUpActivity)); };
 
             FindViewById<MaterialButton>(Resource.Id.loginBtn).Click += delegate
             {
@@ -60,21 +55,26 @@ namespace FriendLoc.Droid.Activities
         {
             var res = true;
 
-            if (string.IsNullOrEmpty(_loginNameTxt.Text) || _loginNameTxt.Text.Length < ServiceInstances.ResourceService.LoginNameMinLength)
+            if (string.IsNullOrEmpty(_loginNameTxt.Text) ||
+                _loginNameTxt.Text.Length < ServiceInstances.ResourceService.LoginNameMinLength)
             {
-                _loginNameTxt.Error = "Login Name min length is " + ServiceInstances.ResourceService.LoginNameMinLength.ToString();
+                _loginNameTxt.Error = "Login Name min length is " +
+                                      ServiceInstances.ResourceService.LoginNameMinLength.ToString();
                 res = false;
             }
 
             if (_loginNameTxt.Text.Length > ServiceInstances.ResourceService.LoginNameMaxLength)
             {
-                _loginNameTxt.Error = ("Login Name max length is " + ServiceInstances.ResourceService.LoginNameMaxLength);
+                _loginNameTxt.Error =
+                    ("Login Name max length is " + ServiceInstances.ResourceService.LoginNameMaxLength);
                 res = false;
             }
 
-            if (string.IsNullOrEmpty(_passwordTxt.Text) || _passwordTxt.Text.Length < ServiceInstances.ResourceService.PasswordMinLength)
+            if (string.IsNullOrEmpty(_passwordTxt.Text) ||
+                _passwordTxt.Text.Length < ServiceInstances.ResourceService.PasswordMinLength)
             {
-                _passwordTxt.Error = "Password min length is " + ServiceInstances.ResourceService.PasswordMinLength.ToString();
+                _passwordTxt.Error = "Password min length is " +
+                                     ServiceInstances.ResourceService.PasswordMinLength.ToString();
                 res = false;
             }
 
@@ -83,7 +83,7 @@ namespace FriendLoc.Droid.Activities
                 _passwordTxt.Error = ("Password max length is " + ServiceInstances.ResourceService.PasswordMaxLength);
                 res = false;
             }
-            
+
             return res;
         }
 
@@ -92,19 +92,13 @@ namespace FriendLoc.Droid.Activities
             if (!ValidateFields())
                 return;
 
-            StartLoading();
-
-            var token = await ServiceInstances.AuthService.Login(_loginNameTxt.Text, _passwordTxt.Text,(err)=> {
-
-                StopLoading();
-                ErrorToast(err);
-
+            var token = await ServiceInstances.AuthService.Login(_loginNameTxt.Text, _passwordTxt.Text, (err) =>
+            {
+                UtilUI.ErrorToast(err);
             });
 
             if (!string.IsNullOrEmpty(token))
             {
-                StopLoading();
-
                 var intent = new Intent(this, typeof(HomeActivity));
                 intent.AddFlags(ActivityFlags.ClearTask | ActivityFlags.ClearTop | ActivityFlags.NewTask);
 
@@ -112,8 +106,10 @@ namespace FriendLoc.Droid.Activities
 
                 if (_keepLoggedinCheckBox.Checked)
                 {
-                    ServiceInstances.SecureStorage.StoreObject(Constants.LoggedinUser, UserSession.Instance.LoggedinUser);
-                    ServiceInstances.SecureStorage.Store(Constants.UserToken, ServiceInstances.ResourceService.UserToken);
+                    ServiceInstances.SecureStorage.StoreObject(Constants.LoggedinUser,
+                        UserSession.Instance.LoggedinUser);
+                    ServiceInstances.SecureStorage.Store(Constants.UserToken,
+                        ServiceInstances.ResourceService.UserToken);
                 }
                 else
                 {

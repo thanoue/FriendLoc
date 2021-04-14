@@ -3,7 +3,10 @@ using Android.Content;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
+using AndroidX.AppCompat.App;
 using AndroidX.Fragment.App;
+using FriendLoc.Common;
+using FriendLoc.Common.Services;
 using FriendLoc.Droid.Activities;
 using Google.Android.Material.AppBar;
 using Plugin.CurrentActivity;
@@ -16,9 +19,10 @@ namespace FriendLoc.Droid.Dialogs
         protected abstract string Title { get; }
         protected abstract string TAG { get; }
         protected virtual DialogTypes DialogTypes => DialogTypes.Popup;
+        public IGlobalUIService UtilUI => ServiceLocator.Instance.Get<IGlobalUIService>();
         public BaseActivity CurrentActivity => (BaseActivity)CrossCurrentActivity.Current.Activity;
-
-        LoadingDialog _loadingDialog;
+        
+        ILoadingDialog _loadingDialog;
 
         Context _context;
         public BaseDialog(Context context)
@@ -58,25 +62,7 @@ namespace FriendLoc.Droid.Dialogs
 
             return baseView;
         }
-
-        public void StartLoading()
-        {
-            CrossCurrentActivity.Current.Activity.RunOnUiThread(() =>
-            {
-                _loadingDialog = new LoadingDialog();
-                _loadingDialog.Show(((BaseActivity)CrossCurrentActivity.Current.Activity).SupportFragmentManager, _loadingDialog.Tag);
-
-            });
-        }
-
-        public void StopLoading()
-        {
-            CrossCurrentActivity.Current.Activity.RunOnUiThread(() =>
-            {
-                _loadingDialog.Dismiss();
-            });
-        }
-
+        
         public void ShowDialog()
         {
             this.Show(((BaseActivity)CrossCurrentActivity.Current.Activity).SupportFragmentManager, TAG);

@@ -1,29 +1,23 @@
 ﻿using System;
+using Android.App;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
-using AndroidX.Fragment.App;
 using Com.Airbnb.Lottie;
 
 namespace FriendLoc.Droid.Dialogs
 {
-    public interface ILoadingDialog
+    public class LoadingDialogOld : DialogFragment,ILoadingDialog
     {
-        void Dismiss();
-        string TAG { get; }
-    }
-
-    public class LoadingDialog : DialogFragment, ILoadingDialog
-    {
-        public string TAG => "LoadingDialog";
+        public  string TAG => "LoadingDialogOld";
 
         LottieAnimationView _animView;
 
-        public LoadingDialog()
+        public LoadingDialogOld()
         {
-            SetStyle( DialogFragment.StyleNoFrame,Resource.Style.ShapeAppearanceOverlay_MaterialComponents_MaterialCalendar_Window_Fullscreen);
+            SetStyle( DialogFragmentStyle.NoFrame, Resource.Style.ShapeAppearanceOverlay_MaterialComponents_MaterialCalendar_Window_Fullscreen);
         }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -41,11 +35,5 @@ namespace FriendLoc.Droid.Dialogs
 
             return view;
         }
-
-        public override void OnViewCreated(View view, Bundle savedInstanceState)
-        {
-            base.OnViewCreated(view, savedInstanceState);
-        }
     }
-
 }

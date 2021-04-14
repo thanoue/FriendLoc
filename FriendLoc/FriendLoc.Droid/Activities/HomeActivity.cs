@@ -86,13 +86,9 @@ namespace FriendLoc.Droid.Activities
 
                 case Resource.Id.tripItem:
 
-                    StartLoading();
-
                     ServiceInstances.TripRepository.GetByJoinedUser(UserSession.Instance.LoggedinUser.Id).ContinueWith((res) =>
                     {
                         var trips = res.Result;
-
-                        StopLoading();
 
                         var fragment = new TripsFragment(trips);
 
