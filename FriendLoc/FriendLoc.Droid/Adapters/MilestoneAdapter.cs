@@ -16,19 +16,19 @@ using PopupMenu = AndroidX.AppCompat.Widget.PopupMenu;
 
 namespace FriendLoc.Droid.Adapters
 {
-    public class TripAdapter : BaseAdapter<TripViewModel>
+    public class MilestoneAdapter : BaseAdapter<MilestoneViewModel>
     {
-        IList<TripViewModel> _items;
+        IList<MilestoneViewModel> _items;
         Context _context;
-        private Action<TripActions, string> _onAction;
-        public TripAdapter(Context context,Action<TripActions, string> onAction, IList<TripViewModel> items)
+        private Action<MilestoneActions, string> _onAction;
+        public MilestoneAdapter(Context context,Action<MilestoneActions, string> onAction, IList<MilestoneViewModel> items)
         {
             _onAction = onAction;
             _context = context;
             _items = items;
         }
 
-        public override TripViewModel this[int position] => _items[position];
+        public override MilestoneViewModel this[int position] => _items[position];
 
         public override int Count => _items.Count;
 
@@ -45,14 +45,13 @@ namespace FriendLoc.Droid.Adapters
 
             if (view == null)
             {
-                view = LayoutInflater.From(_context).Inflate(Resource.Layout.adapter_trip_item, parent, false);
+                view = LayoutInflater.From(_context).Inflate(Resource.Layout.adapter_milestone_item, parent, false);
 
                 viewHolder = new ViewHolder();
 
                 viewHolder.NameTv = view.FindViewById<MaterialTextView>(Resource.Id.nameTv);
                 viewHolder.LeftImg = view.FindViewById<ShapeableImageView>(Resource.Id.leftImg);
-                viewHolder.PlaceTitleTv = view.FindViewById<MaterialTextView>(Resource.Id.milestonesTv);
-                viewHolder.TimeTitleTv = view.FindViewById<MaterialTextView>(Resource.Id.timeRangeTv);
+                viewHolder.PlaceTitleTv = view.FindViewById<MaterialTextView>(Resource.Id.addressTv);
                 viewHolder.MenuIcon = view.FindViewById<AppCompatImageButton>(Resource.Id.menuBtn);
 
                 viewHolder.LeftImg.SetScaleType(ImageView.ScaleType.CenterCrop);
@@ -62,42 +61,24 @@ namespace FriendLoc.Droid.Adapters
                     var popup = new PopupMenu(_context, viewHolder.MenuIcon);
 
                     var item = _items[viewHolder.Position];
-                    int popupResId = 0;
+                    int popupResId =  Resource.Menu.milestone_item_popup_menu;
 
                     popup.SetOnMenuItemClickListener(new OnMenuItemClickListener((menuItem) =>
                     {
                         switch (menuItem.ItemId)
                         {
-                            case Resource.Id.shareItem:
-                                _onAction?.Invoke(TripActions.Share,item.Id);
+                            case Resource.Id.editItem:
+                                _onAction?.Invoke(MilestoneActions.Edit,item.Id);
                                 break;  
-                            case Resource.Id.startItem:
-                                _onAction?.Invoke(TripActions.Start,item.Id);
-                                break;
-                            case Resource.Id.stopItem:
-                                _onAction?.Invoke(TripActions.Stop,item.Id);
-                                break; 
                             case Resource.Id.removeItem:
-                                _onAction?.Invoke(TripActions.Remove,item.Id);
-                                break; 
-                            case Resource.Id.leaveItem:
-                                _onAction?.Invoke(TripActions.Leave,item.Id);
+                                _onAction?.Invoke(MilestoneActions.Remove,item.Id);
                                 break;    
-                            case Resource.Id.duplicateItem:
-                                _onAction?.Invoke(TripActions.Copy,item.Id);
+                            case Resource.Id.copyItem:
+                                _onAction?.Invoke(MilestoneActions.Duplicate,item.Id);
                                 break;
                         }
                         
                     }));
-
-                    if (item.Status == Entity.TripStatuses.Runnning)
-                    {
-                        popupResId = Resource.Menu.trip_popup_menu_playing;
-                    }
-                    else
-                    {
-                        popupResId = Resource.Menu.trip_popup_menu_created;
-                    }
 
                     popup.MenuInflater.Inflate(popupResId, popup.Menu);
 
@@ -127,8 +108,7 @@ namespace FriendLoc.Droid.Adapters
 
             viewHolder.Position = position;
             viewHolder.NameTv.Text = _items[position].Name;
-            viewHolder.PlaceTitleTv.Text = _items[position].Milestones;
-            viewHolder.TimeTitleTv.Text = _items[position].DateRange;
+            viewHolder.PlaceTitleTv.Text = _items[position].Address;
 
             if (!string.IsNullOrEmpty(_items[position].AvtUrl))
             {
@@ -136,7 +116,7 @@ namespace FriendLoc.Droid.Adapters
             }
             else
             {
-                viewHolder.LeftImg.SetImageResource(Resource.Drawable.ic_place_24);
+                viewHolder.LeftImg.SetImageResource(Resource.Drawable.ic_landscape_24);
             }
 
             return view;
@@ -148,7 +128,6 @@ namespace FriendLoc.Droid.Adapters
             public ShapeableImageView LeftImg { get; set; }
             public MaterialTextView NameTv { get; set; }
             public MaterialTextView PlaceTitleTv { get; set; }
-            public MaterialTextView TimeTitleTv { get; set; }
             public AppCompatImageButton MenuIcon { get; set; }
         }
     }

@@ -37,7 +37,7 @@ namespace FriendLoc.Droid.Services
                 else
                 {
                     _loadingDialog = new LoadingDialogOld();
-                    ((LoadingDialogOld) _loadingDialog).Show(CrossCurrentActivity.Current.Activity.FragmentManager,
+                    ((LoadingDialogOld) _loadingDialog).Show(((AppCompatActivity)CrossCurrentActivity.Current.Activity).SupportFragmentManager,
                         _loadingDialog.TAG);
                 }
             });

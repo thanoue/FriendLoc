@@ -30,7 +30,9 @@ namespace FriendLoc.Droid.Activities
         NavigationView _navigationView;
         ShapeableImageView _avtImmg;
         TextView _fullNameTv, _phoneNumberTv;
-        FrameLayout _fragmentContainer;
+        FrameLayout _fragmentContainer; 
+        TripsFragment _tripsFragment;
+        MilestonesFragment _milestonesFragment;
 
         protected override int LayoutResId => Resource.Layout.activity_home;
         protected override bool IsFullScreen => true;
@@ -71,6 +73,27 @@ namespace FriendLoc.Droid.Activities
 
             switch (menuItem.ItemId)
             {
+                case Resource.Id.homeItem:
+                    
+                    var ft = SupportFragmentManager.BeginTransaction();
+
+                    ft.SetCustomAnimations(Resource.Animation.design_bottom_sheet_slide_in, Resource.Animation.design_bottom_sheet_slide_out);
+
+                    if (_tripsFragment != null)
+                    {
+                        ft.Remove(_tripsFragment).Commit();
+
+                        _tripsFragment = null;
+                    }
+                    
+                    if (_milestonesFragment != null)
+                    {
+                        ft.Remove(_milestonesFragment).Commit();
+
+                        _milestonesFragment = null;
+                    }
+                    
+                    break;
                 case Resource.Id.logoutItem:
 
                     ServiceInstances.SecureStorage.DeleteObject(Constants.LoggedinUser);
@@ -85,20 +108,39 @@ namespace FriendLoc.Droid.Activities
                     break;
 
                 case Resource.Id.tripItem:
+                    
+                    _milestonesFragment = null;
 
                     ServiceInstances.TripRepository.GetByJoinedUser(UserSession.Instance.LoggedinUser.Id).ContinueWith((res) =>
                     {
                         var trips = res.Result;
-
-                        var fragment = new TripsFragment(trips);
+                        
+                        _tripsFragment = new TripsFragment(trips);
 
                         var ft = SupportFragmentManager.BeginTransaction();
 
                         ft.SetCustomAnimations(Resource.Animation.design_bottom_sheet_slide_in, Resource.Animation.design_bottom_sheet_slide_out);
 
-                        ft.Replace(_fragmentContainer.Id, fragment).Commit();
+                        ft.Replace(_fragmentContainer.Id, _tripsFragment).Commit();
                     });
+                    
+                    break;
+                    
+                  case Resource.Id.milestoneItem:
 
+                      _tripsFragment = null;
+
+                      ServiceInstances.UserMilestoneRepository.GetAllByUser(UserSession.Instance.LoggedinUser.Id).ContinueWith((res) =>
+                          {
+                              _milestonesFragment = new MilestonesFragment(res.Result);
+
+                              var ft = SupportFragmentManager.BeginTransaction();
+
+                              ft.SetCustomAnimations(Resource.Animation.design_bottom_sheet_slide_in, Resource.Animation.design_bottom_sheet_slide_out);
+
+                              ft.Replace(_fragmentContainer.Id, _milestonesFragment).Commit();
+                          });
+                      
                     break;
             }
 

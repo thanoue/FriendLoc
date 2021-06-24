@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+    <RelativeLayout
+            android:paddingHorizontal="@dimen/screen_padding"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/trip_item_height">
+
+        <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/leftImg"
+                android:layout_centerVertical="true"
+                android:layout_width="@dimen/trup_item_left_img_size"
+                android:layout_height="@dimen/trup_item_left_img_size"
+                android:src="@drawable/ic_account_24"
+                android:scaleType="fitXY"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlayStyle"
+                app:strokeWidth="0dp"/>
+        <LinearLayout
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="@dimen/fields_margin"
+                android:layout_toLeftOf="@id/menuBtn"
+                android:layout_toRightOf="@id/leftImg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/nameTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left|center"
+                        android:text="dsddsdsdsdsdsdsdsds"
+                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        android:textSize="@dimen/main_title_text_size"
+                        android:textColor="@color/colorText"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_marginTop="@dimen/fields_margin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_place_24"
+                        android:layout_centerVertical="true"
+                        android:id="@+id/placeIcon"
+                        android:layout_width="@dimen/medium_icon_size"
+                        android:layout_height="@dimen/medium_icon_size"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                        android:gravity="left|center"
+                        android:id="@+id/addressTv"
+                        android:layout_centerVertical="true"
+                        android:text="adsdsdsdsdsd"
+                        android:layout_toRightOf="@+id/placeIcon"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="@dimen/fields_margin"
+                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/sub_title_text_size"
+                        android:textColor="@color/mtrl_list_item_tint"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+        <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/menuBtn"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_width="@dimen/menu_btn_size"
+                android:layout_height="@dimen/menu_btn_size"
+                android:padding="0dp"
+                android:foregroundGravity="right"
+                android:background="?selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_dots_menu_24"/>
+    </RelativeLayout>
+</LinearLayout>

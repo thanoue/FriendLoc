@@ -10,5 +10,13 @@ namespace FriendLoc.Common
         Copy,
         Leave,
         Remove
+    }  
+    
+    public enum MilestoneActions
+    {
+        None,
+        Edit,
+        Duplicate,
+        Remove
     }
 }

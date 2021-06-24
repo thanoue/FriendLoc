@@ -211,20 +211,21 @@ namespace FriendLoc.Droid.Dialogs
             if (_mileStones == null)
             {
                 _mileStones = new List<SpinnerItem>();
-                var milestones = (await ServiceInstances.UserMilestoneRepository.GetById(UserSession.Instance.LoggedinUser.Id)).Milestones;
+                var milestones =
+                    (await ServiceInstances.UserMilestoneRepository.GetAllByUser(UserSession.Instance.LoggedinUser.Id));
 
                 foreach (var milestone in milestones)
                 {
                     _mileStones.Add(new MultiTitleSpinnerItem()
                     {
-                        LeftImgUrl = (milestone.Value.DisplayImgUrl),
-                        MainTitle = milestone.Value.Name,
-                        SubTitle = milestone.Value.Address,
+                        LeftImgUrl = (milestone.DisplayImgUrl),
+                        MainTitle = milestone.Name,
+                        SubTitle = milestone.Address,
                         LeftImgResId = Resource.Drawable.ic_place_24,
                         Value = new Coordinate()
                         {
-                            Latitude = milestone.Value.Latitude,
-                            Longitude = milestone.Value.Longitude
+                            Latitude = milestone.Latitude,
+                            Longitude = milestone.Longitude
                         }
                     });
                 }

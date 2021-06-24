@@ -1,10 +1,10 @@
 ﻿using System;
-using Android.App;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
+using AndroidX.Fragment.App;
 using Com.Airbnb.Lottie;
 
 namespace FriendLoc.Droid.Dialogs
@@ -17,7 +17,7 @@ namespace FriendLoc.Droid.Dialogs
 
         public LoadingDialogOld()
         {
-            SetStyle( DialogFragmentStyle.NoFrame, Resource.Style.ShapeAppearanceOverlay_MaterialComponents_MaterialCalendar_Window_Fullscreen);
+            SetStyle(DialogFragment.StyleNormal, Resource.Style.ShapeAppearanceOverlay_MaterialComponents_MaterialCalendar_Window_Fullscreen);
         }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
