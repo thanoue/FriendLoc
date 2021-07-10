@@ -22,5 +22,17 @@
     <PackageReference Include="FirebaseStorage.net" Version="1.0.3" />
     <PackageReference Include="FirebaseAuthentication.net" Version="3.6.0" />
     <PackageReference Include="PCLCrypto" Version="2.0.147" />
+    <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="19.1.0.69" />
+    <PackageReference Include="Syncfusion.Xamarin.SfTabView" Version="19.1.0.69" />
+    <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="19.1.0.69" />
+    <PackageReference Include="Syncfusion.Xamarin.Core" Version="19.1.0.69" />
+    <PackageReference Include="Syncfusion.Xamarin.SfCalendar" Version="19.1.0.69" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Syncfusion.Xamarin.Buttons" />
+    <None Remove="Syncfusion.Xamarin.SfTabView" />
+    <None Remove="Syncfusion.Xamarin.SfComboBox" />
+    <None Remove="Syncfusion.Xamarin.Core" />
+    <None Remove="Syncfusion.Xamarin.SfCalendar" />
   </ItemGroup>
 </Project>

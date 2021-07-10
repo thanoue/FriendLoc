@@ -1,4 +1,10 @@
-﻿using System;
+using Syncfusion.SfCalendar.XForms.iOS;
+using  Syncfusion.XForms.iOS.Graphics;
+using Syncfusion.XForms.iOS.Border;
+using Syncfusion.XForms.iOS.ComboBox;
+using Syncfusion.XForms.iOS.TabView;
+using Syncfusion.XForms.iOS.Buttons;
+using System;
 using Foundation;
 using UIKit;
 

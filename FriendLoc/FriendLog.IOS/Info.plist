@@ -31,6 +31,8 @@
 			</array>
 		</dict>
 	</dict>
+	<key>UIAppFonts</key>
+	<array/>
 	<key>MinimumOSVersion</key>
 	<string>9.0</string>
 	<key>UIDeviceFamily</key>
@@ -63,18 +65,16 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
-		<key>UIBackgroundModes</key>
+	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
 		<string>fetch</string>
 		<string>remote-notification</string>
 		<string>processing</string>
 	</array>
-       <key>NSLocationWhenInUseUsageDescription</key>
-		<string>This app needs access to location when in use.</string>
-	
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs access to location when in use.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-		<string>This app needs access to location when open and in the background.</string>
-      
+	<string>This app needs access to location when open and in the background.</string>
 </dict>
 </plist>
