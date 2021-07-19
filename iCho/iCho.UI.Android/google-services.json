@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "840849713145",
+    "project_id": "icho-76fc0",
+    "storage_bucket": "icho-76fc0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:840849713145:android:165e50626ab459a941bf28",
+        "android_client_info": {
+          "package_name": "com.khoideptrai.friendloc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "840849713145-t4gpg965dolsoj0gr9ub7dgupouup3m8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.khoideptrai.friendloc",
+            "certificate_hash": "8dd5f45166df2b2e8cb3224250ce3a3c2a045e36"
+          }
+        },
+        {
+          "client_id": "840849713145-vhqb3i3pg9nqbf85ol1o6svntrnglpbv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.khoideptrai.friendloc",
+            "certificate_hash": "cea260dbf498467972c8e6665ad3fe37d7ba0e02"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8LBMyElBHgtZaPYVtimYnZUfnyspQ3EU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "840849713145-627cs6vkefmd1mp82it04l6q4pjihvd5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.khoideptrai.friendloc"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

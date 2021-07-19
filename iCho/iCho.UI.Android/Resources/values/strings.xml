@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	<string name="facebook_app_name">FriendLoc</string>
+	<string name="facebook_app_id">1737130176488078</string>
+	<string name="fb_login_protocol_scheme">fb1737130176488078</string>
+	<string name="server_client_id">840849713145-vhqb3i3pg9nqbf85ol1o6svntrnglpbv.apps.googleusercontent.com</string>
+</resources>

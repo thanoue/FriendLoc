@@ -115,8 +115,6 @@
     <Compile Include="ViewModels\TripViewModel.cs" />
     <Compile Include="Dialogs\AddTripDialog.cs" />
     <Compile Include="Dialogs\LoadingDialogOld.cs" />
-    <Compile Include="Renderers\BorderlessEntryRenderer.cs" />
-    <Compile Include="Renderers\CalenderDatePickerRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -406,7 +404,6 @@
     <Folder Include="Resources\color\" />
     <Folder Include="Dialogs\" />
     <Folder Include="Utlis\" />
-    <Folder Include="Renderers\" />
     <Folder Include="Resources\drawable-hdpi\" />
     <Folder Include="Resources\drawable-xhdpi\" />
     <Folder Include="Resources\drawable-xxhdpi\" />
