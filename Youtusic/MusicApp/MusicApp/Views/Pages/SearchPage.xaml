@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<pages:BasePage
+    x:Class="MusicApp.Pages.SearchPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:control="clr-namespace:MusicApp.Controls"
+    Title="Search Page"
+    xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    xmlns:pages="clr-namespace:MusicApp.Pages;assembly=MusicApp"
+    xmlns:ui="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material">
+    <pages:BasePage.ViewContent>
+        <Grid
+            Padding="10"
+            HorizontalOptions="FillAndExpand"
+            RowDefinitions="auto,*,auto"
+            RowSpacing="10"
+            VerticalOptions="FillAndExpand">
+
+            <ui:MaterialTextField  TextFontFamily="MediumFont" PlaceholderFontFamily="BoldFont"
+                                   IsSpellCheckEnabled="False" TextFontSize="18"
+                                   FloatingPlaceholderFontSize="18"
+                                   x:Name="searchField"
+                                   Placeholder="Song Name" ReturnType="Search" TintColor="{StaticResource DimOrange}"
+                                   ReturnCommand="{Binding SearchReturnCommand}"
+                                   Text="{Binding SearchTerm}" InputType="Text" />
+
+            <CollectionView
+                ItemTemplate="{StaticResource SongListTemplate}"
+                Grid.Row="1"
+                HorizontalOptions="FillAndExpand"
+                ItemsSource="{Binding SearchedSongs}"
+                SelectionMode="None"
+                VerticalOptions="Start">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="1" Orientation="Vertical" />
+                </CollectionView.ItemsLayout>
+            </CollectionView>
+
+            <Grid Grid.Row="2" ColumnDefinitions="*,*">
+                <pv:PancakeView
+                    Margin="0,0,10,0"
+                    CornerRadius="20"
+                    HeightRequest="40"
+                    HorizontalOptions="End"
+                    Padding="0"
+                    Shadow="{Binding BtnShadow}"
+                    VerticalOptions="Center"
+                    IsVisible="{Binding PrevPageToken, Converter={StaticResource EmptyToHideConverter} }"
+                    WidthRequest="40">
+                    <pv:PancakeView.BackgroundGradientStops>
+                        <pv:GradientStopCollection>
+                            <pv:GradientStop Offset="0" Color="#E3E7EE" />
+                            <pv:GradientStop Offset="1" Color="#FBFBFB" />
+                        </pv:GradientStopCollection>
+                    </pv:PancakeView.BackgroundGradientStops>
+                    <pv:PancakeView.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SearchPrevPageCommand}" />
+                    </pv:PancakeView.GestureRecognizers>
+                    <Label
+                        FontSize="22"
+                        HorizontalTextAlignment="Center"
+                        VerticalTextAlignment="Center"
+                        HorizontalOptions="FillAndExpand"
+                        Style="{StaticResource MaterialIcons}"
+                        Text="{Binding Converter={StaticResource keyboard_arrow_left}}"
+                        TextColor="Black"
+                        VerticalOptions="FillAndExpand" />
+                </pv:PancakeView>
+
+                <pv:PancakeView
+                    Margin="10,0,0,0"
+                    Grid.Column="1"
+                    CornerRadius="20"
+                    HeightRequest="40"
+                    HorizontalOptions="Start"
+                    Padding="0"
+                    IsVisible="{Binding NextPageToken, Converter={StaticResource EmptyToHideConverter} }"
+                    Shadow="{Binding BtnShadow}"
+                    VerticalOptions="Center"
+                    WidthRequest="40">
+                    <pv:PancakeView.BackgroundGradientStops>
+                        <pv:GradientStopCollection>
+                            <pv:GradientStop Offset="0" Color="#E3E7EE" />
+                            <pv:GradientStop Offset="1" Color="#FBFBFB" />
+                        </pv:GradientStopCollection>
+                    </pv:PancakeView.BackgroundGradientStops>
+                    <pv:PancakeView.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SearchNextPageCommand}" />
+                    </pv:PancakeView.GestureRecognizers>
+                    <Label
+                        FontSize="22"
+                        HorizontalOptions="FillAndExpand"
+                        Style="{StaticResource MaterialIcons}"
+                        Text="{Binding Converter={StaticResource keyboard_arrow_right}}"
+                        TextColor="Black"
+                        HorizontalTextAlignment="Center"
+                        VerticalTextAlignment="Center"
+                        VerticalOptions="FillAndExpand" />
+                </pv:PancakeView>
+            </Grid>
+        </Grid>
+    </pages:BasePage.ViewContent>
+</pages:BasePage>

@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Application
+    x:Class="MusicApp.App"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:MusicApp.Controls;assembly=MusicApp"
+    xmlns:converter="clr-namespace:MusicApp.Converter"
+    xmlns:converts="clr-namespace:MusicApp.Converts;assembly=MusicApp"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:icons="clr-namespace:MusicApp.Icons"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:static="clr-namespace:MusicApp.Static;assembly=MusicApp"
+    xmlns:pancakeView="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    mc:Ignorable="d">
+    <Application.Resources>
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <icons:MaterialDesignIcons />
+                <icons:MaterialIcons />
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="Label">
+                <Setter Property="FontFamily" Value="MediumFont" />
+            </Style>
+
+            <Style x:Key="MaterialIcons" TargetType="Label">
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="FontFamily" Value="MaterialIcons" />
+                <Setter Property="Padding" Value="10" />
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+            </Style>
+
+            <Color x:Key="HeaderBarColor">#e35420</Color>
+            <Color x:Key="StatusBarColor">#D4420C</Color>
+            <Color x:Key="DimOrange">#D4420C</Color>
+            <Color x:Key="LightOrange">#F3A283</Color>
+            <Color x:Key="SecondLoadingPageBackground">#80000000</Color>
+            <Color x:Key="LoadingPageBackground">#50000000</Color>
+
+            <Style x:Key="CachedImgStyle" TargetType="controls:CustomImg">
+                <Setter Property="DownsampleToViewSize" Value="False" />
+                <Setter Property="ErrorPlaceholder" Value="{static:ImageResource ImgName='icon_noimg.png'}" />
+                <Setter Property="LoadingPlaceholder" Value="{static:ImageResource ImgName='icon_noimg.png'}" />
+            </Style>
+
+            <converts:ValueProgressBarConverter x:Key="ValueProgressBarConverter" />
+            <converts:EmptyToHideConverter x:Key="EmptyToHideConverter" />
+            <converter:MediaStateConverter x:Key="MediaStateConverter" />
+            <converts:RepeatModeIconConverter x:Key="RepeatModeIconConverter" />
+
+            <x:Double x:Key="PlayerHeight">70</x:Double>
+            <x:Double x:Key="BigTrackImgOuterSize">200</x:Double>
+            <x:Double x:Key="BigTrackImgOuterRadius">100</x:Double>
+            <x:Double x:Key="BigTrackImgInnerSize">190</x:Double>
+            <x:Double x:Key="BigTrackImgInnerRadius">95</x:Double>
+            <x:Double x:Key="HeaderBarTitleFontSize">18</x:Double>
+
+            <DataTemplate x:Key="SongListTemplate">
+                <Grid
+                    Padding="10,10,10,10"
+                    BackgroundColor="#F7F9FC"
+                    HorizontalOptions="FillAndExpand">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <pancakeView:PancakeView
+                        CornerRadius="30"
+                        HeightRequest="60"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        WidthRequest="60">
+                        <pancakeView:PancakeView.BackgroundGradientStops>
+                            <pancakeView:GradientStopCollection>
+                                <pancakeView:GradientStop Offset="0" Color="{StaticResource DimOrange}" />
+                                <pancakeView:GradientStop Offset="1" Color="{StaticResource LightOrange}" />
+                            </pancakeView:GradientStopCollection>
+                        </pancakeView:PancakeView.BackgroundGradientStops>
+                        <controls:CustomImg Style="{StaticResource CachedImgStyle}"
+                                           Src="{Binding SmallThumbnailUrl}" Aspect="AspectFill" />
+                    </pancakeView:PancakeView>
+                    <StackLayout Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"
+                                 Margin="0,0,4,0">
+                        <Label
+                            FontSize="15"
+                            Text="{Binding Title}"
+                            TextColor="Black" />
+                        <Label
+                            FontSize="11"
+                            Opacity="0.5"
+                            Text="{Binding AuthorName}"
+                            TextColor="Black" />
+                    </StackLayout>
+                    <Label
+                        FontSize="22"
+                        Grid.Column="2"
+                        WidthRequest="20"
+                        Padding="5"
+                        HorizontalOptions="Center"
+                        Style="{StaticResource MaterialIcons}"
+                        Text="{Binding Converter={StaticResource more_vert}}"
+                        TextColor="Black"
+                        VerticalOptions="Center" />
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding PlayCommand}"
+                                              CommandParameter="{Binding Id}" />
+                    </Grid.GestureRecognizers>
+                </Grid>
+            </DataTemplate>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

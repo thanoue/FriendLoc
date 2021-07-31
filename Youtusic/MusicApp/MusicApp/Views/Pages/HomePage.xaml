@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<pages:BasePage
+    x:Class="MusicApp.Pages.HomePage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:control="clr-namespace:MusicApp.Controls"
+    Title="Youtusic"
+    xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    xmlns:pages="clr-namespace:MusicApp.Pages;assembly=MusicApp">
+    <pages:BasePage.ViewContent>
+        <Grid
+            Padding="10"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="Start">
+            <CollectionView
+                Grid.Row="0"
+                ItemTemplate="{StaticResource SongListTemplate}"
+                HorizontalOptions="FillAndExpand"
+                ItemsSource="{Binding DownloadedSongs}"
+                SelectionMode="None"
+                Header="Downloaded Songs"
+                VerticalOptions="FillAndExpand">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="1" Orientation="Vertical" />
+                </CollectionView.ItemsLayout>
+            </CollectionView>
+            <pv:PancakeView
+                Margin="15"
+                CornerRadius="30"
+                HeightRequest="60"
+                HorizontalOptions="End"
+                Shadow="{Binding BtnShadow}"
+                VerticalOptions="End"
+                WidthRequest="60">
+                <pv:PancakeView.BackgroundGradientStops>
+                    <pv:GradientStopCollection>
+                        <pv:GradientStop Offset="0" Color="#E3E7EE" />
+                        <pv:GradientStop Offset="1" Color="#FBFBFB" />
+                    </pv:GradientStopCollection>
+                </pv:PancakeView.BackgroundGradientStops>
+                <pv:PancakeView.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding  GoToSearchCommand}" />
+                </pv:PancakeView.GestureRecognizers>
+                <Label
+                    FontSize="30"
+                    HorizontalOptions="FillAndExpand"
+                    Style="{StaticResource MaterialIcons}"
+                    VerticalOptions="FillAndExpand"
+                    Text="{Binding Converter={StaticResource search}}">
+                </Label>
+            </pv:PancakeView> 
+            <pv:PancakeView
+                Margin="15,15,15,85"
+                CornerRadius="30"
+                HeightRequest="60"
+                HorizontalOptions="End"
+                Shadow="{Binding BtnShadow}"
+                VerticalOptions="End"
+                WidthRequest="60">
+                <pv:PancakeView.BackgroundGradientStops>
+                    <pv:GradientStopCollection>
+                        <pv:GradientStop Offset="0" Color="#E3E7EE" />
+                        <pv:GradientStop Offset="1" Color="#FBFBFB" />
+                    </pv:GradientStopCollection>
+                </pv:PancakeView.BackgroundGradientStops>
+                <pv:PancakeView.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding  PlayAllCommand}" />
+                </pv:PancakeView.GestureRecognizers>
+                <Label
+                    FontSize="30"
+                    HorizontalOptions="FillAndExpand"
+                    Style="{StaticResource MaterialIcons}"
+                    VerticalOptions="FillAndExpand"
+                    Text="{Binding Converter={StaticResource done_all}}">
+                </Label>
+            </pv:PancakeView>
+        </Grid>
+    </pages:BasePage.ViewContent>
+</pages:BasePage>

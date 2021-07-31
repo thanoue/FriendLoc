@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage
+    xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material" 
+    x:Class="MusicApp.Pages.BasePage"
+    material:MaterialNavigationPage.AppBarColor="{StaticResource HeaderBarColor}" 
+    material:MaterialNavigationPage.AppBarTitleTextFontFamily="BoldFont"
+    material:MaterialNavigationPage.AppBarTitleTextFontSize="{StaticResource HeaderBarTitleFontSize}" 
+    material:MaterialNavigationPage.StatusBarColor="{StaticResource StatusBarColor}" 
+    material:MaterialNavigationPage.AppBarTitleTextAlignment="Center"
+    material:MaterialNavigationPage.AppBarElevation="10"
+    material:MaterialNavigationPage.AppBarTitleTextColor="White"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:control="clr-namespace:MusicApp.Controls"
+    xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    xmlns:static="clr-namespace:MusicApp.Static"
+    x:Name="basePage">
+    <ContentPage.Content>
+        <pv:PancakeView  HorizontalOptions="FillAndExpand" Padding="0" VerticalOptions="FillAndExpand">
+            <pv:PancakeView.BackgroundGradientStops>
+                <pv:GradientStopCollection>
+                    <pv:GradientStop Offset="1" Color="#E3E7EE" />
+                    <pv:GradientStop Offset="0" Color="#FBFBFB" />
+                    <pv:GradientStop Offset="2" Color="#E3E7EE" />
+                </pv:GradientStopCollection>
+            </pv:PancakeView.BackgroundGradientStops>
+
+            <Grid
+                Padding="0"
+                Margin="0"
+                RowSpacing="0"
+                RowDefinitions="*,auto">
+                <ContentView
+                    Margin="0"
+                    Padding="0"
+                    Content="{Binding Source={x:Reference basePage}, Path=ViewContent}"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand" />
+
+                <!--  player  -->
+                <Grid
+                    Grid.Row="1"
+                    IsVisible="{Binding IsShowPlayer}"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="End">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenPlayerCommand}"/>
+                    </Grid.GestureRecognizers>
+                    <Grid
+                        BindingContext="{x:Static static:MediaController.Instance}"
+                        HeightRequest="{StaticResource PlayerHeight}"
+                        HorizontalOptions="FillAndExpand"
+                        IsVisible="{Binding IsHasPlayer}"
+                        VerticalOptions="End">
+                     
+                        <pv:PancakeView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                            <pv:PancakeView.BackgroundGradientStops>
+                                <pv:GradientStopCollection>
+                                    <pv:GradientStop Offset="0" Color="#E3E7EE" />
+                                    <pv:GradientStop Offset="1" Color="#FBFBFB" />
+                                </pv:GradientStopCollection>
+                            </pv:PancakeView.BackgroundGradientStops>
+                            <Grid
+                                Margin="0"
+                                Padding="0"
+                                ColumnDefinitions="auto,*"
+                                HorizontalOptions="FillAndExpand"
+                                RowDefinitions="auto,*"
+                                VerticalOptions="FillAndExpand">
+
+                                <control:CustomImg
+                                    Grid.RowSpan="2"
+                                    Grid.Column="0"
+                                    Aspect="AspectFill"
+                                    Src="{Binding CurrentSongThumbnail}"
+                                    Style="{StaticResource CachedImgStyle}"
+                                    VerticalOptions="FillAndExpand"
+                                    WidthRequest="{StaticResource PlayerHeight}" />
+
+                                <ProgressBar
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    HeightRequest="3"
+                                    HorizontalOptions="FillAndExpand"
+                                    Progress="{Binding Progress, Converter={StaticResource ValueProgressBarConverter}}"
+                                    ProgressColor="{StaticResource DimOrange}"
+                                    VerticalOptions="End" />
+
+                                <Grid
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    ColumnDefinitions="*,auto">
+
+                                    <StackLayout Margin="0,0,0,0"
+                                                 Spacing="3"
+                                                 Orientation="Vertical"
+                                                 HorizontalOptions="FillAndExpand" VerticalOptions="Center">
+                                        <Label
+                                            HorizontalOptions="FillAndExpand"
+                                            MaxLines="2"
+                                            HorizontalTextAlignment="Start"
+                                            Text="{Binding CurrentSongName}"
+                                            VerticalOptions="Center"
+                                            FontSize="15"
+                                            FontFamily="LightFont"
+                                            VerticalTextAlignment="Start" >
+                                        </Label>
+                                        <Label
+                                            HorizontalOptions="FillAndExpand"
+                                            HorizontalTextAlignment="Start"
+                                            FontSize="14"             
+                                            FontFamily="BoldFont"
+                                            Text="{Binding CurrentAuthorName}"
+                                            VerticalOptions="Center"
+                                            VerticalTextAlignment="Start" />
+                                    </StackLayout>
+
+                                    <pv:PancakeView
+                                        Margin="0,0,10,0"
+                                        CornerRadius="20"
+                                        HeightRequest="40"
+                                        VerticalOptions="Center"
+                                        Grid.Column="1"
+                                        Shadow="{Binding BtnShadow}"
+                                        WidthRequest="40">
+                                        <pv:PancakeView.BackgroundGradientStops>
+                                            <pv:GradientStopCollection>
+                                                <pv:GradientStop Offset="0" Color="#D4420C" />
+                                                <pv:GradientStop Offset="1" Color="#F3A283" />
+                                            </pv:GradientStopCollection>
+                                        </pv:PancakeView.BackgroundGradientStops>
+                                        <pv:PancakeView.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding PlayToggleCommand}" />
+                                        </pv:PancakeView.GestureRecognizers>
+                                        <Label
+                                            FontSize="20"
+                                            HorizontalOptions="FillAndExpand"
+                                            Style="{StaticResource MaterialIcons}"
+                                            Text="{Binding IsPlaying ,Converter={StaticResource MediaStateConverter}}"
+                                            TextColor="White"
+                                            VerticalOptions="FillAndExpand" />
+                                    </pv:PancakeView>
+                                </Grid>
+                            </Grid>
+                        </pv:PancakeView>
+                    </Grid>
+                </Grid>
+                <!--  download  -->
+                <Grid
+                    Grid.RowSpan="2"
+                    HeightRequest="{StaticResource PlayerHeight}"
+                    HorizontalOptions="FillAndExpand"
+                    IsVisible="{Binding IsDownloading}"
+                    VerticalOptions="End">
+                    <pv:PancakeView
+                        HorizontalOptions="FillAndExpand"
+                        Shadow="{Binding BtnShadow}"
+                        VerticalOptions="FillAndExpand">
+                        <pv:PancakeView.BackgroundGradientStops>
+                            <pv:GradientStopCollection>
+                                <pv:GradientStop Offset="0" Color="#E3E7EE" />
+                                <pv:GradientStop Offset="1" Color="#FBFBFB" />
+                            </pv:GradientStopCollection>
+                        </pv:PancakeView.BackgroundGradientStops>
+                        <Grid
+                            Margin="0"
+                            Padding="0"
+                            HorizontalOptions="FillAndExpand"
+                            RowDefinitions="*,*"
+                            VerticalOptions="FillAndExpand">
+                            <Grid VerticalOptions="FillAndExpand">
+                                <ProgressBar
+                                    Margin="10,0"
+                                    HorizontalOptions="FillAndExpand"
+                                    Progress="{Binding ProgressValue, Converter={StaticResource ValueProgressBarConverter}}"
+                                    VerticalOptions="End" />
+                            </Grid>
+                            <Label
+                                Grid.Row="1"
+                                HorizontalOptions="FillAndExpand"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Text="{Binding DownloadingSongName}"
+                                VerticalOptions="FillAndExpand"
+                                VerticalTextAlignment="Start" />
+                        </Grid>
+
+                    </pv:PancakeView>
+
+                </Grid>
+            </Grid>
+        </pv:PancakeView>
+
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<popups:BasePopup xmlns="http://xamarin.com/schemas/2014/forms"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                     xmlns:popupBase="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                     xmlns:pancakeView="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+                     xmlns:popups="clr-namespace:MusicApp.Views.Popups;assembly=MusicApp"
+                     xmlns:animations="http://rotorgames.com"
+                     x:Class="MusicApp.Views.Popups.MenuPopup">
+    <popups:BasePopup.Animation>
+        <animations:ScaleAnimation 
+            PositionIn="Bottom"
+            PositionOut="Bottom"
+            ScaleIn="1"
+            ScaleOut="1"
+            DurationIn="200"
+            DurationOut="200"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True"/>
+    </popups:BasePopup.Animation>
+    <ContentPage.Content>
+        <AbsoluteLayout  AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="WidthProportional,HeightProportional" BackgroundColor="{StaticResource LoadingPageBackground}">
+            <Grid AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="WidthProportional,HeightProportional">
+                <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OutsizeTouch"></TapGestureRecognizer>
+                    </Grid.GestureRecognizers>
+                </Grid>
+                <pancakeView:PancakeView
+                    CornerRadius="30,30,0,0"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="End">
+                    <pancakeView:PancakeView.BackgroundGradientStops>
+                        <pancakeView:GradientStopCollection>
+                            <pancakeView:GradientStop Offset="0" Color="#E3E7EE" />
+                            <pancakeView:GradientStop Offset="1" Color="#FBFBFB" />
+                        </pancakeView:GradientStopCollection>
+                    </pancakeView:PancakeView.BackgroundGradientStops>
+                    <StackLayout x:Name="menuBg" Spacing="1" Orientation="Vertical">
+                     
+                    </StackLayout>
+                </pancakeView:PancakeView>
+            </Grid>
+           
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</popups:BasePopup>

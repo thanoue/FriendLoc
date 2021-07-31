@@ -1,0 +1,107 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PCLCrypto" Version="2.0.147" />
+    <PackageReference Include="PCLStorage" Version="1.0.2" />
+    <PackageReference Include="Plugin.MediaManager.Forms" Version="1.0.9" />
+    <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.12" />
+    <PackageReference Include="Xamarin.FFImageLoading" Version="2.4.11.982" />
+    <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
+    <PackageReference Include="Xamarin.FFImageLoading.Svg" Version="2.4.11.982" />
+    <PackageReference Include="Xamarin.FFImageLoading.Svg.Forms" Version="2.4.11.982" />
+    <PackageReference Include="Xamarin.FFImageLoading.Transformations" Version="2.4.11.982" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
+    <PackageReference Include="Xamarin.Forms.PancakeView" Version="2.3.0.759" />
+    <PackageReference Include="Xam.Plugin.Iconize" Version="3.5.0.129" />
+    <PackageReference Include="Xam.Plugin.Iconize.Material" Version="3.5.0.129" />
+    <PackageReference Include="Xam.Plugin.Iconize.MaterialDesignIcons" Version="3.5.0.129" />
+    <PackageReference Include="MvvmLightLibsStd10" Version="5.4.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="RestSharp" Version="106.12.0" />
+    <PackageReference Include="RestSharp.Newtonsoft.Json" Version="1.5.1" />
+    <PackageReference Include="XF.Material" Version="1.7.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Pages\" />
+    <None Remove="Xam.Plugin.Iconize" />
+    <None Remove="Xam.Plugin.Iconize.Material" />
+    <None Remove="Xam.Plugin.Iconize.MaterialDesignIcons" />
+    <None Remove="Icons\" />
+    <None Remove="Converts\" />
+    <None Remove="Icons\iconize-material.ttf" />
+    <None Remove="Icons\iconize-materialdesignicons.ttf" />
+    <None Remove="Plugin.MaterialDesignControls" />
+    <None Remove="Static\" />
+    <None Remove="Services\" />
+    <None Remove="Services\Impl\" />
+    <None Remove="MvvmLightLibsStd10" />
+    <None Remove="Model\ApiModels\" />
+    <None Remove="Newtonsoft.Json" />
+    <None Remove="RestSharp" />
+    <None Remove="RestSharp.Newtonsoft.Json" />
+    <None Remove="Controls\" />
+    <None Remove="XF.Material" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Icons\" />
+    <Folder Include="Converts\" />
+    <Folder Include="Static\" />
+    <Folder Include="Services\" />
+    <Folder Include="Services\Impl\" />
+    <Folder Include="Model\ApiModels\" />
+    <Folder Include="Controls\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Pages\MainPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Pages\PlayerPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Pages\PlaylistPage.xaml.cs">
+      <DependentUpon>PlaylistPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Icons\iconize-material.ttf" />
+    <EmbeddedResource Include="Icons\iconize-materialdesignicons.ttf" />
+    <None Remove="Images\icon_noimg.png" />
+    <EmbeddedResource Include="Images\icon_noimg.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <None Remove="Fonts\Saira-Bold.ttf" />
+    <EmbeddedResource Include="Fonts\Saira-Bold.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <None Remove="Fonts\Saira-Light.ttf" />
+    <EmbeddedResource Include="Fonts\Saira-Light.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <None Remove="Fonts\Saira-Medium.ttf" />
+    <EmbeddedResource Include="Fonts\Saira-Medium.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <None Remove="Fonts\Saira-Thin.ttf" />
+    <EmbeddedResource Include="Fonts\Saira-Thin.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Plugin.MaterialDesignControls">
+      <HintPath>..\..\Libs\Plugin.MaterialDesignControls.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

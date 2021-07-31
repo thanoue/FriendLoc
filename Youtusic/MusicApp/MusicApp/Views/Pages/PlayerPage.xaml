@@ -1,0 +1,314 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<pages:BasePage
+    x:Class="MusicApp.Pages.PlayerPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    xmlns:pages="clr-namespace:MusicApp.Pages;assembly=MusicApp"  
+    xmlns:static="clr-namespace:MusicApp.Static;assembly=MusicApp"
+    xmlns:controls="clr-namespace:MusicApp.Controls;assembly=MusicApp">
+    <pages:BasePage.ViewContent>
+        <Grid BackgroundColor="{StaticResource DimOrange}" Margin="0" HorizontalOptions="FillAndExpand"
+              VerticalOptions="FillAndExpand">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1.2*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackLayout
+                BindingContext="{x:Static static:MediaController.Instance}" 
+                Grid.Row="0"
+                HorizontalOptions="Center"
+                Spacing="25"
+                VerticalOptions="Center">
+                <pv:PancakeView
+                    BackgroundColor="White"
+                    CornerRadius="{StaticResource BigTrackImgOuterRadius}"
+                    HeightRequest="{StaticResource BigTrackImgOuterSize}"
+                    HorizontalOptions="Center"
+                    Shadow="{Binding BtnShadow}"
+                    VerticalOptions="Center"
+                    WidthRequest="{StaticResource BigTrackImgOuterSize}">
+                    <pv:PancakeView
+                        BackgroundColor="Gray"
+                        CornerRadius="{StaticResource BigTrackImgInnerRadius}"
+                        HeightRequest="{StaticResource BigTrackImgInnerSize}"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        WidthRequest="{StaticResource BigTrackImgInnerSize}">
+                        <controls:CustomImg
+                            x:Name="image"
+                            Aspect="AspectFit"
+                            HeightRequest="{StaticResource BigTrackImgInnerSize}"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            WidthRequest="{StaticResource BigTrackImgInnerSize}"
+                            Style="{StaticResource CachedImgStyle}"
+                            Source="{Binding CurrentSongThumbnail}" />
+                    </pv:PancakeView>
+                </pv:PancakeView>
+                <StackLayout HorizontalOptions="Center">
+                    <StackLayout>
+                        <Label
+                            FontSize="18"
+                            HorizontalOptions="Center"
+                            HorizontalTextAlignment="Center"
+                            TextColor="White"
+                            Margin="15,0"
+                            Text="{Binding CurrentSongName}" />
+                        <Label
+                            FontSize="16"
+                            HorizontalOptions="Center"
+                            Opacity="0.5"
+                            FontFamily="BoldFont"
+                            HorizontalTextAlignment="Center"
+                            Text="{Binding CurrentAuthorName}"
+                            TextColor="Black" />
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+            <StackLayout
+                BindingContext="{x:Static static:MediaController.Instance}" 
+                Grid.Row="1"
+                HorizontalOptions="FillAndExpand"
+                Spacing="100"
+                VerticalOptions="StartAndExpand">
+                <StackLayout HorizontalOptions="Center" WidthRequest="320">
+                    <Slider
+                        HorizontalOptions="FillAndExpand"
+                        Maximum="100"
+                        MaximumTrackColor="Black"
+                        MinimumTrackColor="{StaticResource HeaderBarColor}"
+                        DragCompleted="Slider_OnDragCompleted"
+                        ThumbColor="White"
+                        Value="{Binding Progress}" />
+                    <Grid HorizontalOptions="FillAndExpand">
+                        <Label
+                            FontSize="14"
+                            TextColor="White"
+                            HorizontalOptions="Start"
+                            Text="{Binding CurrentTimeSpan, StringFormat='{0:mm\\:ss}'}"
+                            VerticalOptions="Center" />
+                        <Label
+                            FontSize="14"
+                            HorizontalOptions="End"
+                            TextColor="White"
+                            Text="{Binding CurrentDuration, StringFormat='{0:mm\\:ss}'}"
+                            VerticalOptions="Center" />
+                    </Grid>
+                </StackLayout>
+                <StackLayout
+                    HorizontalOptions="Center"
+                    Orientation="Horizontal"
+                    Spacing="20">
+                    <pv:PancakeView
+                        CornerRadius="20"
+                        HeightRequest="40"
+                        HorizontalOptions="Center"
+                        Shadow="{Binding BtnShadow}"
+                        VerticalOptions="Center"
+                        WidthRequest="40">
+                        <pv:PancakeView.BackgroundGradientStops>
+                            <pv:GradientStopCollection>
+                                <pv:GradientStop Offset="0" Color="#E3E7EE" />
+                                <pv:GradientStop Offset="1" Color="#FBFBFB" />
+                            </pv:GradientStopCollection>
+                        </pv:PancakeView.BackgroundGradientStops>
+                        <pv:PancakeView.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding RepeatCommand}" />
+                        </pv:PancakeView.GestureRecognizers>
+                        <Label
+                            FontSize="23"
+                            HorizontalOptions="FillAndExpand"
+                            Style="{StaticResource MaterialIcons}"
+                            VerticalOptions="FillAndExpand"
+                            Text="{Binding RepeatMode,Converter={StaticResource RepeatModeIconConverter}}">
+                            <Label.Triggers>
+                                <DataTrigger TargetType="Label"
+                                             Binding="{Binding RepeatMode}"
+                                             Value="Off">
+                                    <Setter Property="TextColor" Value="Gray" />
+                                </DataTrigger>
+                                <DataTrigger TargetType="Label"
+                                             Binding="{Binding RepeatMode}"
+                                             Value="One">
+                                    <Setter Property="TextColor" Value="Black" />
+                                </DataTrigger>
+                                <DataTrigger TargetType="Label"
+                                             Binding="{Binding RepeatMode}"
+                                             Value="All">
+                                    <Setter Property="TextColor" Value="Black" />
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
+                    </pv:PancakeView>
+                    <pv:PancakeView
+                        CornerRadius="20"
+                        HeightRequest="40"
+                        HorizontalOptions="Center"
+                        Shadow="{Binding BtnShadow}"
+                        VerticalOptions="Center"
+                        WidthRequest="40">
+                        <pv:PancakeView.BackgroundGradientStops>
+                            <pv:GradientStopCollection>
+                                <pv:GradientStop Offset="0" Color="#E3E7EE" />
+                                <pv:GradientStop Offset="1" Color="#FBFBFB" />
+                            </pv:GradientStopCollection>
+                        </pv:PancakeView.BackgroundGradientStops>
+                        <pv:PancakeView.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding PrevCommand}" />
+                        </pv:PancakeView.GestureRecognizers>
+                        <Label
+                            FontSize="23"
+                            HorizontalOptions="FillAndExpand"
+                            Style="{StaticResource MaterialIcons}"
+                            Text="{Binding  Converter={StaticResource skip_previous}}"
+                            VerticalOptions="FillAndExpand" />
+                    </pv:PancakeView>
+                    <pv:PancakeView
+                        CornerRadius="31"
+                        HeightRequest="62"
+                        HorizontalOptions="Center"
+                        Shadow="{Binding BtnShadow}"
+                        VerticalOptions="Center"
+                        WidthRequest="62">
+                        <pv:PancakeView.BackgroundGradientStops>
+                            <pv:GradientStopCollection>
+                                <pv:GradientStop Offset="0" Color="#D4420C" />
+                                <pv:GradientStop Offset="1" Color="#F3A283" />
+                            </pv:GradientStopCollection>
+                        </pv:PancakeView.BackgroundGradientStops>
+                        <pv:PancakeView.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding PlayToggleCommand}" />
+                        </pv:PancakeView.GestureRecognizers>
+                        <Label
+                            FontSize="35"
+                            TextColor="White"
+                            HorizontalOptions="FillAndExpand"
+                            Style="{StaticResource MaterialIcons}"
+                            Text="{Binding IsPlaying ,Converter={StaticResource MediaStateConverter}}"
+                            VerticalOptions="FillAndExpand" />
+                    </pv:PancakeView>
+                    <pv:PancakeView
+                        CornerRadius="20"
+                        HeightRequest="40"
+                        HorizontalOptions="Center"
+                        Shadow="{Binding BtnShadow}"
+                        VerticalOptions="Center"
+                        WidthRequest="40">
+                        <pv:PancakeView.BackgroundGradientStops>
+                            <pv:GradientStopCollection>
+                                <pv:GradientStop Offset="0" Color="#E3E7EE" />
+                                <pv:GradientStop Offset="1" Color="#FBFBFB" />
+                            </pv:GradientStopCollection>
+                        </pv:PancakeView.BackgroundGradientStops>
+                        <pv:PancakeView.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NextCommand}" />
+                        </pv:PancakeView.GestureRecognizers>
+                        <Label
+                            FontSize="23"
+                            HorizontalOptions="FillAndExpand"
+                            Style="{StaticResource MaterialIcons}"
+                            Text="{Binding  Converter={StaticResource skip_next}}"
+                            VerticalOptions="FillAndExpand" />
+                    </pv:PancakeView>
+                    <pv:PancakeView
+                        CornerRadius="20"
+                        HeightRequest="40"
+                        HorizontalOptions="Center"
+                        Shadow="{Binding BtnShadow}"
+                        VerticalOptions="Center"
+                        WidthRequest="40">
+                        <pv:PancakeView.BackgroundGradientStops>
+                            <pv:GradientStopCollection>
+                                <pv:GradientStop Offset="0" Color="#E3E7EE" />
+                                <pv:GradientStop Offset="1" Color="#FBFBFB" />
+                            </pv:GradientStopCollection>
+                        </pv:PancakeView.BackgroundGradientStops>
+                        <pv:PancakeView.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding  ShuffleCommand}" />
+                        </pv:PancakeView.GestureRecognizers>
+                        <Label
+                            FontSize="23"
+                            HorizontalOptions="FillAndExpand"
+                            Style="{StaticResource MaterialIcons}"
+                            VerticalOptions="FillAndExpand">
+                            <Label.Triggers>
+                                <DataTrigger TargetType="Label"
+                                             Binding="{Binding ShuffleMode}"
+                                             Value="Off">
+                                    <Setter Property="TextColor" Value="Gray" />
+                                    <Setter Property="Text" Value="{Binding Converter={StaticResource shuffle}}" />
+                                </DataTrigger>
+                                <DataTrigger TargetType="Label"
+                                             Binding="{Binding ShuffleMode}"
+                                             Value="All">
+                                    <Setter Property="TextColor" Value="Black" />
+                                    <Setter Property="Text" Value="{Binding Converter={StaticResource shuffle}}" />
+                                </DataTrigger>
+                            </Label.Triggers>
+
+                        </Label>
+                    </pv:PancakeView>
+                </StackLayout>
+            </StackLayout>
+            <pv:PancakeView
+                Margin="10"
+                Grid.RowSpan="2"
+                CornerRadius="20"
+                HeightRequest="40"
+                HorizontalOptions="Start"
+                Shadow="{Binding BtnShadow}"
+                VerticalOptions="Start"
+                WidthRequest="40">
+                <pv:PancakeView.BackgroundGradientStops>
+                    <pv:GradientStopCollection>
+                        <pv:GradientStop Offset="0" Color="#D4420C" />
+                        <pv:GradientStop Offset="1" Color="#F3A283" />
+                    </pv:GradientStopCollection>
+                </pv:PancakeView.BackgroundGradientStops>
+                <pv:PancakeView.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding BackCommand}" />
+                </pv:PancakeView.GestureRecognizers>
+                <Label
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center"
+                    FontSize="27"
+                    Padding="0"
+                    TextColor="White"
+                    HorizontalOptions="FillAndExpand"
+                    Style="{StaticResource MaterialIcons}"
+                    Text="{Binding  Converter={StaticResource expand_more}}"
+                    VerticalOptions="FillAndExpand" />
+            </pv:PancakeView>
+            <pv:PancakeView
+                Margin="10"
+                Grid.RowSpan="2"
+                CornerRadius="20"
+                HeightRequest="40"
+                HorizontalOptions="End"
+                Shadow="{Binding BtnShadow}"
+                VerticalOptions="Start"
+                WidthRequest="40">
+                <pv:PancakeView.BackgroundGradientStops>
+                    <pv:GradientStopCollection>
+                        <pv:GradientStop Offset="0" Color="#D4420C" />
+                        <pv:GradientStop Offset="1" Color="#F3A283" />
+                    </pv:GradientStopCollection>
+                </pv:PancakeView.BackgroundGradientStops>
+                <pv:PancakeView.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ViewPlaylistCommand}" />
+                </pv:PancakeView.GestureRecognizers>
+                <Label
+                    FontSize="27"
+                    HorizontalOptions="FillAndExpand"
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center"         
+                    Padding="0"
+                    TextColor="White"
+                    Style="{StaticResource MaterialIcons}"
+                    Text="{Binding  Converter={StaticResource queue_music}}"
+                    VerticalOptions="FillAndExpand" />
+            </pv:PancakeView>
+        </Grid>
+    </pages:BasePage.ViewContent>
+</pages:BasePage>

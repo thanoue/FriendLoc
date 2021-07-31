@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<popups:BasePopup xmlns="http://xamarin.com/schemas/2014/forms"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                     xmlns:popups="clr-namespace:MusicApp.Views.Popups;assembly=MusicApp"
+                     x:Class="MusicApp.Views.Popups.LoadingPopup">
+    <ContentPage.Content>
+        <AbsoluteLayout  AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="WidthProportional,HeightProportional" BackgroundColor="{StaticResource LoadingPageBackground}">
+            <Frame AbsoluteLayout.LayoutBounds="0.5,0.5,75,75" CornerRadius="10" BackgroundColor="{StaticResource SecondLoadingPageBackground}" Padding="0" AbsoluteLayout.LayoutFlags="XProportional,YProportional"  >
+            </Frame>
+            <ActivityIndicator Color="White" IsRunning="True" AbsoluteLayout.LayoutBounds="0.5,0.5,50,50"  AbsoluteLayout.LayoutFlags="XProportional,YProportional" />
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</popups:BasePopup>
