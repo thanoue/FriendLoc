@@ -1,3 +1,7 @@
+using Syncfusion.XForms.iOS.BadgeView;
+using Syncfusion.XForms.iOS.Expander;
+using Syncfusion.SfRating.XForms.iOS;
+using Syncfusion.ListView.XForms.iOS;
 using Syncfusion.SfCalendar.XForms.iOS;
 using  Syncfusion.XForms.iOS.Graphics;
 using Syncfusion.XForms.iOS.Border;
@@ -13,6 +17,7 @@ using UIKit;
 using Plugin.FacebookClient;
 using Plugin.GoogleClient;
 using iCho.Core.Utils;
+using Syncfusion.SfBusyIndicator.XForms.iOS;
 
 namespace iCho.UI.iOS
 {
@@ -33,6 +38,12 @@ namespace iCho.UI.iOS
         {
             Plugin.MaterialDesignControls.iOS.Renderer.Init();
             global::Xamarin.Forms.Forms.Init();
+            Rg.Plugins.Popup.Popup.Init();
+            SfExpanderRenderer.Init();
+            SfRatingRenderer.Init();
+            SfCheckBoxRenderer.Init();
+            SfListViewRenderer.Init();
+            SfBadgeViewRenderer.Init();
             SfCalendarRenderer.Init();
             SfGradientViewRenderer.Init();
             SfBorderRenderer.Init();
@@ -42,6 +53,8 @@ namespace iCho.UI.iOS
             LoadApplication(new App());
 
             FacebookClientManager.Initialize(app, options);
+
+            new SfBusyIndicatorRenderer();
 
             return base.FinishedLaunching(app, options);
         }

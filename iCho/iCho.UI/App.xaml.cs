@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using iCho.Service;
+using iCho.UI.Views.Catalog;
 using iCho.UI.Views.Forms;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -9,6 +10,7 @@ namespace iCho.UI
 {
     public partial class App : Application
     {
+        public static string BaseImageUrl { get; } = "https://cdn.syncfusion.com/essential-ui-kit-for-xamarin.forms/common/uikitimages/";
         public App()
         {
             RegisterServices();
@@ -20,7 +22,7 @@ namespace iCho.UI
 
             InitializeComponent();
 
-            MainPage = new NavigationPage(new LoginPage());
+            MainPage = new NavigationPage(new CatalogListPage());
         }
 
         void RegisterServices()

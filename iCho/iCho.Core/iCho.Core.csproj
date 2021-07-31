@@ -17,6 +17,11 @@
     <None Remove="Syncfusion.Xamarin.Buttons" />
     <None Remove="Syncfusion.Xamarin.Core" />
     <None Remove="Syncfusion.Xamarin.SfComboBox" />
+    <None Remove="Syncfusion.Xamarin.SfListView" />
+    <None Remove="Syncfusion.Xamarin.SfBadgeView" />
+    <None Remove="Syncfusion.Xamarin.SfRating" />
+    <None Remove="Syncfusion.Xamarin.Expander" />
+    <None Remove="Syncfusion.Xamarin.Cards" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
@@ -33,5 +38,10 @@
     <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="19.1.0.69" />
     <PackageReference Include="Syncfusion.Xamarin.Core" Version="19.1.0.69" />
     <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="19.1.0.69" />
+    <PackageReference Include="Syncfusion.Xamarin.SfListView" Version="19.1.0.69" />
+    <PackageReference Include="Syncfusion.Xamarin.SfBadgeView" Version="19.1.0.69" />
+    <PackageReference Include="Syncfusion.Xamarin.SfRating" Version="19.1.0.69" />
+    <PackageReference Include="Syncfusion.Xamarin.Expander" Version="19.1.0.69" />
+    <PackageReference Include="Syncfusion.Xamarin.Cards" Version="19.1.0.69" />
   </ItemGroup>
 </Project>

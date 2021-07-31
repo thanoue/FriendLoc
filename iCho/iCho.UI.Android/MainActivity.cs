@@ -29,7 +29,7 @@ namespace iCho.UI.Droid
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-          
+            Rg.Plugins.Popup.Popup.Init(this);
             LoadApplication(new App());
         }
 
@@ -57,6 +57,19 @@ namespace iCho.UI.Droid
                 {
                     PickImageTaskCompletionSource?.SetResult(null);
                 }
+            }
+        }
+
+        public override void OnBackPressed()
+        {
+
+            if (Rg.Plugins.Popup.Popup.SendBackPressed(base.OnBackPressed))
+            {
+                // Do something if there are some pages in the `PopupStack`
+            }
+            else
+            {
+                base.OnBackPressed();
             }
         }
 

@@ -6,7 +6,7 @@
     xmlns:converter="clr-namespace:iCho.UI.Converter"
     xmlns:forms="clr-namespace:iCho.UI.Views.Forms"
     xmlns:icons="clr-namespace:iCho.UI.Icons"
-    xmlns:themes="clr-namespace:iCho.UI.Themes">
+    xmlns:themes="clr-namespace:iCho.UI.Themes;assembly=iCho.UI">
     <Application.Resources>
 
         <ResourceDictionary>
