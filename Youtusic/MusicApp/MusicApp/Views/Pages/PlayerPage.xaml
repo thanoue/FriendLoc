@@ -1,22 +1,25 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <pages:BasePage
     x:Class="MusicApp.Pages.PlayerPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:MusicApp.Controls;assembly=MusicApp"
+    xmlns:pages="clr-namespace:MusicApp.Pages;assembly=MusicApp"
     xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
-    xmlns:pages="clr-namespace:MusicApp.Pages;assembly=MusicApp"  
-    xmlns:static="clr-namespace:MusicApp.Static;assembly=MusicApp"
-    xmlns:controls="clr-namespace:MusicApp.Controls;assembly=MusicApp">
+    xmlns:static="clr-namespace:MusicApp.Static;assembly=MusicApp">
     <pages:BasePage.ViewContent>
-        <Grid BackgroundColor="{StaticResource DimOrange}" Margin="0" HorizontalOptions="FillAndExpand"
-              VerticalOptions="FillAndExpand">
+        <Grid
+            Margin="0"
+            BackgroundColor="{StaticResource DimOrange}"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1.2*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <StackLayout
-                BindingContext="{x:Static static:MediaController.Instance}" 
                 Grid.Row="0"
+                BindingContext="{x:Static static:MediaController.Instance}"
                 HorizontalOptions="Center"
                 Spacing="25"
                 VerticalOptions="Center">
@@ -37,62 +40,62 @@
                         WidthRequest="{StaticResource BigTrackImgInnerSize}">
                         <controls:CustomImg
                             x:Name="image"
-                            Aspect="AspectFit"
+                            Aspect="AspectFill"
                             HeightRequest="{StaticResource BigTrackImgInnerSize}"
                             HorizontalOptions="Center"
-                            VerticalOptions="Center"
-                            WidthRequest="{StaticResource BigTrackImgInnerSize}"
+                            Source="{Binding CurrentSongThumbnail}"
                             Style="{StaticResource CachedImgStyle}"
-                            Source="{Binding CurrentSongThumbnail}" />
+                            VerticalOptions="Center"
+                            WidthRequest="{StaticResource BigTrackImgInnerSize}" />
                     </pv:PancakeView>
                 </pv:PancakeView>
                 <StackLayout HorizontalOptions="Center">
                     <StackLayout>
                         <Label
+                            Margin="15,0"
                             FontSize="18"
                             HorizontalOptions="Center"
                             HorizontalTextAlignment="Center"
-                            TextColor="White"
-                            Margin="15,0"
-                            Text="{Binding CurrentSongName}" />
+                            Text="{Binding CurrentSongName}"
+                            TextColor="White" />
                         <Label
+                            FontFamily="BoldFont"
                             FontSize="16"
                             HorizontalOptions="Center"
-                            Opacity="0.5"
-                            FontFamily="BoldFont"
                             HorizontalTextAlignment="Center"
+                            Opacity="0.5"
                             Text="{Binding CurrentAuthorName}"
                             TextColor="Black" />
                     </StackLayout>
                 </StackLayout>
             </StackLayout>
             <StackLayout
-                BindingContext="{x:Static static:MediaController.Instance}" 
                 Grid.Row="1"
+                BindingContext="{x:Static static:MediaController.Instance}"
                 HorizontalOptions="FillAndExpand"
                 Spacing="100"
                 VerticalOptions="StartAndExpand">
                 <StackLayout HorizontalOptions="Center" WidthRequest="320">
                     <Slider
+                        DragCompleted="Slider_OnDragCompleted"
                         HorizontalOptions="FillAndExpand"
                         Maximum="100"
                         MaximumTrackColor="Black"
                         MinimumTrackColor="{StaticResource HeaderBarColor}"
-                        DragCompleted="Slider_OnDragCompleted"
                         ThumbColor="White"
                         Value="{Binding Progress}" />
                     <Grid HorizontalOptions="FillAndExpand">
                         <Label
                             FontSize="14"
-                            TextColor="White"
                             HorizontalOptions="Start"
                             Text="{Binding CurrentTimeSpan, StringFormat='{0:mm\\:ss}'}"
+                            TextColor="White"
                             VerticalOptions="Center" />
                         <Label
                             FontSize="14"
                             HorizontalOptions="End"
-                            TextColor="White"
                             Text="{Binding CurrentDuration, StringFormat='{0:mm\\:ss}'}"
+                            TextColor="White"
                             VerticalOptions="Center" />
                     </Grid>
                 </StackLayout>
@@ -120,22 +123,25 @@
                             FontSize="23"
                             HorizontalOptions="FillAndExpand"
                             Style="{StaticResource MaterialIcons}"
-                            VerticalOptions="FillAndExpand"
-                            Text="{Binding RepeatMode,Converter={StaticResource RepeatModeIconConverter}}">
+                            Text="{Binding RepeatMode, Converter={StaticResource RepeatModeIconConverter}}"
+                            VerticalOptions="FillAndExpand">
                             <Label.Triggers>
-                                <DataTrigger TargetType="Label"
-                                             Binding="{Binding RepeatMode}"
-                                             Value="Off">
+                                <DataTrigger
+                                    Binding="{Binding RepeatMode}"
+                                    TargetType="Label"
+                                    Value="Off">
                                     <Setter Property="TextColor" Value="Gray" />
                                 </DataTrigger>
-                                <DataTrigger TargetType="Label"
-                                             Binding="{Binding RepeatMode}"
-                                             Value="One">
+                                <DataTrigger
+                                    Binding="{Binding RepeatMode}"
+                                    TargetType="Label"
+                                    Value="One">
                                     <Setter Property="TextColor" Value="Black" />
                                 </DataTrigger>
-                                <DataTrigger TargetType="Label"
-                                             Binding="{Binding RepeatMode}"
-                                             Value="All">
+                                <DataTrigger
+                                    Binding="{Binding RepeatMode}"
+                                    TargetType="Label"
+                                    Value="All">
                                     <Setter Property="TextColor" Value="Black" />
                                 </DataTrigger>
                             </Label.Triggers>
@@ -161,7 +167,7 @@
                             FontSize="23"
                             HorizontalOptions="FillAndExpand"
                             Style="{StaticResource MaterialIcons}"
-                            Text="{Binding  Converter={StaticResource skip_previous}}"
+                            Text="{Binding Converter={StaticResource skip_previous}}"
                             VerticalOptions="FillAndExpand" />
                     </pv:PancakeView>
                     <pv:PancakeView
@@ -182,10 +188,10 @@
                         </pv:PancakeView.GestureRecognizers>
                         <Label
                             FontSize="35"
-                            TextColor="White"
                             HorizontalOptions="FillAndExpand"
                             Style="{StaticResource MaterialIcons}"
-                            Text="{Binding IsPlaying ,Converter={StaticResource MediaStateConverter}}"
+                            Text="{Binding IsPlaying, Converter={StaticResource MediaStateConverter}}"
+                            TextColor="White"
                             VerticalOptions="FillAndExpand" />
                     </pv:PancakeView>
                     <pv:PancakeView
@@ -208,7 +214,7 @@
                             FontSize="23"
                             HorizontalOptions="FillAndExpand"
                             Style="{StaticResource MaterialIcons}"
-                            Text="{Binding  Converter={StaticResource skip_next}}"
+                            Text="{Binding Converter={StaticResource skip_next}}"
                             VerticalOptions="FillAndExpand" />
                     </pv:PancakeView>
                     <pv:PancakeView
@@ -225,7 +231,7 @@
                             </pv:GradientStopCollection>
                         </pv:PancakeView.BackgroundGradientStops>
                         <pv:PancakeView.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding  ShuffleCommand}" />
+                            <TapGestureRecognizer Command="{Binding ShuffleCommand}" />
                         </pv:PancakeView.GestureRecognizers>
                         <Label
                             FontSize="23"
@@ -233,15 +239,17 @@
                             Style="{StaticResource MaterialIcons}"
                             VerticalOptions="FillAndExpand">
                             <Label.Triggers>
-                                <DataTrigger TargetType="Label"
-                                             Binding="{Binding ShuffleMode}"
-                                             Value="Off">
+                                <DataTrigger
+                                    Binding="{Binding ShuffleMode}"
+                                    TargetType="Label"
+                                    Value="Off">
                                     <Setter Property="TextColor" Value="Gray" />
                                     <Setter Property="Text" Value="{Binding Converter={StaticResource shuffle}}" />
                                 </DataTrigger>
-                                <DataTrigger TargetType="Label"
-                                             Binding="{Binding ShuffleMode}"
-                                             Value="All">
+                                <DataTrigger
+                                    Binding="{Binding ShuffleMode}"
+                                    TargetType="Label"
+                                    Value="All">
                                     <Setter Property="TextColor" Value="Black" />
                                     <Setter Property="Text" Value="{Binding Converter={StaticResource shuffle}}" />
                                 </DataTrigger>
@@ -252,8 +260,8 @@
                 </StackLayout>
             </StackLayout>
             <pv:PancakeView
-                Margin="10"
                 Grid.RowSpan="2"
+                Margin="10"
                 CornerRadius="20"
                 HeightRequest="40"
                 HorizontalOptions="Start"
@@ -270,19 +278,19 @@
                     <TapGestureRecognizer Command="{Binding BackCommand}" />
                 </pv:PancakeView.GestureRecognizers>
                 <Label
-                    HorizontalTextAlignment="Center"
-                    VerticalTextAlignment="Center"
-                    FontSize="27"
                     Padding="0"
-                    TextColor="White"
+                    FontSize="27"
                     HorizontalOptions="FillAndExpand"
+                    HorizontalTextAlignment="Center"
                     Style="{StaticResource MaterialIcons}"
-                    Text="{Binding  Converter={StaticResource expand_more}}"
-                    VerticalOptions="FillAndExpand" />
+                    Text="{Binding Converter={StaticResource expand_more}}"
+                    TextColor="White"
+                    VerticalOptions="FillAndExpand"
+                    VerticalTextAlignment="Center" />
             </pv:PancakeView>
             <pv:PancakeView
-                Margin="10"
                 Grid.RowSpan="2"
+                Margin="10"
                 CornerRadius="20"
                 HeightRequest="40"
                 HorizontalOptions="End"
@@ -299,15 +307,15 @@
                     <TapGestureRecognizer Command="{Binding ViewPlaylistCommand}" />
                 </pv:PancakeView.GestureRecognizers>
                 <Label
+                    Padding="0"
                     FontSize="27"
                     HorizontalOptions="FillAndExpand"
                     HorizontalTextAlignment="Center"
-                    VerticalTextAlignment="Center"         
-                    Padding="0"
-                    TextColor="White"
                     Style="{StaticResource MaterialIcons}"
-                    Text="{Binding  Converter={StaticResource queue_music}}"
-                    VerticalOptions="FillAndExpand" />
+                    Text="{Binding Converter={StaticResource queue_music}}"
+                    TextColor="White"
+                    VerticalOptions="FillAndExpand"
+                    VerticalTextAlignment="Center" />
             </pv:PancakeView>
         </Grid>
     </pages:BasePage.ViewContent>

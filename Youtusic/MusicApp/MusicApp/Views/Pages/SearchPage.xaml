@@ -1,14 +1,14 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 
 <pages:BasePage
     x:Class="MusicApp.Pages.SearchPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:control="clr-namespace:MusicApp.Controls"
-    Title="Search Page"
-    xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
     xmlns:pages="clr-namespace:MusicApp.Pages;assembly=MusicApp"
-    xmlns:ui="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material">
+    xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    xmlns:ui="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material.Forms"
+    Title="Search Page">
     <pages:BasePage.ViewContent>
         <Grid
             Padding="10"
@@ -17,19 +17,25 @@
             RowSpacing="10"
             VerticalOptions="FillAndExpand">
 
-            <ui:MaterialTextField  TextFontFamily="MediumFont" PlaceholderFontFamily="BoldFont"
-                                   IsSpellCheckEnabled="False" TextFontSize="18"
-                                   FloatingPlaceholderFontSize="18"
-                                   x:Name="searchField"
-                                   Placeholder="Song Name" ReturnType="Search" TintColor="{StaticResource DimOrange}"
-                                   ReturnCommand="{Binding SearchReturnCommand}"
-                                   Text="{Binding SearchTerm}" InputType="Text" />
+            <ui:MaterialTextField
+                x:Name="searchField"
+                FloatingPlaceholderFontSize="18"
+                InputType="Text"
+                IsSpellCheckEnabled="False"
+                Placeholder="Song Name"
+                PlaceholderFontFamily="BoldFont"
+                ReturnCommand="{Binding SearchReturnCommand}"
+                ReturnType="Search"
+                Text="{Binding SearchTerm}"
+                TextFontFamily="MediumFont"
+                TextFontSize="18"
+                TintColor="{StaticResource DimOrange}" />
 
             <CollectionView
-                ItemTemplate="{StaticResource SongListTemplate}"
                 Grid.Row="1"
                 HorizontalOptions="FillAndExpand"
-                ItemsSource="{Binding SearchedSongs}"
+                ItemTemplate="{StaticResource SongListTemplate}"
+                ItemsSource="{Binding Songs}"
                 SelectionMode="None"
                 VerticalOptions="Start">
                 <CollectionView.ItemsLayout>
@@ -40,13 +46,13 @@
             <Grid Grid.Row="2" ColumnDefinitions="*,*">
                 <pv:PancakeView
                     Margin="0,0,10,0"
+                    Padding="0"
                     CornerRadius="20"
                     HeightRequest="40"
                     HorizontalOptions="End"
-                    Padding="0"
+                    IsVisible="{Binding PrevPageToken, Converter={StaticResource EmptyToHideConverter}}"
                     Shadow="{Binding BtnShadow}"
                     VerticalOptions="Center"
-                    IsVisible="{Binding PrevPageToken, Converter={StaticResource EmptyToHideConverter} }"
                     WidthRequest="40">
                     <pv:PancakeView.BackgroundGradientStops>
                         <pv:GradientStopCollection>
@@ -59,23 +65,23 @@
                     </pv:PancakeView.GestureRecognizers>
                     <Label
                         FontSize="22"
-                        HorizontalTextAlignment="Center"
-                        VerticalTextAlignment="Center"
                         HorizontalOptions="FillAndExpand"
+                        HorizontalTextAlignment="Center"
                         Style="{StaticResource MaterialIcons}"
                         Text="{Binding Converter={StaticResource keyboard_arrow_left}}"
                         TextColor="Black"
-                        VerticalOptions="FillAndExpand" />
+                        VerticalOptions="FillAndExpand"
+                        VerticalTextAlignment="Center" />
                 </pv:PancakeView>
 
                 <pv:PancakeView
-                    Margin="10,0,0,0"
                     Grid.Column="1"
+                    Margin="10,0,0,0"
+                    Padding="0"
                     CornerRadius="20"
                     HeightRequest="40"
                     HorizontalOptions="Start"
-                    Padding="0"
-                    IsVisible="{Binding NextPageToken, Converter={StaticResource EmptyToHideConverter} }"
+                    IsVisible="{Binding NextPageToken, Converter={StaticResource EmptyToHideConverter}}"
                     Shadow="{Binding BtnShadow}"
                     VerticalOptions="Center"
                     WidthRequest="40">
@@ -91,12 +97,12 @@
                     <Label
                         FontSize="22"
                         HorizontalOptions="FillAndExpand"
+                        HorizontalTextAlignment="Center"
                         Style="{StaticResource MaterialIcons}"
                         Text="{Binding Converter={StaticResource keyboard_arrow_right}}"
                         TextColor="Black"
-                        HorizontalTextAlignment="Center"
-                        VerticalTextAlignment="Center"
-                        VerticalOptions="FillAndExpand" />
+                        VerticalOptions="FillAndExpand"
+                        VerticalTextAlignment="Center" />
                 </pv:PancakeView>
             </Grid>
         </Grid>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using MediaManager.Library;
 using MediaManager.Playback;
 using MediaManager.Player;
 using MediaManager.Queue;
+using MusicApp.Services;
 using MusicApp.ViewModel;
 using Xamarin.Forms;
 using PositionChangedEventArgs = MediaManager.Playback.PositionChangedEventArgs;
@@ -161,6 +163,12 @@ namespace MusicApp.Static
             Media.AutoPlay = true;
             Media.MediaItemChanged += Media_MediaItemChanged;
             Media.MediaItemFinished += Media_MediaItemFinished;
+            
+            Media.MediaItemFailed += (sender, args) =>
+            {
+
+            };
+            
             Media.StateChanged += (sender, e) =>
             {
                 Console.WriteLine("property: " + e.State);
@@ -355,11 +363,11 @@ namespace MusicApp.Static
         public async void PlaySong(SongItemViewModel song)
         {
             var media = await GetSong(song);
-
+            
             if (media == null)
                 return;
-
-            Play(media);
+            
+            await Play(media);
         }
 
         async Task Play(IMediaItem media)
@@ -421,7 +429,7 @@ namespace MusicApp.Static
 
             if (firstSong == null)
                 return;
-            
+
             Media.Queue.Clear();
 
             await Play(firstSong);
@@ -437,8 +445,8 @@ namespace MusicApp.Static
         public async Task<IMediaItem> GetSong(SongItemViewModel song)
         {
             var item = song.Type == SongTypes.Offline
-                ? await Media.Extractor.CreateMediaItem(new System.IO.FileInfo(song.Url))
-                : await Media.Extractor.CreateMediaItem(song.Url);
+           ? await Media.Extractor.CreateMediaItem(new System.IO.FileInfo(song.Url))
+           : await Media.Extractor.CreateMediaItem(song.Url);
 
             if (item != null && item.Duration.TotalSeconds > 0)
             {
@@ -480,7 +488,7 @@ namespace MusicApp.Static
                     SmallThumbnailUrl = mediItem.DisplayImageUri,
                     BigThumbnailUrl = mediItem.DisplayImageUri,
                     Description = mediItem.DisplayDescription,
-                    Type = (SongTypes) mediItem.Extras,
+                    Type = (SongTypes)mediItem.Extras,
                     OnPlay = onSelect
                 });
             }

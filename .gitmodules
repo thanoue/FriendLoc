@@ -1,0 +1,3 @@
+[submodule "XF-Material-Library"]
+	path = XF-Material-Library
+	url = https://github.com/Baseflow/XF-Material-Library.git

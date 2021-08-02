@@ -18,6 +18,9 @@ namespace MusicApp.ViewModel
 {
     public class PlayerViewModel : BasePageViewModel
     {
+        public override string PageName => nameof(PlayerPage);
+        public override bool IsModal => true;
+
         public override bool IsShowPlayer => false;
 
         public override ICommand BackCommand => new Command(()
@@ -28,6 +31,7 @@ namespace MusicApp.ViewModel
             ISecureStorageService secureStorageService, IFileService fileService, IApiClient apiClient)
             : base(navigation, downloadService, secureStorageService, fileService, apiClient)
         {
+
         }
 
         public ICommand ViewPlaylistCommand => new Command(ViewPlaylist);
@@ -36,8 +40,8 @@ namespace MusicApp.ViewModel
 
         void ViewPlaylist()
         {
-            if (Navigation.CurrentPageKey != nameof(PlaylistPage))
-                Navigation.NavigateTo(nameof(PlaylistPage));
+            if (Navigation.CurrentPageKey != nameof(PlayingQueuePage))
+                Navigation.NavigateTo(nameof(PlayingQueuePage));
 
             Navigation.DismissModal();
         }

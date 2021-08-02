@@ -8,5 +8,6 @@ namespace MusicApp.Services
     {
         Task<SearchResponseModel> SearchVideos(SearchApiModel model);
         Task<SelectResponseModel> GetMediaItems(string src);
+        Task<PlaylistResponse> GetPlaylistItems(string playlistId, int maxCount, string pageToken);
     }
 }

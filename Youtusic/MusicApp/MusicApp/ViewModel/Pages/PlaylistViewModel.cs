@@ -1,118 +1,105 @@
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MusicApp.Pages;
 using MusicApp.Services;
 using MusicApp.Static;
 using MusicApp.Views.Popups;
 
 namespace MusicApp.ViewModel
 {
-    public class PlaylistViewModel : BasePageViewModel
+    public class PlaylistViewModel : BaseSearchViewModel
     {
+        public override string PageName => nameof(PlaylistPage);
         public override bool IsShowPlayer => true;
+        private string _playlistId;
 
         #region Properties
 
-        private SafeObservableCollection<SongItemViewModel> _songs;
-        public SafeObservableCollection<SongItemViewModel> Songs
+        private string _playlistTitle;
+        public string PlaylistTitle
         {
-            get => _songs;
+            get => _playlistTitle;
             set
             {
-                _songs = value;
-                OnPropertyChanged(nameof(Songs));
+                _playlistTitle = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _playlistChannelTitle;
+        public string PlaylistChannelTitle
+        {
+            get => _playlistChannelTitle;
+            set
+            {
+                _playlistChannelTitle = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _playlistThumbnail;
+        public string PlaylistThumbnail
+        {
+            get => _playlistThumbnail;
+            set
+            {
+                _playlistThumbnail = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _playlistDescription;
+        public string PlaylistDescription
+        {
+            get => _playlistDescription;
+            set
+            {
+                _playlistDescription = value;
+                OnPropertyChanged();
             }
         }
 
         #endregion
-        
-        public PlaylistViewModel(ICustomNavigationService navigation, IDownloadService downloadService, ISecureStorageService secureStorageService, IFileService fileService,IApiClient apiClient) 
-            : base(navigation, downloadService, secureStorageService, fileService,apiClient)
+
+        public PlaylistViewModel(ICustomNavigationService navigation, IDownloadService downloadService, IApiClient apiClient, ISecureStorageService secureStorageService, IFileService fileService)
+            : base(navigation, downloadService, apiClient, secureStorageService, fileService)
         {
-            
+
+        }
+
+        public void SetPlaylistId(string id)
+        {
+            _playlistId = id;
         }
 
         protected override void OnLayouAppeared()
         {
             base.OnLayouAppeared();
 
-            Songs = MediaController.Instance.GetPlayingSongs(OnSongSelected);
-        }
-        
-        void OnSongSelected(string id)
-        {
-            var song = Songs.FirstOrDefault(p => p.Id.Equals(id));
-
-            var menuItems = new List<BottomMenuItem>()
-            {
-                new BottomMenuItem()
-                {
-                    Icon = "play_arrow",
-                    Title = "Play Now",
-                    Value = 0
-                },
-                new BottomMenuItem()
-                {
-                    Icon = "file_download",
-                    Title = "Download",
-                    Value = 1
-                },
-                new BottomMenuItem()
-                {
-                    Icon = "remove_circle",
-                    Title = "Remove From Playlist",
-                    Value = 2
-                }
-            };
-
-            var dialog = new MenuPopup((item) =>
-            {
-                switch ((int) item.Value)
-                {
-                    case 0:
-
-                        PlaySong(song);
-
-                        break;
-
-                    case 1:
-
-                        Download(song);
-
-                        break;
-
-                    case 2:
-
-                        RemoveFromPlaylist(song);
-
-                        break;
-                }
-            }, menuItems);
-            dialog.Show();
+            OnSearch("");
         }
 
-        private  async  void Download(SongItemViewModel song)
+        public override async void OnSearch(string pageToken)
         {
-            if (song.Type == SongTypes.Offline)
-            {
-                StaticUI.Instance.ToastMesage("This song has been already downloaded.");
+            StaticUI.Instance.StartLoading();
+            var res = await ApiClient.GetPlaylistItems(_playlistId, PageItemCount, pageToken);
+            StaticUI.Instance.StopLoading();
+
+            if (res == null)
                 return;
-            }
-            
-            song = await GetSongUrl(song);
 
-            if(song != null)
-                DownloadUrl(song);
-        }
+            PlaylistDescription = res.Info.Description;
+            PlaylistTitle = res.Info.Title;
+            PlaylistChannelTitle = res.Info.ChannelTitle;
+            PlaylistThumbnail = res.Info.Thumbnails.Maxres.Url;
 
-        private void RemoveFromPlaylist(SongItemViewModel song)
-        {
-            if (MediaController.Instance.RemoveItemFromQueue(song.Id))
-                Songs.Remove(song);
-        }
+            NextPageToken = res.Items.NextPageToken;
+            PrevPageToken = res.Items.PrevPageToken;
 
-        private void PlaySong(SongItemViewModel song)
-        {
-           MediaController.Instance.PlayOnQueueById(song.Id);
+            Songs.SafeClear();
+            Songs.ObtainFromPlaylist(res.Items.Items, MenuItemClicked);
+            SecureStorageService.CombineSongs(Songs);
         }
     }
 }

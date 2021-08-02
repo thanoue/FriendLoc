@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+
+<pages:BasePage
+    x:Class="MusicApp.Pages.PlayingQueuePage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:control="clr-namespace:MusicApp.Controls"
+    xmlns:pages="clr-namespace:MusicApp.Pages;assembly=MusicApp"
+    xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    xmlns:ui="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+    Title="Playing Songs">
+    <pages:BasePage.ViewContent>
+        <Grid
+            Padding="10"
+            HorizontalOptions="FillAndExpand"
+            RowDefinitions="auto,*"
+            RowSpacing="10"
+            VerticalOptions="Start">
+
+            <CollectionView
+                Grid.Row="1"
+                HorizontalOptions="FillAndExpand"
+                ItemTemplate="{StaticResource SongListTemplate}"
+                ItemsSource="{Binding Songs}"
+                SelectionMode="None"
+                VerticalOptions="FillAndExpand">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="1" Orientation="Vertical" />
+                </CollectionView.ItemsLayout>
+            </CollectionView>
+
+        </Grid>
+    </pages:BasePage.ViewContent>
+</pages:BasePage>

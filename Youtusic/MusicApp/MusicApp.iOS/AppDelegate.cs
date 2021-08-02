@@ -32,13 +32,13 @@ namespace MusicApp.iOS
             
             Rg.Plugins.Popup.Popup.Init();
             global::Xamarin.Forms.Forms.Init();
-            Plugin.MaterialDesignControls.iOS.Renderer.Init();
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init();           
             CachedImageRenderer.InitImageSourceHandler();
+            
             CrossMediaManager.Current.Init();
 
             CrossMediaManager.Apple.Notification = new NotificationManager();
-
+                
             XF.Material.iOS.Material.Init();
 
             LoadApplication(new App());

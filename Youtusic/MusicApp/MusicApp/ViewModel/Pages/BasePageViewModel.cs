@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
 using MusicApp.Converter;
 using MusicApp.Pages;
@@ -14,6 +16,7 @@ using MusicApp.Static;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.PancakeView;
+using static MusicApp.Pages.UrlModel;
 
 namespace MusicApp.ViewModel
 {
@@ -26,7 +29,10 @@ namespace MusicApp.ViewModel
         protected ICustomNavigationService Navigation;
         protected IFileService FileService;
         protected IApiClient ApiClient;
+
         public virtual bool IsShowPlayer => true;
+        public virtual bool IsModal => false;
+        public abstract string PageName { get; }
 
         #endregion
 
@@ -79,22 +85,32 @@ namespace MusicApp.ViewModel
         public BasePageViewModel(ICustomNavigationService navigation,
             IDownloadService downloadService,
             ISecureStorageService secureStorageService,
-            IFileService fileService,IApiClient apiClient)
+            IFileService fileService, IApiClient apiClient)
         {
-            MessagingCenter.Subscribe<BasePage,object>(this,Constants.LAYOUT_APPEARED,(sender,arg)=>
-            {
-                if(!(sender.BindingContext.Equals(this)))
-                    return;
-                
-                OnLayouAppeared();
-            });
-            
+            MessagingCenter.Subscribe<BasePage, object>(this, Constants.LAYOUT_APPEARED, (sender, arg) =>
+               {
+                   if (!(arg.Equals(this)))
+                       return;
+
+                   OnLayouAppeared();
+               });
+
+            if (!IsModal)
+                MessagingCenter.Subscribe<object, UrlModel>(this, Constants.GET_SONG_FROM_YOUTUBE, (page, id) =>
+                {
+                    if (id == null)
+                        return;
+
+                    if (Navigation.CurrentPageKey.Equals(this.PageName))
+                        PlaySongFromId(id);
+                });
+
             Navigation = navigation;
             DownloadService = downloadService;
             SecureStorageService = secureStorageService;
             FileService = fileService;
             ApiClient = apiClient;
-            
+
             _downloadQueue = new Queue<SongItemViewModel>();
 
             #region Base Fields
@@ -102,19 +118,74 @@ namespace MusicApp.ViewModel
             #endregion
         }
 
-        async void OpenPlayer()
+        async void PlaySongFromId(UrlModel id)
         {
-            Navigation.ModalTo("PlayerPage");
+            switch (id.Type)
+            {
+                case IdTypes.Video:
+                    var downloaded = SecureStorageService.SongIsDownloaded(id.Id);
+
+                    if (downloaded != null)
+                    {
+                        MediaController.Instance.PlaySong(downloaded);
+                        return;
+                    }
+
+                    StaticUI.Instance.StartLoading();
+                    var songItem = await ApiClient.GetMediaItems(id.Id);
+                    StaticUI.Instance.StopLoading();
+
+                    if (songItem == null || songItem.Info == null)
+                        return;
+
+                    var song = new SongItemViewModel()
+                    {
+                        Id = songItem.Info.Id,
+                        Title = songItem.Info.Title,
+                        Url = songItem.GetAudioUrl(),
+                        AuthorName = songItem.Info.Author,
+                        AuthorId = songItem.Info.AuthorId,
+                        BigThumbnailUrl = songItem.Info.Thumbnails.LastOrDefault()?.Url ?? "",
+                        SmallThumbnailUrl = songItem.Info.Thumbnails.FirstOrDefault()?.Url ?? "",
+                        Type = SongTypes.Online
+                    };
+
+                    MediaController.Instance.PlaySong(song);
+                    break;
+                case IdTypes.Playlist:
+
+                    var vm = SimpleIoc.Default.GetInstance<PlaylistViewModel>();
+                    vm.SetPlaylistId(id.Id);
+
+
+                    if (Navigation.CurrentPageKey.Equals(nameof(PlaylistPage)))
+                    {
+                        vm.OnSearch("");
+                    }
+                    else
+                    {
+                        Navigation.NavigateTo(nameof(PlaylistPage));
+                    }
+
+                    break;
+
+            }
+        }
+
+
+        void OpenPlayer()
+        {
+           Navigation.ModalTo("PlayerPage");
         }
 
         protected virtual void OnLayouAppeared()
         {
-            
+
         }
 
         #region Download methods
 
-        public void DownloadUrl(SongItemViewModel song)
+        public async void DownloadUrl(SongItemViewModel song)
         {
             if (IsDownloading)
             {
@@ -122,7 +193,7 @@ namespace MusicApp.ViewModel
                 return;
             }
 
-            StartDownloadAsync(song.Title, song.Url, async (filePath) =>
+            await StartDownloadAsync(song.Title, song.Url, async (filePath) =>
             {
                 SecureStorageService.SaveSongToLocalStorate(song, filePath);
 
@@ -139,7 +210,7 @@ namespace MusicApp.ViewModel
                 DownloadUrl(nextSong);
             });
         }
-        
+
         public async Task<SongItemViewModel> GetSongUrl(SongItemViewModel song)
         {
             StaticUI.Instance.StartLoading();
@@ -185,7 +256,7 @@ namespace MusicApp.ViewModel
                         IsDownloading = false;
                         onCompleted?.Invoke(filePath);
                     });
-                }, cts.Token,  Device.RuntimePlatform == Device.Android ? "webm" : "mp4");
+                }, cts.Token, Device.RuntimePlatform == Device.Android ? "webm" : "mp4");
             }
             catch (OperationCanceledException ex)
             {

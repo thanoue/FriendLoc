@@ -6,8 +6,10 @@ using MusicApp.Services;
 using MusicApp.Services.Impl;
 using MusicApp.Static;
 using MusicApp.Views.Popups;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using XF.Material.Forms.UI.Dialogs;
+using static MusicApp.Pages.UrlModel;
 
 namespace MusicApp.ViewModel
 {
@@ -30,27 +32,33 @@ namespace MusicApp.ViewModel
         public ICommand GoToSearchCommand => new Command(async () => { Navigation.NavigateTo(nameof(SearchPage)); });
         public ICommand PlayAllCommand => new Command(PlayAll);
 
+        public override string PageName => nameof(HomePage);
+
         #endregion
 
-        public HomeViewModel(ICustomNavigationService navigation, IDownloadService downloadService,
-            ISecureStorageService secureStorageService,IFileService fileService,IApiClient apiClient) : 
-            base(navigation, downloadService, secureStorageService,fileService,apiClient)
+        public HomeViewModel(ICustomNavigationService navigation,
+            IDownloadService downloadService,
+            ISecureStorageService secureStorageService,
+            IFileService fileService, IApiClient apiClient) :
+            base(navigation, downloadService, secureStorageService, fileService, apiClient)
         {
+          
         }
 
         void PlayAll()
         {
-            if(DownloadedSongs == null || !DownloadedSongs.Any())
+            if (DownloadedSongs == null || !DownloadedSongs.Any())
                 return;
 
             MediaController.Instance.PlayAll(DownloadedSongs);
         }
 
-        protected override void OnLayouAppeared()
+        protected override async void OnLayouAppeared()
         {
             base.OnLayouAppeared();
 
             DownloadedSongs = SecureStorageService.GetDownloadedSongs(OnSongSelected);
+
         }
 
         void OnSongSelected(string id)
@@ -81,7 +89,7 @@ namespace MusicApp.ViewModel
 
             var dialog = new MenuPopup((item) =>
             {
-                switch ((int) item.Value)
+                switch ((int)item.Value)
                 {
                     case 0:
 
@@ -115,6 +123,7 @@ namespace MusicApp.ViewModel
             MediaController.Instance.PlaySong(song);
         }
 
+
         private async void RemoveSong(SongItemViewModel song)
         {
             var confirm = await MaterialDialog.Instance.ConfirmAsync(
@@ -124,7 +133,7 @@ namespace MusicApp.ViewModel
 
             if (confirm == true)
             {
-                SecureStorageService.DeleteSongFromStorage(FileService,song);
+                SecureStorageService.DeleteSongFromStorage(FileService, song);
                 DownloadedSongs.Remove(song);
             }
         }

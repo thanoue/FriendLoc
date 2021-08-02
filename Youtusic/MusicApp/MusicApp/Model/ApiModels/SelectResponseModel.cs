@@ -15,11 +15,37 @@ namespace MusicApp.Model.ApiModels
         [JsonProperty("videos")]
         public IList<MediaFormat> Videos { get; set; }
 
+        [JsonProperty("info")]
+        public SingleVideoInfo Info { get; set; }
+ 
         public SelectResponseModel()
         {
-            RelatedVideos = new List<RelatedVideo>();
-            Audios = new List<MediaFormat>();
-            Videos = new List<MediaFormat>();
+        }
+    }
+
+    public class SingleVideoInfo
+    {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("title")]
+        public string Title { get; set; }
+
+        [JsonProperty("author")]
+        public string Author { get; set; }
+
+        [JsonProperty("authorId")]
+        public string AuthorId { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("thumbnails")]
+        public IList<SearchThumbnail> Thumbnails { get; set; }
+
+        public SingleVideoInfo()
+        {
+            Thumbnails = new List<SearchThumbnail>();
         }
     }
 

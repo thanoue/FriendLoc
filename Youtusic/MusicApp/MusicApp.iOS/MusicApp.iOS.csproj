@@ -47,13 +47,14 @@
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <MtouchArch>ARM64</MtouchArch>
+    <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
     <CodesignKey>Apple Development: Kha Tran (67N5P3NM29)</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchLink>None</MtouchLink>
     <MtouchInterpreter>-all</MtouchInterpreter>
     <CodesignProvision>yutusic_dev</CodesignProvision>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -102,12 +103,6 @@
     <Reference Include="Xamarin.iOS" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors" />
-    <Reference Include="Plugin.MaterialDesignControls.iOS">
-      <HintPath>..\..\Libs\Plugin.MaterialDesignControls.iOS.dll</HintPath>
-    </Reference>
-    <Reference Include="MaterialDesignControls.Droid">
-      <HintPath>..\..\Libs\MaterialDesignControls.Droid.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="PCLCrypto">
@@ -116,7 +111,7 @@
     <PackageReference Include="PCLStorage">
       <Version>1.0.2</Version>
     </PackageReference>
-    <PackageReference Include="Plugin.MediaManager.Forms">
+    <PackageReference Include="Plugin.MediaManager">
       <Version>1.0.9</Version>
     </PackageReference>
     <PackageReference Include="Rg.Plugins.Popup">
@@ -137,7 +132,7 @@
     <PackageReference Include="Xamarin.FFImageLoading.Transformations">
       <Version>2.4.11.982</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2083" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
     <PackageReference Include="Xamarin.Forms.PancakeView">
       <Version>2.3.0.759</Version>
@@ -151,11 +146,11 @@
     <PackageReference Include="RestSharp.Newtonsoft.Json">
       <Version>1.5.1</Version>
     </PackageReference>
-    <PackageReference Include="XF.Material">
-      <Version>1.7.8</Version>
+    <PackageReference Include="Com.Airbnb.iOS.Lottie">
+      <Version>2.5.13</Version>
     </PackageReference>
-    <PackageReference Include="Plugin.MediaManager">
-      <Version>1.0.9</Version>
+    <PackageReference Include="Com.Airbnb.Xamarin.Forms.Lottie">
+      <Version>4.0.10</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
@@ -163,6 +158,14 @@
     <ProjectReference Include="..\MusicApp\MusicApp.csproj">
       <Project>{312DD455-1C56-431F-8532-D6760348BC20}</Project>
       <Name>MusicApp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\XF-Material-Library\XF.Material\XF.Material.Forms\XF.Material.Forms.csproj">
+      <Project>{0750B14B-219B-4D56-AD78-4B4EAA3FA280}</Project>
+      <Name>XF.Material.Forms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\XF-Material-Library\XF.Material\XF.Material.iOS\XF.Material.iOS.csproj">
+      <Project>{E71F3053-056C-4381-9638-048ED73BDFF6}</Project>
+      <Name>XF.Material.iOS</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

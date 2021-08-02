@@ -1,22 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <ContentPage
-    xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material" 
     x:Class="MusicApp.Pages.BasePage"
-    material:MaterialNavigationPage.AppBarColor="{StaticResource HeaderBarColor}" 
-    material:MaterialNavigationPage.AppBarTitleTextFontFamily="BoldFont"
-    material:MaterialNavigationPage.AppBarTitleTextFontSize="{StaticResource HeaderBarTitleFontSize}" 
-    material:MaterialNavigationPage.StatusBarColor="{StaticResource StatusBarColor}" 
-    material:MaterialNavigationPage.AppBarTitleTextAlignment="Center"
-    material:MaterialNavigationPage.AppBarElevation="10"
-    material:MaterialNavigationPage.AppBarTitleTextColor="White"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:control="clr-namespace:MusicApp.Controls"
+    xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material.Forms"
     xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
     xmlns:static="clr-namespace:MusicApp.Static"
-    x:Name="basePage">
+    x:Name="basePage"
+    material:MaterialNavigationPage.AppBarColor="{StaticResource HeaderBarColor}"
+    material:MaterialNavigationPage.AppBarTitleTextAlignment="Center"
+    material:MaterialNavigationPage.AppBarTitleTextColor="White"
+    material:MaterialNavigationPage.AppBarTitleTextFontFamily="BoldFont"
+    material:MaterialNavigationPage.AppBarTitleTextFontSize="{StaticResource HeaderBarTitleFontSize}"
+    material:MaterialNavigationPage.StatusBarColor="{StaticResource StatusBarColor}">
     <ContentPage.Content>
-        <pv:PancakeView  HorizontalOptions="FillAndExpand" Padding="0" VerticalOptions="FillAndExpand">
+        <pv:PancakeView
+            Padding="0"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand">
             <pv:PancakeView.BackgroundGradientStops>
                 <pv:GradientStopCollection>
                     <pv:GradientStop Offset="1" Color="#E3E7EE" />
@@ -26,10 +28,10 @@
             </pv:PancakeView.BackgroundGradientStops>
 
             <Grid
-                Padding="0"
                 Margin="0"
-                RowSpacing="0"
-                RowDefinitions="*,auto">
+                Padding="0"
+                RowDefinitions="*,auto"
+                RowSpacing="0">
                 <ContentView
                     Margin="0"
                     Padding="0"
@@ -40,11 +42,11 @@
                 <!--  player  -->
                 <Grid
                     Grid.Row="1"
-                    IsVisible="{Binding IsShowPlayer}"
                     HorizontalOptions="FillAndExpand"
+                    IsVisible="{Binding IsShowPlayer}"
                     VerticalOptions="End">
                     <Grid.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding OpenPlayerCommand}"/>
+                        <TapGestureRecognizer Command="{Binding OpenPlayerCommand}" />
                     </Grid.GestureRecognizers>
                     <Grid
                         BindingContext="{x:Static static:MediaController.Instance}"
@@ -52,7 +54,7 @@
                         HorizontalOptions="FillAndExpand"
                         IsVisible="{Binding IsHasPlayer}"
                         VerticalOptions="End">
-                     
+
                         <pv:PancakeView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                             <pv:PancakeView.BackgroundGradientStops>
                                 <pv:GradientStopCollection>
@@ -92,37 +94,38 @@
                                     Grid.Column="1"
                                     ColumnDefinitions="*,auto">
 
-                                    <StackLayout Margin="0,0,0,0"
-                                                 Spacing="3"
-                                                 Orientation="Vertical"
-                                                 HorizontalOptions="FillAndExpand" VerticalOptions="Center">
+                                    <StackLayout
+                                        Margin="0,0,0,0"
+                                        HorizontalOptions="FillAndExpand"
+                                        Orientation="Vertical"
+                                        Spacing="3"
+                                        VerticalOptions="Center">
                                         <Label
+                                            FontFamily="LightFont"
+                                            FontSize="15"
                                             HorizontalOptions="FillAndExpand"
-                                            MaxLines="2"
                                             HorizontalTextAlignment="Start"
+                                            MaxLines="2"
                                             Text="{Binding CurrentSongName}"
                                             VerticalOptions="Center"
-                                            FontSize="15"
-                                            FontFamily="LightFont"
-                                            VerticalTextAlignment="Start" >
-                                        </Label>
+                                            VerticalTextAlignment="Start" />
                                         <Label
+                                            FontFamily="BoldFont"
+                                            FontSize="14"
                                             HorizontalOptions="FillAndExpand"
                                             HorizontalTextAlignment="Start"
-                                            FontSize="14"             
-                                            FontFamily="BoldFont"
                                             Text="{Binding CurrentAuthorName}"
                                             VerticalOptions="Center"
                                             VerticalTextAlignment="Start" />
                                     </StackLayout>
 
                                     <pv:PancakeView
+                                        Grid.Column="1"
                                         Margin="0,0,10,0"
                                         CornerRadius="20"
                                         HeightRequest="40"
-                                        VerticalOptions="Center"
-                                        Grid.Column="1"
                                         Shadow="{Binding BtnShadow}"
+                                        VerticalOptions="Center"
                                         WidthRequest="40">
                                         <pv:PancakeView.BackgroundGradientStops>
                                             <pv:GradientStopCollection>
@@ -137,7 +140,7 @@
                                             FontSize="20"
                                             HorizontalOptions="FillAndExpand"
                                             Style="{StaticResource MaterialIcons}"
-                                            Text="{Binding IsPlaying ,Converter={StaticResource MediaStateConverter}}"
+                                            Text="{Binding IsPlaying, Converter={StaticResource MediaStateConverter}}"
                                             TextColor="White"
                                             VerticalOptions="FillAndExpand" />
                                     </pv:PancakeView>
@@ -180,8 +183,8 @@
                                 Grid.Row="1"
                                 HorizontalOptions="FillAndExpand"
                                 HorizontalTextAlignment="Center"
-                                TextColor="Black"
                                 Text="{Binding DownloadingSongName}"
+                                TextColor="Black"
                                 VerticalOptions="FillAndExpand"
                                 VerticalTextAlignment="Start" />
                         </Grid>

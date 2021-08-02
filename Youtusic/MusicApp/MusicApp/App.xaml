@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 
 <Application
     x:Class="MusicApp.App"
@@ -10,8 +10,8 @@
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:icons="clr-namespace:MusicApp.Icons"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:static="clr-namespace:MusicApp.Static;assembly=MusicApp"
     xmlns:pancakeView="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    xmlns:static="clr-namespace:MusicApp.Static;assembly=MusicApp"
     mc:Ignorable="d">
     <Application.Resources>
 
@@ -41,7 +41,7 @@
             <Color x:Key="LoadingPageBackground">#50000000</Color>
 
             <Style x:Key="CachedImgStyle" TargetType="controls:CustomImg">
-                <Setter Property="DownsampleToViewSize" Value="False" />
+                <Setter Property="DownsampleToViewSize" Value="True" />
                 <Setter Property="ErrorPlaceholder" Value="{static:ImageResource ImgName='icon_noimg.png'}" />
                 <Setter Property="LoadingPlaceholder" Value="{static:ImageResource ImgName='icon_noimg.png'}" />
             </Style>
@@ -80,11 +80,16 @@
                                 <pancakeView:GradientStop Offset="1" Color="{StaticResource LightOrange}" />
                             </pancakeView:GradientStopCollection>
                         </pancakeView:PancakeView.BackgroundGradientStops>
-                        <controls:CustomImg Style="{StaticResource CachedImgStyle}"
-                                           Src="{Binding SmallThumbnailUrl}" Aspect="AspectFill" />
+                        <controls:CustomImg
+                            Aspect="AspectFill"
+                            Src="{Binding BigThumbnailUrl}"
+                            Style="{StaticResource CachedImgStyle}" />
                     </pancakeView:PancakeView>
-                    <StackLayout Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"
-                                 Margin="0,0,4,0">
+                    <StackLayout
+                        Grid.Column="1"
+                        Margin="0,0,4,0"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center">
                         <Label
                             FontSize="15"
                             Text="{Binding Title}"
@@ -95,19 +100,8 @@
                             Text="{Binding AuthorName}"
                             TextColor="Black" />
                     </StackLayout>
-                    <Label
-                        FontSize="22"
-                        Grid.Column="2"
-                        WidthRequest="20"
-                        Padding="5"
-                        HorizontalOptions="Center"
-                        Style="{StaticResource MaterialIcons}"
-                        Text="{Binding Converter={StaticResource more_vert}}"
-                        TextColor="Black"
-                        VerticalOptions="Center" />
                     <Grid.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding PlayCommand}"
-                                              CommandParameter="{Binding Id}" />
+                        <TapGestureRecognizer Command="{Binding PlayCommand}" CommandParameter="{Binding Id}" />
                     </Grid.GestureRecognizers>
                 </Grid>
             </DataTemplate>

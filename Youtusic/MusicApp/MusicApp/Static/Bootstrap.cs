@@ -30,23 +30,24 @@ namespace MusicApp.Static
 
         public ICustomNavigationService Setup()
         {
+            SimpleIoc.Default.Register<ICustomNavigationService, NavigationService>();
             SimpleIoc.Default.Register<IDownloadService, DownloadService>();
             SimpleIoc.Default.Register<IApiClient, ApiClient>();
             SimpleIoc.Default.Register<SearchViewModel>();
             SimpleIoc.Default.Register<PlayerViewModel>();
             SimpleIoc.Default.Register<HomeViewModel>();
+            SimpleIoc.Default.Register<PlayingQueueViewModel>();
             SimpleIoc.Default.Register<PlaylistViewModel>();
-            SimpleIoc.Default.Register<ICustomNavigationService, NavigationService>();
 
             var navigationService = SimpleIoc.Default.GetInstance<ICustomNavigationService>();
 
             if (navigationService != null)
             {
-                navigationService.Configure("HomePage", typeof(HomePage));
-                navigationService.Configure("PlayerPage", typeof(PlayerPage));
-                navigationService.Configure("SearchPage", typeof(SearchPage));
-                navigationService.Configure("HomePage", typeof(HomePage));
-                navigationService.Configure("PlaylistPage", typeof(PlaylistPage));
+                navigationService.Configure(nameof(HomePage), typeof(HomePage));
+                navigationService.Configure(nameof(PlayerPage), typeof(PlayerPage));
+                navigationService.Configure(nameof(SearchPage), typeof(SearchPage));
+                navigationService.Configure(nameof(PlayingQueuePage), typeof(PlayingQueuePage));
+                navigationService.Configure(nameof(PlaylistPage), typeof(PlaylistPage));;
             }
 
             return navigationService;

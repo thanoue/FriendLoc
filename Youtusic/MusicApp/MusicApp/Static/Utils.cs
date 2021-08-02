@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using MusicApp.Model.ApiModels;
+using MusicApp.Pages;
 using MusicApp.Services;
 using MusicApp.ViewModel;
 using Plugin.Iconize;
@@ -48,7 +49,7 @@ namespace MusicApp.Static
                 if (videos == null)
                     return "";
 
-                var url = videos.FirstOrDefault(p=>p.Container == ("mp4"))?.Url?? "";
+                var url = videos.FirstOrDefault(p => p.Container == ("mp4"))?.Url ?? "";
 
                 return url;
             }
@@ -62,23 +63,53 @@ namespace MusicApp.Static
                 var parts = imageName.Split('/');
                 imageName = parts[parts.Length - 1];
             }
-            
+
             return ImageSource.FromResource("MusicApp.Images." + imageName, typeof(Utils).Assembly);
         }
+
+        public static UrlModel GetId(string url)
+        {
+            if (url.Contains("playlist"))
+            {
+                var parts = url.Split('=');
+
+                return new UrlModel()
+                {
+                    Id = parts[parts.Length - 1],
+                    Type = UrlModel.IdTypes.Playlist
+                };
+            }
+            else
+            {
+                if (url.Contains("youtu.be"))
+                {
+                    var parts = url.Split('/');
+
+                    return new UrlModel()
+                    {
+                        Id = parts[parts.Length - 1],
+                        Type = UrlModel.IdTypes.Video
+                    };
+                }
+
+                return null;
+            }
+        }
+
 
         public static void CombineSongs(this ISecureStorageService secureStorageService, ObservableCollection<SongItemViewModel> songs)
         {
             var ids = secureStorageService.GetObject<List<string>>(Constants.SAVED_SONG_IDS);
 
-            if(ids == null || !ids.Any())
+            if (ids == null || !ids.Any())
                 return;
-            
+
             foreach (var song in songs)
             {
                 if (ids.Contains(song.Id))
                 {
                     var saved = secureStorageService.GetObject<SongItemViewModel>(song.Id);
-                    if(saved == null)
+                    if (saved == null)
                         continue;
                     song.Url = saved.Url;
                     song.Type = SongTypes.Offline;
@@ -86,14 +117,17 @@ namespace MusicApp.Static
             }
         }
 
-        public static bool SongIsDownloaded(this ISecureStorageService secureStorageService, string songId)
+        public static SongItemViewModel SongIsDownloaded(this ISecureStorageService secureStorageService, string songId)
         {
-            var ids = secureStorageService.GetObject<List<string>>(Constants.SAVED_SONG_IDS);   
+            var song = secureStorageService.GetObject<SongItemViewModel>(songId);
 
-            return ids != null && ids.Contains(songId);
+            if (song == null || song.Id != songId)
+                return null;
+
+            return song;
         }
 
-        public static SafeObservableCollection<SongItemViewModel>  GetDownloadedSongs(this ISecureStorageService secureStorageService,Action<string> onPlay)
+        public static SafeObservableCollection<SongItemViewModel> GetDownloadedSongs(this ISecureStorageService secureStorageService, Action<string> onPlay)
         {
             var list = new SafeObservableCollection<SongItemViewModel>();
 
@@ -106,7 +140,7 @@ namespace MusicApp.Static
             {
                 var song = secureStorageService.GetObject<SongItemViewModel>(id);
                 song.OnPlay = onPlay;
-                
+
                 if (song != null)
                     list.Add(song);
             }
@@ -114,7 +148,7 @@ namespace MusicApp.Static
             return list;
         }
 
-        public static void SaveSongToLocalStorate(this ISecureStorageService secureStorageService,SongItemViewModel song,string localFilePath )
+        public static void SaveSongToLocalStorate(this ISecureStorageService secureStorageService, SongItemViewModel song, string localFilePath)
         {
             var ids = secureStorageService.GetObject<List<string>>(Constants.SAVED_SONG_IDS);
 
@@ -123,44 +157,44 @@ namespace MusicApp.Static
 
             if (ids.Contains(song.Id))
                 throw new Exception("This song is already downloaded!!!");
-            
+
             ids.Add(song.Id);
-            
-            secureStorageService.StoreObject(Constants.SAVED_SONG_IDS,ids);
-            
+
+            secureStorageService.StoreObject(Constants.SAVED_SONG_IDS, ids);
+
             song.Type = SongTypes.Offline;
             song.Url = localFilePath;
-            
+
             var oldSong = secureStorageService.GetObject<SongItemViewModel>(song.Id);
 
             if (oldSong != null)
             {
                 oldSong.Url = localFilePath;
                 oldSong.Type = SongTypes.Offline;
-                secureStorageService.StoreObject(oldSong.Id,oldSong);
+                secureStorageService.StoreObject(oldSong.Id, oldSong);
                 return;
             }
 
-            secureStorageService.StoreObject(song.Id,song);
+            secureStorageService.StoreObject(song.Id, song);
         }
 
-        public static void DeleteSongFromStorage(this ISecureStorageService secureStorageService,IFileService fileService,SongItemViewModel song)
+        public static void DeleteSongFromStorage(this ISecureStorageService secureStorageService, IFileService fileService, SongItemViewModel song)
         {
             var ids = secureStorageService.GetObject<List<string>>(Constants.SAVED_SONG_IDS);
             if (ids == null || !ids.Any() || !ids.Contains(song.Id))
-                return ;
+                return;
 
             ids.Remove(song.Id);
-            
-            secureStorageService.StoreObject(Constants.SAVED_SONG_IDS,ids);
+
+            secureStorageService.StoreObject(Constants.SAVED_SONG_IDS, ids);
             secureStorageService.Remove(song.Id);
-            
+
             fileService?.DeleteFile(song.Url);
         }
 
         public static void SafeClear<T>(this ObservableCollection<T> observableCollection)
         {
-            if(!MainThread.IsMainThread)
+            if (!MainThread.IsMainThread)
             {
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
@@ -194,7 +228,7 @@ namespace MusicApp.Static
             }
         }
     }
-    
+
     [ContentProperty(nameof(ImgName))]
     public class ImageResourceExtension : IMarkupExtension
     {

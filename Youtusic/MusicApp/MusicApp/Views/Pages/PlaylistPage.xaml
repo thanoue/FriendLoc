@@ -1,33 +1,151 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 
 <pages:BasePage
     x:Class="MusicApp.Pages.PlaylistPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:control="clr-namespace:MusicApp.Controls"
-    Title="Playing Songs"
-    xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
     xmlns:pages="clr-namespace:MusicApp.Pages;assembly=MusicApp"
-    xmlns:ui="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material">
+    xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    xmlns:ui="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+    x:Name="PlaylistPageContent"
+    Title="Playlist">
     <pages:BasePage.ViewContent>
         <Grid
             Padding="10"
             HorizontalOptions="FillAndExpand"
-            RowDefinitions="auto,*"
+            RowDefinitions="*,auto"
             RowSpacing="10"
             VerticalOptions="Start">
 
             <CollectionView
-                Grid.Row="1"
+                Grid.Row="0"
                 HorizontalOptions="FillAndExpand"
                 ItemTemplate="{StaticResource SongListTemplate}"
                 ItemsSource="{Binding Songs}"
                 SelectionMode="None"
-                VerticalOptions="FillAndExpand">
+                VerticalOptions="StartAndExpand">
+                <CollectionView.Header>
+                    <Grid
+                        Padding="10"
+                        ColumnDefinitions="auto,*"
+                        HeightRequest="100">
+
+                        <pv:PancakeView
+                            CornerRadius="40"
+                            HorizontalOptions="Start"
+                            VerticalOptions="Center"
+                            HeightRequest="80"
+                            WidthRequest="80">
+                            <pv:PancakeView.BackgroundGradientStops>
+                                <pv:GradientStopCollection>
+                                    <pv:GradientStop Offset="0" Color="{StaticResource DimOrange}" />
+                                    <pv:GradientStop Offset="1" Color="{StaticResource LightOrange}" />
+                                </pv:GradientStopCollection>
+                            </pv:PancakeView.BackgroundGradientStops>
+                            <control:CustomImg
+                                x:Name="playlistThumbnail"
+                                Aspect="AspectFill"
+                                Src="{Binding PlaylistThumbnail}"
+                                Style="{StaticResource CachedImgStyle}" />
+
+                        </pv:PancakeView>
+                        <StackLayout
+                            Grid.Column="1"
+                            HorizontalOptions="FillAndExpand"
+                            Orientation="Vertical"
+                            VerticalOptions="FillAndExpand"
+                            Spacing="0">
+                            <Label
+                                x:Name="playlistName"
+                                FontFamily="BoldFont"
+                                FontSize="20"
+                                HorizontalOptions="FillAndExpand"
+                                MaxLines="1"
+                                VerticalOptions="Start" />
+                            <Label
+                                x:Name="playlistAuthor"
+                                FontFamily="MediumFont"
+                                FontSize="18"
+                                HorizontalOptions="FillAndExpand"
+                                MaxLines="1"
+                                VerticalOptions="Start" />
+                            <Label
+                                x:Name="playlistDescription"
+                                FontFamily="LightFont"
+                                FontSize="15"
+                                HorizontalOptions="FillAndExpand"
+                                VerticalOptions="Start" />
+
+                        </StackLayout>
+                    </Grid>
+                </CollectionView.Header>
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout ItemSpacing="1" Orientation="Vertical" />
                 </CollectionView.ItemsLayout>
             </CollectionView>
+            <Grid Grid.Row="1" ColumnDefinitions="*,*">
+                <pv:PancakeView
+                    Margin="0,0,10,0"
+                    Padding="0"
+                    CornerRadius="20"
+                    HeightRequest="40"
+                    HorizontalOptions="End"
+                    IsVisible="{Binding PrevPageToken, Converter={StaticResource EmptyToHideConverter}}"
+                    Shadow="{Binding BtnShadow}"
+                    VerticalOptions="Center"
+                    WidthRequest="40">
+                    <pv:PancakeView.BackgroundGradientStops>
+                        <pv:GradientStopCollection>
+                            <pv:GradientStop Offset="0" Color="#E3E7EE" />
+                            <pv:GradientStop Offset="1" Color="#FBFBFB" />
+                        </pv:GradientStopCollection>
+                    </pv:PancakeView.BackgroundGradientStops>
+                    <pv:PancakeView.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SearchPrevPageCommand}" />
+                    </pv:PancakeView.GestureRecognizers>
+                    <Label
+                        FontSize="22"
+                        HorizontalOptions="FillAndExpand"
+                        HorizontalTextAlignment="Center"
+                        Style="{StaticResource MaterialIcons}"
+                        Text="{Binding Converter={StaticResource keyboard_arrow_left}}"
+                        TextColor="Black"
+                        VerticalOptions="FillAndExpand"
+                        VerticalTextAlignment="Center" />
+                </pv:PancakeView>
+
+                <pv:PancakeView
+                    Grid.Column="1"
+                    Margin="10,0,0,0"
+                    Padding="0"
+                    CornerRadius="20"
+                    HeightRequest="40"
+                    HorizontalOptions="Start"
+                    IsVisible="{Binding NextPageToken, Converter={StaticResource EmptyToHideConverter}}"
+                    Shadow="{Binding BtnShadow}"
+                    VerticalOptions="Center"
+                    WidthRequest="40">
+                    <pv:PancakeView.BackgroundGradientStops>
+                        <pv:GradientStopCollection>
+                            <pv:GradientStop Offset="0" Color="#E3E7EE" />
+                            <pv:GradientStop Offset="1" Color="#FBFBFB" />
+                        </pv:GradientStopCollection>
+                    </pv:PancakeView.BackgroundGradientStops>
+                    <pv:PancakeView.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SearchNextPageCommand}" />
+                    </pv:PancakeView.GestureRecognizers>
+                    <Label
+                        FontSize="22"
+                        HorizontalOptions="FillAndExpand"
+                        HorizontalTextAlignment="Center"
+                        Style="{StaticResource MaterialIcons}"
+                        Text="{Binding Converter={StaticResource keyboard_arrow_right}}"
+                        TextColor="Black"
+                        VerticalOptions="FillAndExpand"
+                        VerticalTextAlignment="Center" />
+                </pv:PancakeView>
+            </Grid>
 
         </Grid>
     </pages:BasePage.ViewContent>
