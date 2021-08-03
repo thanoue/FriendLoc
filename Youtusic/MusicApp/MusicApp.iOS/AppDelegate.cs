@@ -9,6 +9,7 @@ using MusicApp.iOS.Services;
 using MusicApp.Services;
 using MusicApp.Services.Impl;
 using UIKit;
+using Xamarin.Forms;
 
 namespace MusicApp.iOS
 {
@@ -29,7 +30,9 @@ namespace MusicApp.iOS
         {
             SimpleIoc.Default.Register<IFileService, IOSFileService>();
             SimpleIoc.Default.Register<ISecureStorageService, IOSSecureStorageService>();
-            
+
+            Forms.SetFlags("CollectionView_Experimental");
+
             Rg.Plugins.Popup.Popup.Init();
             global::Xamarin.Forms.Forms.Init();
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init();           
@@ -37,10 +40,8 @@ namespace MusicApp.iOS
             
             CrossMediaManager.Current.Init();
 
-            CrossMediaManager.Apple.Notification = new NotificationManager();
+            //CrossMediaManager.Apple.Notification = new NotificationManager();
                 
-            XF.Material.iOS.Material.Init();
-
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

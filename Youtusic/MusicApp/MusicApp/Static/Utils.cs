@@ -148,7 +148,7 @@ namespace MusicApp.Static
             return list;
         }
 
-        public static void SaveSongToLocalStorate(this ISecureStorageService secureStorageService, SongItemViewModel song, string localFilePath)
+        public static void SaveSongToLocalStorate(this ISecureStorageService secureStorageService, SongItemViewModel song, string localFileName)
         {
             var ids = secureStorageService.GetObject<List<string>>(Constants.SAVED_SONG_IDS);
 
@@ -163,13 +163,13 @@ namespace MusicApp.Static
             secureStorageService.StoreObject(Constants.SAVED_SONG_IDS, ids);
 
             song.Type = SongTypes.Offline;
-            song.Url = localFilePath;
+            song.Url = localFileName;
 
             var oldSong = secureStorageService.GetObject<SongItemViewModel>(song.Id);
 
             if (oldSong != null)
             {
-                oldSong.Url = localFilePath;
+                oldSong.Url = localFileName;
                 oldSong.Type = SongTypes.Offline;
                 secureStorageService.StoreObject(oldSong.Id, oldSong);
                 return;

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using GalaSoft.MvvmLight.Ioc;
 using MediaManager;
 using MediaManager.Library;
 using MediaManager.Playback;
@@ -27,6 +28,8 @@ namespace MusicApp.Static
         public IMediaManager Media => CrossMediaManager.Current;
 
         public double _lastestPos;
+
+        private IFileService _fileService;
 
         #region properties
 
@@ -160,10 +163,13 @@ namespace MusicApp.Static
 
         public MediaController() : base()
         {
+            _fileService = SimpleIoc.Default.GetInstance<IFileService>();
+
             Media.AutoPlay = true;
             Media.MediaItemChanged += Media_MediaItemChanged;
             Media.MediaItemFinished += Media_MediaItemFinished;
-            
+            Media.PositionChanged += Media_PositionChanged;
+
             Media.MediaItemFailed += (sender, args) =>
             {
 
@@ -207,12 +213,12 @@ namespace MusicApp.Static
 
         public void RemovePosChangedHandler()
         {
-            Media.PositionChanged -= Media_PositionChanged;
+         //   Media.PositionChanged -= Media_PositionChanged;
         }
 
         private void Media_MediaItemFinished(object sender, MediaManager.Media.MediaItemEventArgs e)
         {
-            Media.PositionChanged -= Media_PositionChanged;
+            //Media.PositionChanged -= Media_PositionChanged;
             _lastestPos = 0;
             Progress = 0;
         }
@@ -235,12 +241,13 @@ namespace MusicApp.Static
             CurrentSongThumbnail = media.DisplayImageUri;
             CurrentDuration = Media.Queue.Current.Duration;
 
-            Media.PositionChanged -= Media_PositionChanged;
+            //Media.PositionChanged -= Media_PositionChanged;
             Media.PositionChanged += Media_PositionChanged;
         }
 
         private void Media_PositionChanged(object sender, PositionChangedEventArgs e)
         {
+            Console.WriteLine("Pos: "+ e.Position);
             var currentSeconds = e.Position.TotalSeconds;
             if (currentSeconds - _lastestPos < 1)
                 return;
@@ -338,7 +345,7 @@ namespace MusicApp.Static
             Media.PlayNext();
         }
 
-        public void Play()
+        public async void Play()
         {
             if (Media.Queue.HasCurrent)
             {
@@ -372,7 +379,7 @@ namespace MusicApp.Static
 
         async Task Play(IMediaItem media)
         {
-            Media.PositionChanged -= Media_PositionChanged;
+           // Media.PositionChanged -= Media_PositionChanged;
 
             Media.Queue.Clear();
 
@@ -382,6 +389,11 @@ namespace MusicApp.Static
             }
             else
             {
+                if(Media.Queue.Count <= 0)
+                {
+                    await Media.Play(media);
+                    return;
+                }
                 Media.Queue.Add(media);
 
                 await Media.PlayQueueItem(media);
@@ -402,7 +414,7 @@ namespace MusicApp.Static
                 return;
             }
 
-            Media.PositionChanged -= Media_PositionChanged;
+            //Media.PositionChanged -= Media_PositionChanged;
 
             await Media.PlayQueueItem(item);
         }
@@ -445,10 +457,10 @@ namespace MusicApp.Static
         public async Task<IMediaItem> GetSong(SongItemViewModel song)
         {
             var item = song.Type == SongTypes.Offline
-           ? await Media.Extractor.CreateMediaItem(new System.IO.FileInfo(song.Url))
+           ? await Media.Extractor.CreateMediaItem(new System.IO.FileInfo(Path.Combine(_fileService.GetStorageFolderPath(), song.Url)))
            : await Media.Extractor.CreateMediaItem(song.Url);
 
-            if (item != null && item.Duration.TotalSeconds > 0)
+            if (item != null)
             {
                 item.Id = song.Id;
                 item.IsMetadataExtracted = false;

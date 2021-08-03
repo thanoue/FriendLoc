@@ -8,7 +8,6 @@ using MusicApp.Static;
 using MusicApp.Views.Popups;
 using Xamarin.Essentials;
 using Xamarin.Forms;
-using XF.Material.Forms.UI.Dialogs;
 using static MusicApp.Pages.UrlModel;
 
 namespace MusicApp.ViewModel
@@ -126,16 +125,16 @@ namespace MusicApp.ViewModel
 
         private async void RemoveSong(SongItemViewModel song)
         {
-            var confirm = await MaterialDialog.Instance.ConfirmAsync(
-                message: "Do you want to delete this song forever?",
-                confirmingText: "Delete",
-                dismissiveText: "Cancel");
+            //var confirm = await MaterialDialog.Instance.ConfirmAsync(
+            //    message: "Do you want to delete this song forever?",
+            //    confirmingText: "Delete",
+            //    dismissiveText: "Cancel");
 
-            if (confirm == true)
-            {
-                SecureStorageService.DeleteSongFromStorage(FileService, song);
-                DownloadedSongs.Remove(song);
-            }
+            //if (confirm == true)
+            //{
+            //    SecureStorageService.DeleteSongFromStorage(FileService, song);
+            //    DownloadedSongs.Remove(song);
+            //}
         }
     }
 }

@@ -7,13 +7,7 @@
     xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material.Forms"
     xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
     xmlns:static="clr-namespace:MusicApp.Static"
-    x:Name="basePage"
-    material:MaterialNavigationPage.AppBarColor="{StaticResource HeaderBarColor}"
-    material:MaterialNavigationPage.AppBarTitleTextAlignment="Center"
-    material:MaterialNavigationPage.AppBarTitleTextColor="White"
-    material:MaterialNavigationPage.AppBarTitleTextFontFamily="BoldFont"
-    material:MaterialNavigationPage.AppBarTitleTextFontSize="{StaticResource HeaderBarTitleFontSize}"
-    material:MaterialNavigationPage.StatusBarColor="{StaticResource StatusBarColor}">
+    x:Name="basePage">
     <ContentPage.Content>
         <pv:PancakeView
             Padding="0"

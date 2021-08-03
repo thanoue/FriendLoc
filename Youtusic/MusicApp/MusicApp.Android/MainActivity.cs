@@ -41,8 +41,6 @@ namespace MusicApp.Droid
             CachedImageRenderer.Init(true);
             CachedImageRenderer.InitImageViewHandler();
 
-            XF.Material.Droid.Material.Init(this, savedInstanceState);
-
             var id = "";
 
             try

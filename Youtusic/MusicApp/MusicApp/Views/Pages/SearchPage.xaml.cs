@@ -15,7 +15,6 @@ namespace MusicApp.Pages
             this.BindingContext = SimpleIoc.Default.GetInstance<SearchViewModel>();
             InitializeComponent();
             
-            searchField.Focus();
         }
     }
 }

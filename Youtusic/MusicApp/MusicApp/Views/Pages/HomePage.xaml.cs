@@ -39,7 +39,7 @@ namespace MusicApp.Pages
             }
             else
             {
-                GetUrlFromClipBoard();
+                //GetUrlFromClipBoard();
             }
         }
 

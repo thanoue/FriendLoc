@@ -5,7 +5,6 @@ using MusicApp.Static;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using XF.Material.Forms.UI;
 
 namespace MusicApp
 {
@@ -17,14 +16,12 @@ namespace MusicApp
         {
             InitializeComponent();
 
-            XF.Material.Forms.Material.Init(this);
-
             Plugin.Iconize.Iconize.With(new Plugin.Iconize.Fonts.MaterialModule())
                                   .With(new Plugin.Iconize.Fonts.MaterialDesignIconsModule());
 
             var navigationService = Bootstrap.Instance.Setup();
             
-            var nav =  new MaterialNavigationPage(new HomePage(id));
+            var nav =  new NavigationPage(new HomePage(id));
             
             navigationService.Initialize(nav);
 
@@ -41,30 +38,30 @@ namespace MusicApp
 
         protected override async void OnResume()
         {
-            if (Device.RuntimePlatform == Device.Android)
-                return;
+        //    if (Device.RuntimePlatform == Device.Android)
+        //        return;
 
-            if (_isFirstResume)
-            {
-                _isFirstResume = false;
-                return;
-            }
+        //    if (_isFirstResume)
+        //    {
+        //        _isFirstResume = false;
+        //        return;
+        //    }
 
-            var hasText = Clipboard.HasText;
+        //   // var hasText = Clipboard.HasText;
 
-            if (!hasText)
-                return;
+        //    if (!hasText)
+        //        return;
 
-            var text = await Clipboard.GetTextAsync();
+        //    //var text = await Clipboard.GetTextAsync();
 
-            var id = Utils.GetId(text);
+        //    var id = Utils.GetId(text);
 
-            if(id != null)
-            {
-                Clipboard.SetTextAsync("");
+        //    if(id != null)
+        //    {
+        //        Clipboard.SetTextAsync("");
 
-                MessagingCenter.Send<object, UrlModel>(this, Constants.GET_SONG_FROM_YOUTUBE, id);
-            }
+        //      //  MessagingCenter.Send<object, UrlModel>(this, Constants.GET_SONG_FROM_YOUTUBE, id);
+        //    }
         }
     }
 }

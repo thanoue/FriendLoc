@@ -1,7 +1,6 @@
 using MusicApp.Views.Popups;
 using Xamarin.Essentials;
 using Xamarin.Forms;
-using XF.Material.Forms.UI.Dialogs;
 
 namespace MusicApp.Static
 {
@@ -26,9 +25,9 @@ namespace MusicApp.Static
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await MaterialDialog.Instance.SnackbarAsync(message: msg,
-                                       actionButtonText: "Got It",
-                                       msDuration: msDuration);
+                //await MaterialDialog.Instance.SnackbarAsync(message: msg,
+                //                       actionButtonText: "Got It",
+                //                       msDuration: msDuration);
             });
        
         }

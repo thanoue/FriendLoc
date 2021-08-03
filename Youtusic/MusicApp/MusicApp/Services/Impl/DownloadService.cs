@@ -61,7 +61,7 @@ namespace MusicApp.Services.Impl
                             {
                                 isMoreDataToRead = false;
 
-                                onCompleted?.Invoke(filePath);
+                                onCompleted?.Invoke(fileName);
                             }
                             else
                             {

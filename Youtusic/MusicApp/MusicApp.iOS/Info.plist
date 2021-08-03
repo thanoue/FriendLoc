@@ -21,7 +21,7 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>MinimumOSVersion</key>
-	<string>9.0</string>
+	<string>11.4</string>
 	<key>CFBundleDisplayName</key>
 	<string>Youtusic</string>
 	<key>CFBundleIdentifier</key>
@@ -38,17 +38,22 @@
 	<array>
 		<string>audio</string>
 		<string>fetch</string>
-		<string>processing</string>
+		<string>remote-notification</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>UIStatusBarStyle</key>
-	<string>UIStatusBarStyleBlackOpaque</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoadsInMedia</key>
 		<true/>
+		<key>NSAllowLocalNetworking</key>
+		<true/>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
 	</dict>
-
+	<key>CFBundleShortVersionString</key>
+	<string>2</string>
+	<key>UIMainStoryboardFile</key>
+	<string>LaunchScreen</string>
 </dict>
 </plist>

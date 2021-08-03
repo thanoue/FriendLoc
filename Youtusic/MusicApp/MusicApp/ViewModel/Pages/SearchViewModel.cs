@@ -53,6 +53,13 @@ namespace MusicApp.ViewModel
             SearchTerm = "yeu em dai lau";
         }
 
+        protected override void OnLayouAppeared()
+        {
+            base.OnLayouAppeared();
+
+            MediaController.Instance.Play();
+        }
+
         #region Methods
 
         public override async void OnSearch(string pageToken)

@@ -7,7 +7,6 @@
     xmlns:control="clr-namespace:MusicApp.Controls"
     xmlns:pages="clr-namespace:MusicApp.Pages;assembly=MusicApp"
     xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
-    xmlns:ui="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material.Forms"
     Title="Search Page">
     <pages:BasePage.ViewContent>
         <Grid
@@ -17,7 +16,17 @@
             RowSpacing="10"
             VerticalOptions="FillAndExpand">
 
-            <ui:MaterialTextField
+            <StackLayout HeightRequest="45" Orientation="Horizontal">
+                <Entry
+                    HorizontalOptions="StartAndExpand"
+                    Text="{Binding SearchTerm}"
+                    VerticalOptions="FillAndExpand" />
+                <Button
+                    Command="{Binding SearchReturnCommand}"
+                    HorizontalOptions="End"
+                    Text="SEARCH" />
+            </StackLayout>
+            <!--<ui:MaterialTextField
                 x:Name="searchField"
                 FloatingPlaceholderFontSize="18"
                 InputType="Text"
@@ -29,7 +38,7 @@
                 Text="{Binding SearchTerm}"
                 TextFontFamily="MediumFont"
                 TextFontSize="18"
-                TintColor="{StaticResource DimOrange}" />
+                TintColor="{StaticResource DimOrange}" />-->
 
             <CollectionView
                 Grid.Row="1"

@@ -193,9 +193,9 @@ namespace MusicApp.ViewModel
                 return;
             }
 
-            await StartDownloadAsync(song.Title, song.Url, async (filePath) =>
+            await StartDownloadAsync(song.Title, song.Url, async (fileName) =>
             {
-                SecureStorageService.SaveSongToLocalStorate(song, filePath);
+                SecureStorageService.SaveSongToLocalStorate(song, fileName);
 
                 if (_downloadQueue.Count <= 0)
                     return;
@@ -249,12 +249,12 @@ namespace MusicApp.ViewModel
             {
                 IsDownloading = true;
 
-                await DownloadService.DownloadFileAsync(url, progressIndicator, (filePath) =>
+                await DownloadService.DownloadFileAsync(url, progressIndicator, (fileName) =>
                 {
                     MainThread.BeginInvokeOnMainThread(() =>
                     {
                         IsDownloading = false;
-                        onCompleted?.Invoke(filePath);
+                        onCompleted?.Invoke(fileName);
                     });
                 }, cts.Token, Device.RuntimePlatform == Device.Android ? "webm" : "mp4");
             }

@@ -9,7 +9,6 @@ using MusicApp.Services;
 using MusicApp.Services.Impl;
 using MusicApp.ViewModel;
 using Xamarin.Forms;
-using XF.Material.Forms.UI;
 
 namespace MusicApp.Static
 {
@@ -57,7 +56,7 @@ namespace MusicApp.Static
     public interface ICustomNavigationService : INavigationService
     {
         void Configure(string pageKey, Type pageType);
-        void Initialize(MaterialNavigationPage navigation);
+        void Initialize(NavigationPage navigation);
         void ModalTo(string pageKey);
         void DismissModal();
     }
@@ -65,9 +64,9 @@ namespace MusicApp.Static
     public class NavigationService : ICustomNavigationService
     {
         private readonly Dictionary<string, Type> _pagesByKey = new Dictionary<string, Type>();
-        private MaterialNavigationPage _navigation;
+        private NavigationPage _navigation;
 
-        public MaterialNavigationPage Navigation
+        public NavigationPage Navigation
         {
             get { return _navigation; }
         }
@@ -204,7 +203,7 @@ namespace MusicApp.Static
             }
         }
 
-        public void Initialize(MaterialNavigationPage navigation)
+        public void Initialize(NavigationPage navigation)
         {
             _navigation = navigation;
         }
